@@ -6,7 +6,7 @@
 
 const API_BASE =
   process.env.NODE_ENV === 'production'
-    ? (process.env.CMS_API_URL ?? 'https://api.sergioluque.com')
+? (process.env.CMS_API_URL ?? 'https://sergioluque-cms.carlosluque-095.workers.dev')
     : 'http://localhost:8787'
 
 export async function apiFetch<T>(path: string): Promise<T | null> {
