@@ -1,0 +1,95 @@
+export const runtime = 'edge'
+
+import { NextRequest, NextResponse } from 'next/server'
+import { getSchema } from '@/lib/admin/schemas'
+
+const WORKER_BASE =
+  process.env.NODE_ENV === 'production'
+    ? (process.env.CMS_API_URL ?? 'https://sergioluque-cms.carlosluque-095.workers.dev')
+    : 'http://localhost:8787'
+
+const COOKIE_NAME = 'sl_admin_jwt'
+
+function authHeader(req: NextRequest): Record<string, string> {
+  const token = req.cookies.get(COOKIE_NAME)?.value
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+async function resolveEntity(
+  ctx: { params: Promise<{ entity: string }> }
+): Promise<string | null> {
+  const { entity } = await ctx.params
+  // Don't proxy obras, login, logout, upload — they have specific routes
+  if (entity === 'obras' || entity === 'login' || entity === 'logout' || entity === 'upload') {
+    return null
+  }
+  const schema = getSchema(entity)
+  return schema?.name ?? null
+}
+
+export async function POST(
+  req: NextRequest,
+  ctx: { params: Promise<{ entity: string }> }
+) {
+  const table = await resolveEntity(ctx)
+  if (!table) return NextResponse.json({ error: 'Unknown entity' }, { status: 404 })
+
+  try {
+    const body = await req.text()
+    const res = await fetch(`${WORKER_BASE}/admin/${table}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...authHeader(req) },
+      body,
+    })
+    const data = (await res.json()) as Record<string, unknown>
+    return NextResponse.json(data, { status: res.status })
+  } catch {
+    return NextResponse.json({ error: 'Worker unavailable' }, { status: 503 })
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  ctx: { params: Promise<{ entity: string }> }
+) {
+  const table = await resolveEntity(ctx)
+  if (!table) return NextResponse.json({ error: 'Unknown entity' }, { status: 404 })
+
+  try {
+    const body = await req.text()
+    const parsed = JSON.parse(body) as { id?: number }
+    if (!parsed.id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+
+    const res = await fetch(`${WORKER_BASE}/admin/${table}/${parsed.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', ...authHeader(req) },
+      body,
+    })
+    const data = (await res.json()) as Record<string, unknown>
+    return NextResponse.json(data, { status: res.status })
+  } catch {
+    return NextResponse.json({ error: 'Worker unavailable' }, { status: 503 })
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  ctx: { params: Promise<{ entity: string }> }
+) {
+  const table = await resolveEntity(ctx)
+  if (!table) return NextResponse.json({ error: 'Unknown entity' }, { status: 404 })
+
+  try {
+    const id = req.nextUrl.searchParams.get('id')
+    if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+
+    const res = await fetch(`${WORKER_BASE}/admin/${table}/${id}`, {
+      method: 'DELETE',
+      headers: authHeader(req),
+    })
+    const data = (await res.json()) as Record<string, unknown>
+    return NextResponse.json(data, { status: res.status })
+  } catch {
+    return NextResponse.json({ error: 'Worker unavailable' }, { status: 503 })
+  }
+}

@@ -27,18 +27,24 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             gap: '24px',
           }}
         >
-          <span
+          <a
+            href="/admin"
             style={{
               fontFamily: 'monospace',
               fontSize: '12px',
               fontWeight: 700,
               letterSpacing: '0.15em',
               color: 'var(--text-muted)',
+              textDecoration: 'none',
             }}
           >
             SL / ADMIN
-          </span>
+          </a>
           <a href="/admin/obras" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Obras</a>
+          <a href="/admin/posts" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Blog</a>
+          <a href="/admin/proyectos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Proyectos</a>
+          <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Conciertos</a>
+          <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Publicaciones</a>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <ThemeToggle />
             <form action="/api/admin/logout" method="post">
