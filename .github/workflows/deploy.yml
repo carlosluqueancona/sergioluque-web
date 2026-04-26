@@ -26,9 +26,17 @@ jobs:
       - name: Build for Cloudflare Pages
         run: pnpm dlx @cloudflare/next-on-pages@1
 
+      - name: Create Pages project (if not exists)
+        continue-on-error: true
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create sergioluque-web --production-branch main
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .vercel/output/static --project-name sergioluque-web --branch main
+          command: pages deploy .vercel/output/static --project-name sergioluque-web --branch main --commit-dirty=true
