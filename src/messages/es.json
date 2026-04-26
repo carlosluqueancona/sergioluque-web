@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "works": "Obras",
+    "projects": "Proyectos",
+    "blog": "Blog",
+    "bio": "Biografía",
+    "publications": "Publicaciones",
+    "concerts": "Conciertos",
+    "contact": "Contacto"
+  },
+  "works": {
+    "title": "Obras",
+    "catalog": "Catálogo de obras",
+    "instrumentation": "Formación",
+    "duration": "Duración",
+    "premiere": "Estreno",
+    "commissions": "Encargos",
+    "ensembles": "Intérpretes",
+    "year": "Año",
+    "noAudio": "Audio no disponible",
+    "count_one": "obra",
+    "count_other": "obras"
+  },
+  "home": {
+    "role": "Compositor e investigador",
+    "featuredWorks": "Obras seleccionadas",
+    "upcomingConcerts": "Próximos conciertos",
+    "viewAll": "Ver todo",
+    "noUpcomingConcerts": "No hay conciertos programados próximamente"
+  },
+  "contact": {
+    "title": "Contacto",
+    "name": "Nombre",
+    "email": "Email",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "sending": "Enviando...",
+    "success": "Mensaje enviado correctamente.",
+    "error": "Error al enviar el mensaje. Inténtalo de nuevo.",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "tu@email.com",
+    "subjectPlaceholder": "Asunto del mensaje",
+    "messagePlaceholder": "Tu mensaje..."
+  },
+  "audio": {
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "loading": "Cargando audio..."
+  },
+  "cv": {
+    "download": "Descargar CV"
+  },
+  "bio": {
+    "title": "Biografía"
+  },
+  "concerts": {
+    "title": "Conciertos",
+    "upcoming": "Próximos conciertos",
+    "past": "Conciertos pasados",
+    "noUpcoming": "No hay conciertos programados próximamente",
+    "noPast": "No hay conciertos pasados registrados"
+  },
+  "publications": {
+    "title": "Publicaciones",
+    "abstract": "Resumen",
+    "journal": "Revista",
+    "doi": "DOI",
+    "download": "Descargar PDF"
+  },
+  "projects": {
+    "title": "Proyectos"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Leer más",
+    "publishedAt": "Publicado el"
+  },
+  "common": {
+    "backToList": "Volver",
+    "loading": "Cargando...",
+    "notFound": "No encontrado"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe.",
+    "back": "Volver al inicio"
+  }
+}

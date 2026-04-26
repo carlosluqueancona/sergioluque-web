@@ -1,0 +1,16 @@
+name = "sergioluque-cms"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sergioluque-db"
+database_id = "dc6c7575-9577-479d-b484-5642d15e1d48"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "sergioluque-media"
+
+[vars]
+ALLOWED_ORIGINS = "https://sergioluque.com,https://www.sergioluque.com"

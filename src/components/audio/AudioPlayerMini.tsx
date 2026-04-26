@@ -1,0 +1,150 @@
+'use client'
+
+import { useRef, useState, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
+import { formatTime } from '@/lib/utils'
+
+interface AudioPlayerMiniProps {
+  audioUrl: string
+  title: string
+  duration?: number
+}
+
+export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlayerMiniProps) {
+  const t = useTranslations('audio')
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [audioDuration, setAudioDuration] = useState(duration ?? 0)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const togglePlay = useCallback(async () => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (isPlaying) {
+      audio.pause()
+      setIsPlaying(false)
+    } else {
+      setIsLoading(true)
+      try {
+        await audio.play()
+        setIsPlaying(true)
+      } catch {
+        setIsPlaying(false)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+  }, [isPlaying])
+
+  const handleTimeUpdate = useCallback(() => {
+    setCurrentTime(audioRef.current?.currentTime ?? 0)
+  }, [])
+
+  const handleLoadedMetadata = useCallback(() => {
+    setAudioDuration(audioRef.current?.duration ?? 0)
+  }, [])
+
+  const handleEnded = useCallback(() => {
+    setIsPlaying(false)
+    setCurrentTime(0)
+  }, [])
+
+  const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <audio
+        ref={audioRef}
+        src={audioUrl}
+        preload="metadata"
+        hidden
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={handleEnded}
+      />
+
+      <button
+        onClick={togglePlay}
+        disabled={isLoading}
+        aria-label={isPlaying ? t('pause') : t('play')}
+        style={{
+          width: '32px',
+          height: '32px',
+          border: '1px solid var(--border)',
+          background: 'none',
+          color: 'var(--text-primary)',
+          cursor: isLoading ? 'wait' : 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+        }}
+      >
+        {isLoading ? (
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" strokeDasharray="20" strokeDashoffset="20">
+              <animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="1s" repeatCount="indefinite" />
+            </circle>
+          </svg>
+        ) : isPlaying ? (
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="3" y="2" width="4" height="12" />
+            <rect x="9" y="2" width="4" height="12" />
+          </svg>
+        ) : (
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+            <polygon points="3,1 14,8 3,15" />
+          </svg>
+        )}
+      </button>
+
+      <div
+        onClick={(e) => {
+          const audio = audioRef.current
+          if (!audio || audioDuration === 0) return
+          const rect = e.currentTarget.getBoundingClientRect()
+          audio.currentTime = ((e.clientX - rect.left) / rect.width) * audioDuration
+          setCurrentTime(audio.currentTime)
+        }}
+        role="slider"
+        aria-label="Posición"
+        aria-valuemin={0}
+        aria-valuemax={Math.round(audioDuration)}
+        aria-valuenow={Math.round(currentTime)}
+        style={{
+          flex: 1,
+          height: '3px',
+          background: 'var(--border)',
+          cursor: 'pointer',
+          position: 'relative',
+          borderRadius: '2px',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            height: '100%',
+            width: `${progress}%`,
+            background: 'var(--accent)',
+            borderRadius: '2px',
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          fontFamily: 'var(--font-space-mono)',
+          fontSize: '11px',
+          color: 'var(--text-secondary)',
+          flexShrink: 0,
+        }}
+      >
+        {formatTime(audioDuration)}
+      </div>
+    </div>
+  )
+}
