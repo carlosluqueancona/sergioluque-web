@@ -98,3 +98,30 @@
 .work-card:hover {
   background: var(--surface-hover);
 }
+
+/* Admin light theme — scoped via data attribute so the public site is unaffected */
+[data-admin-theme="light"] {
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --surface-hover: #F0F0F0;
+  --border: #E2E2E2;
+  --text-primary: #0A0A0A;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --accent: #1A1A1A;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+[data-admin-theme="light"] input,
+[data-admin-theme="light"] textarea,
+[data-admin-theme="light"] select {
+  background: var(--surface) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+}
+
+[data-admin-theme="dark"] {
+  background: var(--bg);
+  color: var(--text-primary);
+}

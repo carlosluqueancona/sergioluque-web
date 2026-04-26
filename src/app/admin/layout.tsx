@@ -1,8 +1,13 @@
 import type { ReactNode } from 'react'
+import { ThemeToggle, themeBootstrapScript } from '@/components/admin/ThemeToggle'
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
+      <head>
+        {/* Set theme before paint to avoid flash of wrong colors */}
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+      </head>
       <body
         style={{
           margin: 0,
@@ -10,6 +15,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           color: 'var(--text-primary)',
           fontFamily: 'var(--font-space-mono), monospace',
           minHeight: '100vh',
+          transition: 'background 150ms ease, color 150ms ease',
         }}
       >
         <nav
@@ -33,23 +39,26 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             SL / ADMIN
           </span>
           <a href="/admin/obras" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Obras</a>
-          <form action="/api/admin/logout" method="post" style={{ marginLeft: 'auto' }}>
-            <button
-              type="submit"
-              style={{
-                background: 'none',
-                border: '1px solid var(--border)',
-                color: 'var(--text-muted)',
-                fontFamily: 'monospace',
-                fontSize: '11px',
-                padding: '4px 12px',
-                cursor: 'pointer',
-                letterSpacing: '0.1em',
-              }}
-            >
-              LOGOUT
-            </button>
-          </form>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <ThemeToggle />
+            <form action="/api/admin/logout" method="post">
+              <button
+                type="submit"
+                style={{
+                  background: 'none',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-muted)',
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                  padding: '4px 12px',
+                  cursor: 'pointer',
+                  letterSpacing: '0.1em',
+                }}
+              >
+                LOGOUT
+              </button>
+            </form>
+          </div>
         </nav>
         <main style={{ padding: '32px 24px' }}>
           {children}
