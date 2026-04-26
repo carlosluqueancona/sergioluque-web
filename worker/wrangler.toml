@@ -13,4 +13,4 @@ binding = "MEDIA"
 bucket_name = "sergioluque-media"
 
 [vars]
-ALLOWED_ORIGINS = "https://sergioluque.com,https://www.sergioluque.com"
+ALLOWED_ORIGINS = "https://sergioluque.com,https://www.sergioluque.com,https://sergioluque-web.pages.dev"

@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 /**
  * Proxy login requests to the Cloudflare Worker admin API.
  * Forwards the Set-Cookie header from the Worker response so the

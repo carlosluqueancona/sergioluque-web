@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import { getObras, getPosts, getProyectos } from '@/lib/db/queries'
 import type { MetadataRoute } from 'next'
 

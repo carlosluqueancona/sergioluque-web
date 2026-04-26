@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import type { Metadata } from 'next'
 import { Space_Mono, IBM_Plex_Sans } from 'next/font/google'
 import './globals.css'
