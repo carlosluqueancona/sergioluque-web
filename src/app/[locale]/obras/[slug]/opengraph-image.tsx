@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import { ImageResponse } from 'next/og'
 import { getObraBySlug } from '@/lib/db/queries'
 import type { Locale } from '@/types'

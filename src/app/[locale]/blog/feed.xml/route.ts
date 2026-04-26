@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import { getPosts } from '@/lib/db/queries'
 import { NextRequest } from 'next/server'
 import type { Locale } from '@/types'
