@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { getObrasDestacadas, getEventosProximos } from '@/lib/db/queries'
 import { WorkCard } from '@/components/works'
 import { ConcertItem } from '@/components/concerts'
+import { Hero } from '@/components/home/Hero'
 import type { Locale } from '@/types'
 
 export const revalidate = 3600
@@ -22,46 +23,7 @@ export default async function HomePage({
 
   return (
     <>
-      {/* Hero */}
-      <section
-        style={{
-          minHeight: '80vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          padding: '0 48px 64px',
-          maxWidth: '1200px',
-          margin: '0 auto',
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: 'var(--font-space-mono)',
-            fontSize: 'clamp(36px, 7vw, 80px)',
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            margin: '0 0 16px',
-            lineHeight: 1.05,
-            letterSpacing: '-0.03em',
-          }}
-        >
-          SERGIO
-          <br />
-          LUQUE
-        </h1>
-        <p
-          style={{
-            fontFamily: 'var(--font-space-mono)',
-            fontSize: '13px',
-            color: 'var(--text-secondary)',
-            margin: 0,
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-          }}
-        >
-          {t('role')}
-        </p>
-      </section>
+      <Hero locale={locale as Locale} />
 
       {/* Obras destacadas */}
       {obras.length > 0 && (
