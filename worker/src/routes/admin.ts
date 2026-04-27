@@ -302,7 +302,7 @@ admin.post('/_migrate-monolingual', async (c) => {
     }
   }
 
-  // Settings: rename bio_long_en → bio, bio_short_en → bio_short, drop _es rows.
+    // Settings: rename bio_long_en → bio, bio_short_en → bio_short, drop _es rows.
   const settingsLog: string[] = [];
   try {
     await c.env.DB.prepare(
@@ -322,6 +322,129 @@ admin.post('/_migrate-monolingual', async (c) => {
   }
 
   return json({ ok: true, log, settings: settingsLog }, 200, cors);
+});
+
+/**
+ * Drops the lingering NOT NULL UNIQUE legacy slug_es column (and any other
+ * stragglers) by recreating the affected tables. The earlier monolingual
+ * migration could not DROP slug_es directly because SQLite/D1 refuses to
+ * drop a column that participates in a UNIQUE or PRIMARY KEY constraint.
+ */
+admin.post('/_migrate-finalize', async (c) => {
+  const cors = getCors(c.req.raw, c.env);
+  const payload = await guardAuth(c.req.raw, c.env);
+  if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  type Recreate = { table: string; createSql: string; copyCols: string };
+  const recreations: Recreate[] = [
+    {
+      table: 'obras',
+      createSql: `CREATE TABLE obras_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL DEFAULT '',
+        slug TEXT NOT NULL DEFAULT '' UNIQUE,
+        year INTEGER,
+        instrumentation TEXT DEFAULT '',
+        duration TEXT DEFAULT '',
+        description TEXT DEFAULT '',
+        audio_url TEXT DEFAULT '',
+        audio_duration INTEGER DEFAULT 0,
+        image_url TEXT DEFAULT '',
+        premiere_date TEXT DEFAULT '',
+        premiere_venue TEXT DEFAULT '',
+        premiere_city TEXT DEFAULT '',
+        commissions TEXT DEFAULT '',
+        ensembles TEXT DEFAULT '',
+        is_featured INTEGER DEFAULT 0,
+        sort_order INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+      )`,
+      copyCols: 'id, title, slug, year, instrumentation, duration, description, audio_url, audio_duration, image_url, premiere_date, premiere_venue, premiere_city, commissions, ensembles, is_featured, sort_order, created_at, updated_at',
+    },
+    {
+      table: 'posts',
+      createSql: `CREATE TABLE posts_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL DEFAULT '',
+        slug TEXT NOT NULL DEFAULT '' UNIQUE,
+        body TEXT DEFAULT '',
+        excerpt TEXT DEFAULT '',
+        image_url TEXT DEFAULT '',
+        tags TEXT DEFAULT '',
+        status TEXT DEFAULT 'draft',
+        published_at TEXT DEFAULT NULL,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+      )`,
+      copyCols: 'id, title, slug, body, excerpt, image_url, tags, status, published_at, created_at, updated_at',
+    },
+    {
+      table: 'proyectos',
+      createSql: `CREATE TABLE proyectos_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL DEFAULT '',
+        slug TEXT NOT NULL DEFAULT '' UNIQUE,
+        year INTEGER,
+        description TEXT DEFAULT '',
+        images TEXT DEFAULT '[]',
+        links TEXT DEFAULT '[]',
+        is_featured INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+      )`,
+      copyCols: 'id, title, slug, year, description, images, links, is_featured, created_at, updated_at',
+    },
+  ];
+
+  const log: Record<string, string[]> = {};
+
+  for (const r of recreations) {
+    log[r.table] = [];
+    try {
+      // 1. Create the new table with the desired schema.
+      await c.env.DB.prepare(r.createSql).run();
+      log[r.table].push('created _new');
+
+      // 2. Copy rows. NULL slugs/titles get coerced to '' to satisfy NOT NULL.
+      await c.env.DB.prepare(
+        `INSERT INTO ${r.table}_new (${r.copyCols}) SELECT ${r.copyCols} FROM ${r.table}`
+      ).run();
+      log[r.table].push('copied rows');
+
+      // 3. Drop original, rename new.
+      await c.env.DB.prepare(`DROP TABLE ${r.table}`).run();
+      log[r.table].push('dropped old');
+      await c.env.DB.prepare(`ALTER TABLE ${r.table}_new RENAME TO ${r.table}`).run();
+      log[r.table].push('renamed _new');
+    } catch (err) {
+      log[r.table].push(`error: ${(err as Error).message}`);
+      // Try cleanup: drop _new if it exists so the next run can retry.
+      try {
+        await c.env.DB.prepare(`DROP TABLE ${r.table}_new`).run();
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  // Recreate indexes
+  const indexes = [
+    `CREATE INDEX IF NOT EXISTS idx_obras_featured ON obras(is_featured)`,
+    `CREATE INDEX IF NOT EXISTS idx_obras_year ON obras(year DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status, published_at DESC)`,
+  ];
+  const indexLog: string[] = [];
+  for (const ix of indexes) {
+    try {
+      await c.env.DB.prepare(ix).run();
+      indexLog.push(ix.split(' ON ')[1] ?? ix);
+    } catch (err) {
+      indexLog.push(`error: ${(err as Error).message}`);
+    }
+  }
+
+  return json({ ok: true, log, indexes: indexLog }, 200, cors);
 });
 
 // ── Settings (key-value upsert) ───────────────────────────────────────────
