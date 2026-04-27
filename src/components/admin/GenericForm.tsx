@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useRef, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import type { EntitySchema, FieldDef } from '@/lib/admin/schemas'
 
@@ -30,13 +30,53 @@ const labelStyle: React.CSSProperties = {
   textTransform: 'uppercase',
 }
 
-const fieldStyle: React.CSSProperties = { marginBottom: '16px' }
+const fieldStyle: React.CSSProperties = { marginBottom: '20px' }
 
-function defaultValue(field: FieldDef, current?: unknown): string | boolean {
+const smallButton: React.CSSProperties = {
+  background: 'var(--surface-hover)',
+  border: '1px solid var(--border)',
+  color: 'var(--text-primary)',
+  fontFamily: 'monospace',
+  fontSize: '11px',
+  padding: '6px 12px',
+  cursor: 'pointer',
+  letterSpacing: '0.05em',
+}
+
+interface LinkItem {
+  label: string
+  url: string
+}
+
+type FormValue = string | boolean | string[] | LinkItem[]
+
+function defaultValue(field: FieldDef, current?: unknown): FormValue {
   if (field.type === 'boolean') {
     if (typeof current === 'boolean') return current
     if (typeof current === 'number') return current === 1
     return false
+  }
+  if (field.type === 'image-list') {
+    if (typeof current === 'string') {
+      try {
+        const parsed = JSON.parse(current)
+        return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === 'string') : []
+      } catch {
+        return []
+      }
+    }
+    return Array.isArray(current) ? (current as string[]) : []
+  }
+  if (field.type === 'link-list') {
+    if (typeof current === 'string') {
+      try {
+        const parsed = JSON.parse(current)
+        return Array.isArray(parsed) ? (parsed as LinkItem[]) : []
+      } catch {
+        return []
+      }
+    }
+    return Array.isArray(current) ? (current as LinkItem[]) : []
   }
   if (current == null) return ''
   return String(current)
@@ -44,8 +84,8 @@ function defaultValue(field: FieldDef, current?: unknown): string | boolean {
 
 export function GenericForm({ schema, initialData }: GenericFormProps) {
   const router = useRouter()
-  const [form, setForm] = useState<Record<string, string | boolean>>(() => {
-    const initial: Record<string, string | boolean> = {}
+  const [form, setForm] = useState<Record<string, FormValue>>(() => {
+    const initial: Record<string, FormValue> = {}
     for (const field of schema.fields) {
       initial[field.key] = defaultValue(field, initialData?.[field.key])
     }
@@ -55,8 +95,26 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
   const [loading, setLoading] = useState(false)
   const id = initialData?.id as number | undefined
 
-  function set(key: string, value: string | boolean) {
+  function set(key: string, value: FormValue) {
     setForm((prev) => ({ ...prev, [key]: value }))
+  }
+
+  async function uploadFile(file: File): Promise<string | null> {
+    const fd = new FormData()
+    fd.append('file', file)
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
+      if (!res.ok) {
+        const data = (await res.json()) as { error?: string }
+        setError(data.error ?? 'Error al subir archivo')
+        return null
+      }
+      const { url } = (await res.json()) as { url: string }
+      return url
+    } catch {
+      setError('Error de conexión al subir archivo')
+      return null
+    }
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -71,6 +129,8 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
         payload[field.key] = v ? 1 : 0
       } else if (field.type === 'number') {
         payload[field.key] = v ? Number(v) : null
+      } else if (field.type === 'image-list' || field.type === 'link-list') {
+        payload[field.key] = JSON.stringify(v ?? [])
       } else {
         payload[field.key] = v
       }
@@ -118,50 +178,13 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       {schema.fields.map((field) => (
-        <div key={field.key} style={fieldStyle}>
-          <label style={labelStyle} htmlFor={field.key}>
-            {field.label}
-            {field.required ? ' *' : ''}
-          </label>
-          {field.type === 'textarea' ? (
-            <textarea
-              id={field.key}
-              value={String(form[field.key] ?? '')}
-              onChange={(e) => set(field.key, e.target.value)}
-              rows={field.rows ?? 4}
-              required={field.required}
-              style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
-            />
-          ) : field.type === 'boolean' ? (
-            <input
-              id={field.key}
-              type="checkbox"
-              checked={Boolean(form[field.key])}
-              onChange={(e) => set(field.key, e.target.checked)}
-              style={{ width: 'auto', accentColor: 'var(--accent)' }}
-            />
-          ) : (
-            <input
-              id={field.key}
-              type={
-                field.type === 'date'
-                  ? 'date'
-                  : field.type === 'datetime'
-                    ? 'datetime-local'
-                    : field.type === 'number'
-                      ? 'number'
-                      : field.type === 'url'
-                        ? 'url'
-                        : 'text'
-              }
-              value={String(form[field.key] ?? '')}
-              onChange={(e) => set(field.key, e.target.value)}
-              required={field.required}
-              placeholder={field.placeholder}
-              style={inputStyle}
-            />
-          )}
-        </div>
+        <FieldRenderer
+          key={field.key}
+          field={field}
+          value={form[field.key]}
+          onChange={(v) => set(field.key, v)}
+          uploadFile={uploadFile}
+        />
       ))}
 
       {error && (
@@ -170,7 +193,16 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
         </p>
       )}
 
-      <div style={{ display: 'flex', gap: '12px', marginTop: '24px', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '12px',
+          marginTop: '24px',
+          alignItems: 'center',
+          paddingTop: '24px',
+          borderTop: '1px solid var(--border)',
+        }}
+      >
         <button
           type="submit"
           disabled={loading}
@@ -209,5 +241,382 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
         )}
       </div>
     </form>
+  )
+}
+
+// ─── Field Renderer ──────────────────────────────────────────────────────
+
+interface FieldRendererProps {
+  field: FieldDef
+  value: FormValue
+  onChange: (v: FormValue) => void
+  uploadFile: (file: File) => Promise<string | null>
+}
+
+function FieldRenderer({ field, value, onChange, uploadFile }: FieldRendererProps) {
+  if (field.type === 'image-upload' || field.type === 'pdf-upload') {
+    return (
+      <FileField
+        field={field}
+        value={String(value ?? '')}
+        onChange={(v) => onChange(v)}
+        uploadFile={uploadFile}
+        accept={field.type === 'image-upload' ? 'image/*' : 'application/pdf'}
+      />
+    )
+  }
+
+  if (field.type === 'image-list') {
+    return (
+      <ImageListField
+        field={field}
+        value={Array.isArray(value) ? (value as string[]) : []}
+        onChange={(v) => onChange(v)}
+        uploadFile={uploadFile}
+      />
+    )
+  }
+
+  if (field.type === 'link-list') {
+    return (
+      <LinkListField
+        field={field}
+        value={Array.isArray(value) ? (value as LinkItem[]) : []}
+        onChange={(v) => onChange(v)}
+      />
+    )
+  }
+
+  if (field.type === 'textarea') {
+    return (
+      <div style={fieldStyle}>
+        <label style={labelStyle}>{field.label}</label>
+        <textarea
+          value={String(value ?? '')}
+          onChange={(e) => onChange(e.target.value)}
+          rows={field.rows ?? 4}
+          required={field.required}
+          style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
+        />
+      </div>
+    )
+  }
+
+  if (field.type === 'boolean') {
+    return (
+      <div style={fieldStyle}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={Boolean(value)}
+            onChange={(e) => onChange(e.target.checked)}
+            style={{ accentColor: 'var(--accent)' }}
+          />
+          <span style={{ ...labelStyle, marginBottom: 0 }}>{field.label}</span>
+        </label>
+      </div>
+    )
+  }
+
+  return (
+    <div style={fieldStyle}>
+      <label style={labelStyle}>
+        {field.label}
+        {field.required ? ' *' : ''}
+      </label>
+      <input
+        type={
+          field.type === 'date'
+            ? 'date'
+            : field.type === 'datetime'
+              ? 'datetime-local'
+              : field.type === 'number'
+                ? 'number'
+                : field.type === 'url'
+                  ? 'url'
+                  : 'text'
+        }
+        value={String(value ?? '')}
+        onChange={(e) => onChange(e.target.value)}
+        required={field.required}
+        placeholder={field.placeholder}
+        style={inputStyle}
+      />
+    </div>
+  )
+}
+
+// ─── File Field (single image or pdf) ────────────────────────────────────
+
+function FileField({
+  field,
+  value,
+  onChange,
+  uploadFile,
+  accept,
+}: {
+  field: FieldDef
+  value: string
+  onChange: (v: string) => void
+  uploadFile: (file: File) => Promise<string | null>
+  accept: string
+}) {
+  const ref = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    const url = await uploadFile(file)
+    if (url) onChange(url)
+    setUploading(false)
+    if (ref.current) ref.current.value = ''
+  }
+
+  return (
+    <div style={fieldStyle}>
+      <label style={labelStyle}>{field.label}</label>
+      {value && accept.startsWith('image/') && (
+        <img
+          src={value}
+          alt=""
+          style={{
+            display: 'block',
+            maxWidth: '200px',
+            maxHeight: '200px',
+            border: '1px solid var(--border)',
+            marginBottom: '8px',
+          }}
+        />
+      )}
+      {value && accept === 'application/pdf' && (
+        <a
+          href={value}
+          target="_blank"
+          rel="noopener"
+          style={{ color: 'var(--accent)', fontSize: '12px', display: 'block', marginBottom: '8px' }}
+        >
+          {value.split('/').pop()}
+        </a>
+      )}
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <input
+          ref={ref}
+          type="file"
+          accept={accept}
+          onChange={handleFile}
+          style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
+        />
+        {value && (
+          <button type="button" onClick={() => onChange('')} style={smallButton}>
+            Quitar
+          </button>
+        )}
+      </div>
+      {uploading && (
+        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          Subiendo…
+        </p>
+      )}
+      <input type="hidden" value={value} readOnly />
+    </div>
+  )
+}
+
+// ─── Image List Field ────────────────────────────────────────────────────
+
+function ImageListField({
+  field,
+  value,
+  onChange,
+  uploadFile,
+}: {
+  field: FieldDef
+  value: string[]
+  onChange: (v: string[]) => void
+  uploadFile: (file: File) => Promise<string | null>
+}) {
+  const ref = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+
+  async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (!files.length) return
+    setUploading(true)
+    const urls: string[] = []
+    for (const file of files) {
+      const url = await uploadFile(file)
+      if (url) urls.push(url)
+    }
+    if (urls.length) onChange([...value, ...urls])
+    setUploading(false)
+    if (ref.current) ref.current.value = ''
+  }
+
+  function remove(idx: number) {
+    onChange(value.filter((_, i) => i !== idx))
+  }
+
+  function move(idx: number, dir: -1 | 1) {
+    const next = [...value]
+    const target = idx + dir
+    if (target < 0 || target >= next.length) return
+    ;[next[idx], next[target]] = [next[target]!, next[idx]!]
+    onChange(next)
+  }
+
+  return (
+    <div style={fieldStyle}>
+      <label style={labelStyle}>{field.label}</label>
+      {value.length > 0 && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+            gap: '8px',
+            marginBottom: '8px',
+          }}
+        >
+          {value.map((url, i) => (
+            <div
+              key={`${url}-${i}`}
+              style={{
+                border: '1px solid var(--border)',
+                padding: '6px',
+                background: 'var(--surface)',
+              }}
+            >
+              <img
+                src={url}
+                alt=""
+                style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block' }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginTop: '6px',
+                  gap: '4px',
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  style={{ ...smallButton, padding: '2px 8px', fontSize: '10px' }}
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(i, 1)}
+                  disabled={i === value.length - 1}
+                  style={{ ...smallButton, padding: '2px 8px', fontSize: '10px' }}
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  onClick={() => remove(i)}
+                  style={{
+                    ...smallButton,
+                    padding: '2px 8px',
+                    fontSize: '10px',
+                    color: 'var(--error)',
+                    borderColor: 'var(--error)',
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <input
+        ref={ref}
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleFiles}
+        style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
+      />
+      {uploading && (
+        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          Subiendo imágenes…
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ─── Link List Field ─────────────────────────────────────────────────────
+
+function LinkListField({
+  field,
+  value,
+  onChange,
+}: {
+  field: FieldDef
+  value: LinkItem[]
+  onChange: (v: LinkItem[]) => void
+}) {
+  function add() {
+    onChange([...value, { label: '', url: '' }])
+  }
+  function remove(idx: number) {
+    onChange(value.filter((_, i) => i !== idx))
+  }
+  function update(idx: number, key: keyof LinkItem, val: string) {
+    const next = [...value]
+    next[idx] = { ...next[idx]!, [key]: val }
+    onChange(next)
+  }
+
+  return (
+    <div style={fieldStyle}>
+      <label style={labelStyle}>{field.label}</label>
+      {value.map((item, i) => (
+        <div
+          key={i}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 2fr auto',
+            gap: '8px',
+            marginBottom: '8px',
+            alignItems: 'center',
+          }}
+        >
+          <input
+            placeholder="Etiqueta"
+            value={item.label}
+            onChange={(e) => update(i, 'label', e.target.value)}
+            style={inputStyle}
+          />
+          <input
+            type="url"
+            placeholder="https://…"
+            value={item.url}
+            onChange={(e) => update(i, 'url', e.target.value)}
+            style={inputStyle}
+          />
+          <button
+            type="button"
+            onClick={() => remove(i)}
+            style={{
+              ...smallButton,
+              color: 'var(--error)',
+              borderColor: 'var(--error)',
+            }}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={add} style={smallButton}>
+        + Agregar enlace
+      </button>
+    </div>
   )
 }

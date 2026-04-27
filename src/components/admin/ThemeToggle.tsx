@@ -42,7 +42,7 @@ export function ThemeToggle() {
         letterSpacing: '0.1em',
       }}
     >
-      {theme === 'dark' ? '☾  DARK' : '☀  LIGHT'}
+      {theme === 'dark' ? '☀  LIGHT' : '☾  DARK'}
     </button>
   )
 }

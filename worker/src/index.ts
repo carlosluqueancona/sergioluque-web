@@ -39,6 +39,22 @@ app.route('/admin', admin);
 
 app.route('/admin/upload', upload);
 
+// ── R2 public media serving ──────────────────────────────────────────────
+
+app.get('/media/*', async (c) => {
+  const path = c.req.path.replace(/^\/media\//, '');
+  if (!path) return new Response('Not found', { status: 404 });
+
+  const obj = await c.env.MEDIA.get(path);
+  if (!obj) return new Response('Not found', { status: 404 });
+
+  const headers = new Headers();
+  obj.writeHttpMetadata(headers);
+  headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+  headers.set('Access-Control-Allow-Origin', '*');
+  return new Response(obj.body, { status: 200, headers });
+});
+
 // ── 404 fallback ─────────────────────────────────────────────────────────
 
 app.notFound((c) => {

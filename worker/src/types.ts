@@ -3,6 +3,7 @@ export interface Env {
   MEDIA: R2Bucket;
   JWT_SECRET: string;
   ALLOWED_ORIGINS?: string;
+  MEDIA_PUBLIC_URL?: string;
 }
 
 export interface Obra {

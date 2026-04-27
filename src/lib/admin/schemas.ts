@@ -6,6 +6,10 @@ export type FieldType =
   | 'datetime'
   | 'boolean'
   | 'url'
+  | 'image-upload'
+  | 'pdf-upload'
+  | 'image-list'
+  | 'link-list'
 
 export interface FieldDef {
   key: string
@@ -85,18 +89,8 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       ...bilingual('slug', 'Slug'),
       { key: 'year', label: 'Año', type: 'number' },
       ...bilingual('description', 'Descripción', 'textarea', 6),
-      {
-        key: 'images',
-        label: 'Imágenes (URLs JSON: ["url1","url2"])',
-        type: 'textarea',
-        rows: 3,
-      },
-      {
-        key: 'links',
-        label: 'Enlaces (JSON: [{"label":"...","url":"..."}])',
-        type: 'textarea',
-        rows: 3,
-      },
+      { key: 'images', label: 'Imágenes', type: 'image-list' },
+      { key: 'links', label: 'Enlaces', type: 'link-list' },
       { key: 'is_featured', label: '¿Destacado?', type: 'boolean' },
     ],
   },

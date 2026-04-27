@@ -33,11 +33,10 @@ export default async function AdminObrasPage() {
     })
     if (res.status === 401) redirect('/admin/login')
     if (res.ok) {
-      const data = (await res.json()) as { obras?: ObraRow[] }
-      obras = data.obras ?? []
+      obras = (await res.json()) as ObraRow[]
     }
   } catch {
-    // Worker not running in dev — show empty state
+    // Worker unreachable — show empty state
   }
 
   return (
@@ -65,7 +64,7 @@ export default async function AdminObrasPage() {
 
       {obras.length === 0 && (
         <p style={{ color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '13px' }}>
-          No hay obras. Asegúrate de que el Worker está corriendo en localhost:8787.
+          No hay obras todavía. Crea la primera con el botón de arriba.
         </p>
       )}
 

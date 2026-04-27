@@ -101,7 +101,10 @@ upload.post('/', async (c) => {
       httpMetadata: { contentType: detectedMime },
     });
 
-    return json({ url: `https://media.sergioluque.com/${key}` }, 200, cors);
+    const baseUrl =
+      c.env.MEDIA_PUBLIC_URL ??
+      `https://${c.req.raw.headers.get('host') ?? 'sergioluque-cms.carlosluque-095.workers.dev'}/media`;
+    return json({ url: `${baseUrl}/${key}` }, 200, cors);
   } catch (err) {
     console.error('R2 upload error', err);
     return jsonError('Upload failed', 500, cors);
