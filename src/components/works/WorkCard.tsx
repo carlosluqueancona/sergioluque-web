@@ -4,6 +4,9 @@ import { getTranslations } from 'next-intl/server'
 import { AudioPlayerMini } from '@/components/audio'
 import type { Obra, Locale } from '@/types'
 
+const isHttpUrl = (s: string | undefined): s is string =>
+  !!s && /^https?:\/\//i.test(s)
+
 interface WorkCardProps {
   obra: Obra
   locale: Locale
@@ -14,6 +17,8 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
   const title = obra.title
   const instrumentation = obra.instrumentation
   const slug = obra.slug
+  const showImage = isHttpUrl(obra.imageUrl)
+  const showAudio = isHttpUrl(obra.audioUrl)
 
   return (
     <article
@@ -22,19 +27,19 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
         borderBottom: '1px solid var(--border)',
         padding: '24px 0',
         display: 'grid',
-        gridTemplateColumns: obra.imageUrl ? '120px 1fr' : '1fr',
+        gridTemplateColumns: showImage ? '120px 1fr' : '1fr',
         gap: '24px',
         alignItems: 'start',
       }}
     >
-      {obra.imageUrl && (
+      {showImage && (
         <Link href={`/${locale}/obras/${slug}`} style={{ display: 'block' }}>
           <Image
-            src={obra.imageUrl}
+            src={obra.imageUrl as string}
             alt={title}
             width={120}
             height={120}
-            style={{ display: 'block', objectFit: 'cover' }}
+            style={{ display: 'block', objectFit: 'cover', width: '120px', height: '120px' }}
           />
         </Link>
       )}
@@ -61,19 +66,21 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
           >
             {title}
           </Link>
-          <span
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '12px',
-              color: 'var(--text-muted)',
-              flexShrink: 0,
-            }}
-          >
-            {obra.year}
-          </span>
+          {obra.year != null && (
+            <span
+              style={{
+                fontFamily: 'var(--font-space-mono)',
+                fontSize: '12px',
+                color: 'var(--text-muted)',
+                flexShrink: 0,
+              }}
+            >
+              {obra.year}
+            </span>
+          )}
         </div>
 
-        {instrumentation && (
+        {(instrumentation || obra.duration) && (
           <p
             style={{
               fontFamily: 'var(--font-space-mono)',
@@ -85,22 +92,27 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
           >
             {instrumentation}
             {obra.duration && (
-              <span style={{ marginLeft: '16px', color: 'var(--text-muted)' }}>
+              <span
+                style={{
+                  marginLeft: instrumentation ? '16px' : 0,
+                  color: 'var(--text-muted)',
+                }}
+              >
                 {obra.duration}
               </span>
             )}
           </p>
         )}
 
-        {obra.audioUrl && (
+        {showAudio && (
           <AudioPlayerMini
-            audioUrl={obra.audioUrl}
+            audioUrl={obra.audioUrl as string}
             title={title}
             duration={obra.audioDuration}
           />
         )}
 
-        {!obra.audioUrl && (
+        {!showAudio && (
           <p
             style={{
               fontFamily: 'var(--font-space-mono)',

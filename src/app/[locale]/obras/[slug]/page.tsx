@@ -7,6 +7,9 @@ import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/types'
 import type { Metadata } from 'next'
 
+const isHttpUrl = (s: string | undefined): s is string =>
+  !!s && /^https?:\/\//i.test(s)
+
 export const revalidate = 3600
 
 export async function generateStaticParams() {
@@ -99,7 +102,7 @@ export default async function ObraPage({
             </p>
           )}
 
-          {obra.audioUrl && (
+          {isHttpUrl(obra.audioUrl) && (
             <div style={{ marginBottom: '48px' }}>
               <AudioPlayer
                 audioUrl={obra.audioUrl}
@@ -109,14 +112,14 @@ export default async function ObraPage({
             </div>
           )}
 
-          {obra.imageUrl && (
+          {isHttpUrl(obra.imageUrl) && (
             <div style={{ marginBottom: '48px' }}>
               <Image
                 src={obra.imageUrl}
                 alt={title}
-                width={800}
-                height={400}
-                style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover' }}
+                width={1600}
+                height={900}
+                style={{ display: 'block', width: '100%', height: 'auto' }}
               />
             </div>
           )}
