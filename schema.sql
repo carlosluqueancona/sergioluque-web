@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS posts (
   body_en      TEXT DEFAULT '',
   excerpt_es   TEXT DEFAULT '',
   excerpt_en   TEXT DEFAULT '',
+  image_url    TEXT DEFAULT '',
   tags         TEXT DEFAULT '',
   status       TEXT DEFAULT 'draft',
   published_at TEXT DEFAULT NULL,
@@ -81,6 +82,7 @@ CREATE TABLE IF NOT EXISTS eventos (
   description_es TEXT DEFAULT '',
   description_en TEXT DEFAULT '',
   external_link  TEXT DEFAULT '',
+  image_url      TEXT DEFAULT '',
   created_at     TEXT DEFAULT (datetime('now')),
   updated_at     TEXT DEFAULT (datetime('now'))
 );
@@ -96,6 +98,7 @@ CREATE TABLE IF NOT EXISTS publicaciones (
   abstract_en TEXT DEFAULT '',
   pdf_url     TEXT DEFAULT '',
   doi         TEXT DEFAULT '',
+  image_url   TEXT DEFAULT '',
   created_at  TEXT DEFAULT (datetime('now')),
   updated_at  TEXT DEFAULT (datetime('now'))
 );

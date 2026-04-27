@@ -30,6 +30,7 @@ export interface Post {
   excerpt?: string
   tags?: string[]
   publishedAt?: string
+  imageUrl?: string
 }
 
 export interface Proyecto {
@@ -52,6 +53,7 @@ export interface Evento {
   country?: string
   description?: string
   externalLink?: string
+  imageUrl?: string
 }
 
 export interface Publicacion {
@@ -62,6 +64,7 @@ export interface Publicacion {
   abstract?: string
   pdfUrl?: string
   doi?: string
+  imageUrl?: string
 }
 
 export interface Settings {

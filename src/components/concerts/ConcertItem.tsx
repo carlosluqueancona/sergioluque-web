@@ -1,4 +1,8 @@
+import Image from 'next/image'
 import type { Evento } from '@/types'
+
+const isHttpUrl = (s: string | undefined): s is string =>
+  !!s && /^https?:\/\//i.test(s)
 
 interface ConcertItemProps {
   evento: Evento
@@ -14,18 +18,29 @@ function formatEventDate(dateStr: string): string {
 
 export function ConcertItem({ evento }: ConcertItemProps) {
   const title = evento.title
+  const showImage = isHttpUrl(evento.imageUrl)
 
   return (
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: '140px 1fr',
+        gridTemplateColumns: showImage ? '80px 140px 1fr' : '140px 1fr',
         gap: '24px',
         padding: '16px 0',
         borderBottom: '1px solid var(--border)',
-        alignItems: 'baseline',
+        alignItems: 'start',
       }}
     >
+      {showImage && (
+        <Image
+          src={evento.imageUrl as string}
+          alt={title}
+          width={80}
+          height={80}
+          style={{ display: 'block', width: '80px', height: '80px', objectFit: 'cover' }}
+        />
+      )}
+
       <span
         style={{
           fontFamily: 'var(--font-space-mono)',

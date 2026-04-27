@@ -189,7 +189,7 @@ registerCrud(admin, 'obras', [
 registerCrud(admin, 'posts', [
   'title_es', 'title_en', 'slug_es', 'slug_en',
   'body_es', 'body_en', 'excerpt_es', 'excerpt_en',
-  'tags', 'status', 'published_at',
+  'tags', 'status', 'published_at', 'image_url',
 ]);
 
 registerCrud(admin, 'proyectos', [
@@ -199,13 +199,35 @@ registerCrud(admin, 'proyectos', [
 
 registerCrud(admin, 'eventos', [
   'title_es', 'title_en', 'event_date', 'venue', 'city', 'country',
-  'description_es', 'description_en', 'external_link',
+  'description_es', 'description_en', 'external_link', 'image_url',
 ]);
 
 registerCrud(admin, 'publicaciones', [
   'title_es', 'title_en', 'journal', 'year',
-  'abstract_es', 'abstract_en', 'pdf_url', 'doi',
+  'abstract_es', 'abstract_en', 'pdf_url', 'doi', 'image_url',
 ]);
+
+// ── One-off DB migration ─────────────────────────────────────────────────
+// Adds image_url columns to posts/eventos/publicaciones. Idempotent: each
+// ALTER is wrapped in try/catch so re-runs ignore "duplicate column" errors.
+// Protected by admin JWT. Will be removed once executed.
+admin.post('/_migrate-images', async (c) => {
+  const cors = getCors(c.req.raw, c.env);
+  const payload = await guardAuth(c.req.raw, c.env);
+  if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  const tables = ['posts', 'eventos', 'publicaciones'];
+  const results: Record<string, string> = {};
+  for (const t of tables) {
+    try {
+      await c.env.DB.prepare(`ALTER TABLE ${t} ADD COLUMN image_url TEXT DEFAULT ''`).run();
+      results[t] = 'added';
+    } catch (err) {
+      results[t] = `skipped (${(err as Error).message})`;
+    }
+  }
+  return json({ ok: true, results }, 200, cors);
+});
 
 // ── Settings (key-value upsert) ───────────────────────────────────────────
 

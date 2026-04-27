@@ -67,6 +67,7 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       ...bilingual('slug', 'Slug'),
       ...bilingual('excerpt', 'Resumen', 'textarea', 2),
       ...bilingual('body', 'Cuerpo', 'textarea', 10),
+      { key: 'image_url', label: 'Imagen de portada', type: 'image-upload' },
       { key: 'tags', label: 'Tags (separados por coma)', type: 'text' },
       { key: 'status', label: 'Estado (draft / published)', type: 'text' },
       { key: 'published_at', label: 'Fecha de publicación', type: 'date' },
@@ -114,6 +115,7 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       { key: 'country', label: 'País', type: 'text' },
       ...bilingual('description', 'Descripción', 'textarea', 4),
       { key: 'external_link', label: 'Enlace externo', type: 'url' },
+      { key: 'image_url', label: 'Imagen', type: 'image-upload' },
     ],
   },
 
@@ -135,6 +137,7 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       ...bilingual('abstract', 'Abstract', 'textarea', 6),
       { key: 'pdf_url', label: 'URL del PDF', type: 'url' },
       { key: 'doi', label: 'DOI', type: 'text' },
+      { key: 'image_url', label: 'Imagen / Portada', type: 'image-upload' },
     ],
   },
 }

@@ -45,6 +45,7 @@ function mapPost(row: Record<string, unknown>, locale: string): Post {
     excerpt: ((locale === 'en' ? row['excerpt_en'] : row['excerpt_es']) as string) || undefined,
     tags,
     publishedAt: (row['published_at'] as string) || undefined,
+    imageUrl: (row['image_url'] as string) || undefined,
   };
 }
 
@@ -82,6 +83,7 @@ function mapEvento(row: Record<string, unknown>, locale: string): Evento {
     description:
       ((locale === 'en' ? row['description_en'] : row['description_es']) as string) || undefined,
     externalLink: (row['external_link'] as string) || undefined,
+    imageUrl: (row['image_url'] as string) || undefined,
   };
 }
 
@@ -94,6 +96,7 @@ function mapPublicacion(row: Record<string, unknown>, locale: string): Publicaci
     abstract: ((locale === 'en' ? row['abstract_en'] : row['abstract_es']) as string) || undefined,
     pdfUrl: (row['pdf_url'] as string) || undefined,
     doi: (row['doi'] as string) || undefined,
+    imageUrl: (row['image_url'] as string) || undefined,
   };
 }
 
