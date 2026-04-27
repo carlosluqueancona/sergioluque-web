@@ -47,7 +47,9 @@ export function HeroLissajous() {
     let t = 0
     let strokeRGB: [number, number, number] = [240, 240, 240]
 
-    function readStrokeRGB(): [number, number, number] {
+    // Arrow consts (not function declarations) so TS narrowing of `canvas`
+    // and `ctx` from the early returns above persists in these closures.
+    const readStrokeRGB = (): [number, number, number] => {
       const raw = getComputedStyle(document.documentElement)
         .getPropertyValue('--text-primary')
         .trim()
@@ -69,7 +71,7 @@ export function HeroLissajous() {
       attributeFilter: ['data-theme'],
     })
 
-    function resize() {
+    const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2)
       W = canvas.clientWidth
       H = canvas.clientHeight
@@ -78,7 +80,7 @@ export function HeroLissajous() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
-    function setupFigures() {
+    const setupFigures = () => {
       const min = Math.min(W, H)
       figures = [
         // Perfect fifth (3:2) — outer figure, biggest, slowest drift
@@ -126,7 +128,7 @@ export function HeroLissajous() {
       ]
     }
 
-    function onResize() {
+    const onResize = () => {
       resize()
       setupFigures()
     }
@@ -136,7 +138,7 @@ export function HeroLissajous() {
     const reduce =
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
-    function frame() {
+    const frame = () => {
       ctx.clearRect(0, 0, W, H)
       const [r, g, bb] = strokeRGB
       for (const f of figures) {

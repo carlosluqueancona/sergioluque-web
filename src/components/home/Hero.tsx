@@ -1,5 +1,4 @@
 import type { Locale } from '@/types'
-import { ScrambleText } from './ScrambleText'
 import { HeroLissajous } from './HeroLissajous'
 
 interface HeroProps {
@@ -70,13 +69,9 @@ export function Hero({ locale }: HeroProps) {
           color: 'var(--text-muted)',
         }}
       >
-        <ScrambleText delay={0}>{`S/L · ${t.origin}`}</ScrambleText>
-        <ScrambleText delay={6} style={{ textAlign: 'center' }}>
-          {t.role}
-        </ScrambleText>
-        <ScrambleText delay={12} style={{ textAlign: 'right' }}>
-          {`MMXX — ${year}`}
-        </ScrambleText>
+        <span>{`S/L · ${t.origin}`}</span>
+        <span style={{ textAlign: 'center' }}>{t.role}</span>
+        <span style={{ textAlign: 'right' }}>{`MMXX — ${year}`}</span>
       </div>
 
       {/* Main wordmark */}
@@ -149,10 +144,7 @@ export function Hero({ locale }: HeroProps) {
             alignItems: 'start',
           }}
         >
-          <ScrambleText
-            as="p"
-            delay={28}
-            charStep={1.2}
+          <p
             style={{
               fontFamily: 'var(--font-ibm-plex-sans)',
               fontSize: '15px',
@@ -163,7 +155,7 @@ export function Hero({ locale }: HeroProps) {
             }}
           >
             {t.practice}
-          </ScrambleText>
+          </p>
           <DecorativeScore />
         </div>
       </div>
@@ -184,8 +176,8 @@ export function Hero({ locale }: HeroProps) {
           color: 'var(--text-muted)',
         }}
       >
-        <ScrambleText delay={36}>{`↓ ${t.scrollHint}`}</ScrambleText>
-        <ScrambleText delay={44}>{t.catalog}</ScrambleText>
+        <span>{`↓ ${t.scrollHint}`}</span>
+        <span>{t.catalog}</span>
       </div>
       </div>
     </section>
