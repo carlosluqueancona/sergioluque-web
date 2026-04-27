@@ -20,7 +20,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Worker deploy is best-effort: it requires CLOUDFLARE_API_TOKEN to have
+      # Workers Scripts:Edit + User Details:Read. If the token only has Pages
+      # perms the step fails; Pages still ships. Deploy the worker manually
+      # with `cd worker && pnpm dlx wrangler deploy` until the token is widened.
       - name: Deploy Worker (sergioluque-cms)
+        continue-on-error: true
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
