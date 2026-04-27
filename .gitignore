@@ -46,3 +46,4 @@ worker/.wrangler/
 .wrangler/
 worker/node_modules/
 worker/.wrangler/
+.claude/scheduled_tasks.lock
