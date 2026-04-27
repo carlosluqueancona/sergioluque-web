@@ -1,5 +1,6 @@
 import type { Locale } from '@/types'
 import { ScrambleText } from './ScrambleText'
+import { HeroLissajous } from './HeroLissajous'
 
 interface HeroProps {
   locale: Locale
@@ -40,7 +41,18 @@ export function Hero({ locale }: HeroProps) {
         isolation: 'isolate',
       }}
     >
-      <HeroNoise />
+      {/*
+        Hero film-grain overlay — kept available but commented out while
+        the Lissajous canvas is the active background. Swap by toggling
+        which of the two next lines is rendered.
+        <HeroNoise />
+      */}
+      <HeroLissajous />
+
+      {/* All foreground content sits in this wrapper at z-index 1 so the
+          Lissajous canvas (z-index 0) stays behind without each child
+          needing its own positioning. */}
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
 
       {/* Top meta bar */}
       <div
@@ -175,6 +187,7 @@ export function Hero({ locale }: HeroProps) {
         <ScrambleText delay={36}>{`↓ ${t.scrollHint}`}</ScrambleText>
         <ScrambleText delay={44}>{t.catalog}</ScrambleText>
       </div>
+      </div>
     </section>
   )
 }
@@ -192,7 +205,10 @@ export function Hero({ locale }: HeroProps) {
  *
  * `prefers-reduced-motion: reduce` users see the noise but no shimmer.
  */
-function HeroNoise() {
+// Exported so the lint pass treats it as intentional API even when the
+// JSX call site is commented out — preserves the noise option as a
+// drop-in replacement for HeroLissajous.
+export function HeroNoise() {
   return (
     <svg
       aria-hidden
