@@ -12,6 +12,7 @@ const COPY = {
     origin: 'Ciudad de México',
     catalog: 'Catálogo de obras',
     scrollHint: 'Desliza para ver el catálogo',
+    seoHeading: 'Compositor e investigador en música electroacústica',
   },
   en: {
     role: 'Composer · Researcher',
@@ -19,6 +20,7 @@ const COPY = {
     origin: 'Mexico City',
     catalog: 'Works catalogue',
     scrollHint: 'Scroll for catalogue',
+    seoHeading: 'Composer and researcher in electroacoustic music',
   },
 } as const
 
@@ -105,8 +107,16 @@ export function Hero({ locale }: HeroProps) {
           <span>02</span>
         </div>
 
-        <h1
+        {/*
+          The visible wordmark is purely decorative — semantic H1 lives in
+          .visually-hidden right above so search engines and screen readers
+          land on a descriptive heading ("Compositor e investigador en
+          música electroacústica") instead of the brand mark.
+        */}
+        <h1 className="visually-hidden">{t.seoHeading}</h1>
+        <div
           className="hero-wordmark"
+          aria-hidden="true"
           style={{
             fontFamily: 'var(--font-space-mono)',
             fontSize: 'clamp(56px, 13vw, 200px)',
@@ -120,7 +130,7 @@ export function Hero({ locale }: HeroProps) {
         >
           <span style={{ display: 'block' }}>SERGIO</span>
           <span style={{ display: 'block' }}>LUQUE</span>
-        </h1>
+        </div>
 
         {/* Subtitle */}
         <p

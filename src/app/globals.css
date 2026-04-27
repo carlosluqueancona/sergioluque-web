@@ -295,6 +295,21 @@
   color: var(--text-primary);
 }
 
+/* Visually hide an element while keeping it readable by screen readers
+   and indexable by search engines. Use for the semantic Hero H1 while
+   the visible wordmark is rendered as a decorative <div aria-hidden>. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Hero wordmark entrance — staggered fade-in + subtle Y rise.
    Each line of the wordmark animates independently so SERGIO arrives
    first and LUQUE follows, mirroring the score's two-bar phrasing. */
