@@ -3,6 +3,7 @@ import { getTranslations, getLocale } from 'next-intl/server'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { NavLink } from './NavLink'
 import { ThemeToggle } from './ThemeToggle'
+import { MobileNav } from './MobileNav'
 
 export async function Header() {
   const locale = await getLocale()
@@ -28,17 +29,7 @@ export async function Header() {
         borderBottom: '1px solid var(--border)',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 48px',
-          height: '56px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className="site-header-inner">
         <Link
           href={`/${locale}`}
           style={{
@@ -48,22 +39,15 @@ export async function Header() {
             color: 'var(--text-primary)',
             textDecoration: 'none',
             letterSpacing: '0.05em',
+            whiteSpace: 'nowrap',
           }}
         >
           SERGIO LUQUE
         </Link>
 
-        <nav aria-label="Navegación principal">
-          <ul
-            style={{
-              display: 'flex',
-              gap: '32px',
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-              alignItems: 'center',
-            }}
-          >
+        {/* Desktop nav (≥901px) */}
+        <nav aria-label={t('works')}>
+          <ul className="site-nav-desktop">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <NavLink href={link.href} label={link.label} />
@@ -77,6 +61,13 @@ export async function Header() {
             </li>
           </ul>
         </nav>
+
+        {/* Mobile nav (≤900px) */}
+        <div className="site-nav-mobile">
+          <LanguageSwitcher />
+          <ThemeToggle />
+          <MobileNav links={navLinks} menuLabel={locale === 'en' ? 'Menu' : 'Menú'} />
+        </div>
       </div>
     </header>
   )

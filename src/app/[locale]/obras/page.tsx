@@ -15,7 +15,7 @@ export default async function ObrasPage({
   const obras = await getObras(locale as Locale)
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px' }}>
+    <div className="page-shell">
       <h1 className="t-h1">{t('title')}</h1>
       <p className="t-label" style={{ marginBottom: '48px' }}>
         {obras.length} {obras.length === 1 ? t('count_one') : t('count_other')}

@@ -28,12 +28,8 @@ export default async function HomePage({
       {/* Obras destacadas */}
       {obras.length > 0 && (
         <section
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '64px 48px',
-            borderTop: '1px solid var(--border)',
-          }}
+          className="page-shell"
+          style={{ borderTop: '1px solid var(--border)' }}
         >
           <div
             style={{
@@ -79,12 +75,8 @@ export default async function HomePage({
       {/* Próximos conciertos */}
       {eventos.length > 0 && (
         <section
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '64px 48px',
-            borderTop: '1px solid var(--border)',
-          }}
+          className="page-shell"
+          style={{ borderTop: '1px solid var(--border)' }}
         >
           <div
             style={{

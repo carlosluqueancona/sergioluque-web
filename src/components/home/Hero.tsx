@@ -27,6 +27,7 @@ export function Hero({ locale }: HeroProps) {
 
   return (
     <section
+      className="hero-section"
       style={{
         position: 'relative',
         minHeight: '100vh',
@@ -42,6 +43,7 @@ export function Hero({ locale }: HeroProps) {
 
       {/* Top meta bar */}
       <div
+        className="hero-meta-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr 1fr',
@@ -121,6 +123,7 @@ export function Hero({ locale }: HeroProps) {
 
         {/* Subtitle band */}
         <div
+          className="hero-subtitle-grid"
           style={{
             paddingLeft: '40px',
             marginTop: '40px',
@@ -192,15 +195,15 @@ function HeroNoise() {
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        opacity: 0.5,
-        mixBlendMode: 'overlay',
+        opacity: 0.85,
+        mixBlendMode: 'hard-light',
         zIndex: 1,
       }}
     >
       <filter id="hero-grain">
         <feTurbulence
           type="fractalNoise"
-          baseFrequency="0.9"
+          baseFrequency="0.55"
           numOctaves="2"
           stitchTiles="stitch"
           seed="3"
@@ -214,6 +217,13 @@ function HeroNoise() {
           />
         </feTurbulence>
         <feColorMatrix type="saturate" values="0" />
+        {/* Push the noise mid-tones outward to pure black/white — gives a
+           much higher-contrast filmic grain than the default fractalNoise. */}
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="2.2" intercept="-0.6" />
+          <feFuncG type="linear" slope="2.2" intercept="-0.6" />
+          <feFuncB type="linear" slope="2.2" intercept="-0.6" />
+        </feComponentTransfer>
       </filter>
       <rect width="100%" height="100%" filter="url(#hero-grain)" />
     </svg>

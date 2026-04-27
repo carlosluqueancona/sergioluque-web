@@ -191,6 +191,127 @@
   outline-offset: -2px;
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   Layout primitives — replace the dozen identical
+   maxWidth/padding inline blocks across page components.
+   Padding shrinks on small screens via clamp() so we don't waste
+   space on phones nor look cramped on desktop.
+   ───────────────────────────────────────────────────────────────── */
+.page-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 48px);
+}
+.page-shell-narrow {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 48px);
+}
+
+/* Detail page two-column layout (content + sidebar). Stacks on mobile. */
+.aside-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .aside-grid { grid-template-columns: 1fr; }
+}
+
+/* Two-column grids that should stack on mobile (proyectos, contact). */
+.cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 4vw, 48px);
+}
+@media (max-width: 768px) {
+  .cols-2 { grid-template-columns: 1fr; }
+}
+
+/* WorkCard: collapse image-on-side to image-on-top below the phone breakpoint. */
+@media (max-width: 540px) {
+  .work-card {
+    grid-template-columns: 1fr !important;
+  }
+  .work-card img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Header / nav — desktop horizontal; mobile collapses behind a
+   menu toggle that the MobileNav client component drives.
+   ───────────────────────────────────────────────────────────────── */
+.site-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.site-nav-desktop {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+.site-nav-mobile { display: none; position: relative; }
+
+@media (max-width: 900px) {
+  .site-nav-desktop { display: none; }
+  .site-nav-mobile { display: flex; align-items: center; gap: 8px; }
+}
+
+.site-nav-mobile-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 60;
+}
+.site-nav-mobile-panel a {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 10px 20px;
+  letter-spacing: 0.05em;
+}
+.site-nav-mobile-panel a:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+/* Hero responsive tweaks: pull padding in on mobile */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 16px 20px 0 !important;
+  }
+  .hero-meta-grid {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+    text-align: left !important;
+  }
+  .hero-meta-grid > * { text-align: left !important; }
+  .hero-subtitle-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+
 /* Admin light theme — scoped via data attribute so the public site is unaffected */
 [data-admin-theme="light"] {
   --bg: #FAFAFA;

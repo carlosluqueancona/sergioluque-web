@@ -48,7 +48,7 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
     : null
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '64px 48px' }}>
+    <div className="page-shell-narrow">
       <Link href={`/${locale}/blog`} style={{ fontFamily: 'var(--font-space-mono)', fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none', letterSpacing: '0.1em', display: 'inline-block', marginBottom: '32px' }}>
         ← {t('backToList')}
       </Link>

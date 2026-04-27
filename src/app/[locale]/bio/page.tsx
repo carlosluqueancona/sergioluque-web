@@ -22,12 +22,12 @@ export default async function BioPage({ params }: { params: Promise<{ locale: st
   const profileImageUrl = settings?.profileImageUrl
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px' }}>
-      <h1 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '48px', letterSpacing: '-0.02em' }}>
+    <div className="page-shell">
+      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
         {t('title')}
       </h1>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '64px', alignItems: 'start' }}>
+      <div className="aside-grid">
         <div>
           {bio ? (
             <PostBody value={bio} />

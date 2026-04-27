@@ -26,7 +26,7 @@ export async function Footer() {
         style={{
           maxWidth: '1200px',
           margin: '0 auto',
-          padding: '32px 48px',
+          padding: 'clamp(24px, 4vw, 32px) clamp(20px, 5vw, 48px)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-start',

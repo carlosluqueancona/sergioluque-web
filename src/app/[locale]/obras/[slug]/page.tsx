@@ -65,15 +65,8 @@ export default async function ObraPage({
     .join(', ')
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px' }}>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 280px',
-          gap: '64px',
-          alignItems: 'start',
-        }}
-      >
+    <div className="page-shell">
+      <div className="aside-grid">
         <div>
           <h1 className="t-h2">{title}</h1>
 

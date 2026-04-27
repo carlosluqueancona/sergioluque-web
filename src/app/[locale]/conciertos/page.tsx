@@ -22,8 +22,8 @@ export default async function ConciertosPage({ params }: { params: Promise<{ loc
   ])
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px' }}>
-      <h1 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '64px', letterSpacing: '-0.02em' }}>
+    <div className="page-shell">
+      <h1 className="t-h1" style={{ marginBottom: '64px' }}>
         {t('title')}
       </h1>
 

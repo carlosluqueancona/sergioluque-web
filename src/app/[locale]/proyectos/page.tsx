@@ -18,11 +18,11 @@ export default async function ProyectosPage({ params }: { params: Promise<{ loca
   const proyectos = await getProyectos(locale as Locale)
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px' }}>
-      <h1 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '48px', letterSpacing: '-0.02em' }}>
+    <div className="page-shell">
+      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
         {t('title')}
       </h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0' }}>
+      <div className="cols-2" style={{ gap: 0 }}>
         {proyectos.map((proyecto) => (
           <ProjectCard key={proyecto.id} proyecto={proyecto} locale={locale as Locale} />
         ))}
