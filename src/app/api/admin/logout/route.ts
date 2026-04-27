@@ -1,11 +1,12 @@
 export const runtime = 'edge'
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 const COOKIE_NAME = 'sl_admin_jwt'
 
-export async function POST() {
-  const response = NextResponse.json({ ok: true })
+export async function POST(req: NextRequest) {
+  const url = new URL('/admin/login', req.url)
+  const response = NextResponse.redirect(url, { status: 303 })
   response.cookies.set(COOKIE_NAME, '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
