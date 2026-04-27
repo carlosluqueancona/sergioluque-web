@@ -35,8 +35,11 @@ export function Hero({ locale }: HeroProps) {
         maxWidth: '1400px',
         margin: '0 auto',
         padding: '24px 48px 0',
+        isolation: 'isolate',
       }}
     >
+      <HeroNoise />
+
       {/* Top meta bar */}
       <div
         style={{
@@ -163,6 +166,57 @@ export function Hero({ locale }: HeroProps) {
         <span>{t.catalog}</span>
       </div>
     </section>
+  )
+}
+
+/**
+ * Discrete film-grain overlay generated entirely by the SVG filter pipeline.
+ *
+ *  - feTurbulence(fractalNoise) → high-frequency monochrome noise
+ *  - feColorMatrix saturate=0  → strip residual hue from the turbulence
+ *  - mix-blend-mode: overlay   → lightens lights / darkens darks, so the
+ *                                effect reads correctly in both light and
+ *                                dark theme without any conditional CSS
+ *  - <animate> on seed         → 6 discrete frames over 1.2s ≈ 5fps grain
+ *                                shimmer. Cheap, no JS, no rAF.
+ *
+ * `prefers-reduced-motion: reduce` users see the noise but no shimmer.
+ */
+function HeroNoise() {
+  return (
+    <svg
+      aria-hidden
+      style={{
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        opacity: 0.5,
+        mixBlendMode: 'overlay',
+        zIndex: 1,
+      }}
+    >
+      <filter id="hero-grain">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.9"
+          numOctaves="2"
+          stitchTiles="stitch"
+          seed="3"
+        >
+          <animate
+            attributeName="seed"
+            values="3;19;47;91;128;73"
+            dur="1.2s"
+            repeatCount="indefinite"
+            calcMode="discrete"
+          />
+        </feTurbulence>
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#hero-grain)" />
+    </svg>
   )
 }
 
