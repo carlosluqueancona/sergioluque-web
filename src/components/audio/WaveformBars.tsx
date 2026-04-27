@@ -29,7 +29,7 @@ export function WaveformBars({
 }: WaveformBarsProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const rafRef = useRef<number | null>(null)
-  const bufRef = useRef<Uint8Array | null>(null)
+  const bufRef = useRef<Uint8Array<ArrayBuffer> | null>(null)
   const progressRef = useRef<number | null>(progress ?? null)
   progressRef.current = progress ?? null
 
