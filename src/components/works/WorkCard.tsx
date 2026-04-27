@@ -40,11 +40,7 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
         href={href}
         aria-label={title}
         className="work-card-link"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 1,
-        }}
+        style={{ position: 'absolute', inset: 0, zIndex: 1 }}
       />
 
       {showImage && (
@@ -72,42 +68,16 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
             marginBottom: '4px',
           }}
         >
-          <h3
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '15px',
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              margin: 0,
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {title}
-          </h3>
+          <h3 className="t-card-title">{title}</h3>
           {obra.year != null && (
-            <span
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '12px',
-                color: 'var(--text-muted)',
-                flexShrink: 0,
-              }}
-            >
+            <span className="t-caption" style={{ flexShrink: 0 }}>
               {obra.year}
             </span>
           )}
         </div>
 
         {(instrumentation || obra.duration) && (
-          <p
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '11px',
-              color: 'var(--text-secondary)',
-              margin: '0 0 12px',
-              letterSpacing: '0.05em',
-            }}
-          >
+          <p className="t-meta" style={{ margin: '0 0 12px' }}>
             {instrumentation}
             {obra.duration && (
               <span
@@ -131,18 +101,9 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
             />
           </div>
         ) : (
-          <p
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '11px',
-              color: 'var(--text-muted)',
-            }}
-          >
-            {t('noAudio')}
-          </p>
+          <p className="t-caption">{t('noAudio')}</p>
         )}
       </div>
-
     </article>
   )
 }

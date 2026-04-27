@@ -117,6 +117,68 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   Typography utility classes — the patterns repeated across the
+   site, centralized so component JSX stops carrying 4–5 inline
+   font/size/color/letter-spacing props each.
+   Components still use inline style for layout-specific things
+   (margins, alignment) — these only encode the "voice" of the text.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Tiny uppercase metadata label (sidebar dt, section subtitles). */
+.t-label {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Small mono caption (year next to title, time codes, sidebar dd). */
+.t-caption {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Mid-weight mono body (instrumentation, sidebar values). */
+.t-meta {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+/* Card title (work cards, list items). */
+.t-card-title {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Page heading (page titles like "Obras", "Bio", etc.). */
+.t-h1 {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+/* Detail heading (single-obra title). */
+.t-h2 {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
 /* Work cards */
 .work-card {
   transition: background-color 150ms ease-out;

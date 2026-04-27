@@ -75,29 +75,10 @@ export default async function ObraPage({
         }}
       >
         <div>
-          <h1
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '36px',
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              marginBottom: '8px',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            {title}
-          </h1>
+          <h1 className="t-h2">{title}</h1>
 
           {instrumentation && (
-            <p
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '13px',
-                color: 'var(--text-secondary)',
-                marginBottom: '32px',
-                letterSpacing: '0.05em',
-              }}
-            >
+            <p className="t-meta" style={{ marginBottom: '32px' }}>
               {instrumentation}
             </p>
           )}
@@ -145,26 +126,10 @@ export default async function ObraPage({
                   key={item.label}
                   style={{ padding: '12px 0', borderBottom: '1px solid var(--border)' }}
                 >
-                  <dt
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '10px',
-                      color: 'var(--text-muted)',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      marginBottom: '4px',
-                    }}
-                  >
+                  <dt className="t-label" style={{ marginBottom: '4px' }}>
                     {item.label}
                   </dt>
-                  <dd
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '13px',
-                      color: 'var(--text-primary)',
-                      margin: 0,
-                    }}
-                  >
+                  <dd className="t-meta" style={{ color: 'var(--text-primary)', margin: 0 }}>
                     {item.value}
                   </dd>
                 </div>
@@ -172,27 +137,11 @@ export default async function ObraPage({
 
             {obra.ensembles && (
               <div style={{ padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
-                <dt
-                  style={{
-                    fontFamily: 'var(--font-space-mono)',
-                    fontSize: '10px',
-                    color: 'var(--text-muted)',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    marginBottom: '4px',
-                  }}
-                >
+                <dt className="t-label" style={{ marginBottom: '4px' }}>
                   {t('ensembles')}
                 </dt>
                 <dd style={{ margin: 0 }}>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '12px',
-                      color: 'var(--text-primary)',
-                      margin: 0,
-                    }}
-                  >
+                  <p className="t-caption" style={{ color: 'var(--text-primary)', margin: 0 }}>
                     {obra.ensembles}
                   </p>
                 </dd>
