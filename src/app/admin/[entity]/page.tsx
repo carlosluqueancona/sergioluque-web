@@ -33,7 +33,7 @@ export default async function EntityListPage({
   try {
     const res = await fetch(`${WORKER_BASE}/admin/${schema.name}`, {
       headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+      
     })
     if (res.ok) rows = (await res.json()) as Record<string, unknown>[]
   } catch {

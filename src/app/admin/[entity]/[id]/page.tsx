@@ -30,7 +30,7 @@ export default async function EditEntityPage({
   try {
     const res = await fetch(`${WORKER_BASE}/admin/${schema.name}`, {
       headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+      
     })
     if (res.ok) {
       const all = (await res.json()) as Record<string, unknown>[]

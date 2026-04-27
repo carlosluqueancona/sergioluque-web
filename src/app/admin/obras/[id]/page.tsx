@@ -50,7 +50,7 @@ export default async function EditObraPage({
   try {
     const res = await fetch(`${WORKER_BASE}/admin/obras`, {
       headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+      
     })
     if (res.ok) {
       const all = (await res.json()) as ObraRow[]

@@ -21,7 +21,7 @@ export default async function SettingsPage() {
   try {
     const res = await fetch(`${WORKER_BASE}/admin/settings`, {
       headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+      
     })
     if (res.ok) initial = (await res.json()) as Record<string, string>
   } catch {

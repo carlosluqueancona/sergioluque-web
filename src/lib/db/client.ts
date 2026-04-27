@@ -20,7 +20,7 @@ export async function apiFetch<T>(path: string): Promise<T | null> {
       signal: controller.signal,
       ...(process.env.NODE_ENV === 'production'
         ? { next: { revalidate: 3600 } }
-        : { cache: 'no-store' }),
+        : {  }),
     })
     clearTimeout(timeout)
     if (!res.ok) return null
