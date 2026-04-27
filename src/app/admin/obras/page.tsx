@@ -28,17 +28,27 @@ export default async function AdminObrasPage() {
 
   // Fetch obras from Worker admin API
   let obras: ObraRow[] = []
+  let debugInfo = ''
   try {
     const res = await fetch(`${WORKER_BASE}/admin/obras`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     })
+    debugInfo = `status=${res.status} url=${WORKER_BASE}/admin/obras`
     if (res.status === 401) redirect('/admin/login')
     if (res.ok) {
-      obras = (await res.json()) as ObraRow[]
+      const data = await res.json()
+      if (Array.isArray(data)) {
+        obras = data as ObraRow[]
+        debugInfo += ` rows=${obras.length}`
+      } else {
+        debugInfo += ` notArray=${JSON.stringify(data).slice(0, 100)}`
+      }
+    } else {
+      debugInfo += ` body=${(await res.text()).slice(0, 100)}`
     }
-  } catch {
-    // Worker unreachable — show empty state
+  } catch (err) {
+    debugInfo = `fetchError=${err instanceof Error ? err.message : String(err)}`
   }
 
   return (
@@ -65,9 +75,14 @@ export default async function AdminObrasPage() {
       </div>
 
       {obras.length === 0 && (
-        <p style={{ color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '13px' }}>
-          No hay obras todavía. Crea la primera con el botón de arriba.
-        </p>
+        <>
+          <p style={{ color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '13px' }}>
+            No hay obras todavía. Crea la primera con el botón de arriba.
+          </p>
+          <p style={{ color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '10px', marginTop: '24px', opacity: 0.5 }}>
+            DEBUG: {debugInfo}
+          </p>
+        </>
       )}
 
       {obras.length > 0 && (
