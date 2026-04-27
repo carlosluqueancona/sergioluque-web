@@ -108,12 +108,27 @@ export function Hero({ locale }: HeroProps) {
         </div>
 
         {/*
-          The visible wordmark is purely decorative — semantic H1 lives in
-          .visually-hidden right above so search engines and screen readers
-          land on a descriptive heading ("Compositor e investigador en
-          música electroacústica") instead of the brand mark.
+          Real, visible H1 sits as a small eyebrow above the wordmark.
+          Keywords ride here ("compositor", "música electroacústica",
+          "investigador"); the giant SERGIO LUQUE underneath is purely
+          decorative (<div aria-hidden>).
         */}
-        <h1 className="visually-hidden">{t.seoHeading}</h1>
+        <h1
+          style={{
+            paddingLeft: '40px',
+            margin: '0 0 16px',
+            fontFamily: 'var(--font-space-mono)',
+            fontSize: '12px',
+            fontWeight: 400,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--text-secondary)',
+            maxWidth: '720px',
+            lineHeight: 1.5,
+          }}
+        >
+          {t.seoHeading}
+        </h1>
         <div
           className="hero-wordmark"
           aria-hidden="true"
