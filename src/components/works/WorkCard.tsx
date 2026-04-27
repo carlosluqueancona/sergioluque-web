@@ -19,29 +19,48 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
   const slug = obra.slug
   const showImage = isHttpUrl(obra.imageUrl)
   const showAudio = isHttpUrl(obra.audioUrl)
+  const href = `/${locale}/obras/${slug}`
 
   return (
     <article
       className="work-card"
       style={{
+        position: 'relative',
         borderBottom: '1px solid var(--border)',
-        padding: '24px 0',
+        padding: '24px 16px',
+        marginInline: '-16px',
         display: 'grid',
         gridTemplateColumns: showImage ? '120px 1fr' : '1fr',
         gap: '24px',
         alignItems: 'start',
+        transition: 'background-color 150ms ease-out',
       }}
     >
+      {/* Full-card click target. Sits below the audio player so its buttons stay interactive. */}
+      <Link
+        href={href}
+        aria-label={title}
+        className="work-card-link"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+        }}
+      />
+
       {showImage && (
-        <Link href={`/${locale}/obras/${slug}`} style={{ display: 'block' }}>
-          <Image
-            src={obra.imageUrl as string}
-            alt={title}
-            width={120}
-            height={120}
-            style={{ display: 'block', objectFit: 'cover', width: '120px', height: '120px' }}
-          />
-        </Link>
+        <Image
+          src={obra.imageUrl as string}
+          alt={title}
+          width={120}
+          height={120}
+          style={{
+            display: 'block',
+            objectFit: 'cover',
+            width: '120px',
+            height: '120px',
+          }}
+        />
       )}
 
       <div>
@@ -54,18 +73,18 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
             marginBottom: '4px',
           }}
         >
-          <Link
-            href={`/${locale}/obras/${slug}`}
+          <h3
             style={{
               fontFamily: 'var(--font-space-mono)',
               fontSize: '15px',
               fontWeight: 700,
               color: 'var(--text-primary)',
-              textDecoration: 'none',
+              margin: 0,
+              letterSpacing: '-0.01em',
             }}
           >
             {title}
-          </Link>
+          </h3>
           {obra.year != null && (
             <span
               style={{
@@ -104,15 +123,15 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
           </p>
         )}
 
-        {showAudio && (
-          <AudioPlayerMini
-            audioUrl={obra.audioUrl as string}
-            title={title}
-            duration={obra.audioDuration}
-          />
-        )}
-
-        {!showAudio && (
+        {showAudio ? (
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <AudioPlayerMini
+              audioUrl={obra.audioUrl as string}
+              title={title}
+              duration={obra.audioDuration}
+            />
+          </div>
+        ) : (
           <p
             style={{
               fontFamily: 'var(--font-space-mono)',
@@ -124,6 +143,14 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
           </p>
         )}
       </div>
+
+      <style>{`
+        .work-card:hover { background-color: var(--surface); }
+        .work-card-link:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: -2px;
+        }
+      `}</style>
     </article>
   )
 }
