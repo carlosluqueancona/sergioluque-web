@@ -101,7 +101,7 @@ export default async function ObraPage({
               { label: S.works.premiere, value: premiereInfo || undefined },
               { label: S.works.commissions, value: obra.commissions },
             ]
-              .filter((item): item is { label: string; value: string } => Boolean(item.value))
+              .filter((item): item is typeof item & { value: string } => Boolean(item.value))
               .map((item) => (
                 <div
                   key={item.label}
