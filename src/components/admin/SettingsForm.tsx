@@ -17,27 +17,25 @@ interface FieldConfig {
 
 const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
   {
-    title: 'Biografía',
+    title: 'Biography',
     fields: [
-      { key: 'bio_short_es', label: 'Bio corta (ES)', type: 'textarea', rows: 3 },
-      { key: 'bio_short_en', label: 'Bio corta (EN)', type: 'textarea', rows: 3 },
-      { key: 'bio_long_es', label: 'Bio larga (ES)', type: 'textarea', rows: 10 },
-      { key: 'bio_long_en', label: 'Bio larga (EN)', type: 'textarea', rows: 10 },
+      { key: 'bio_short', label: 'Short bio', type: 'textarea', rows: 3 },
+      { key: 'bio', label: 'Long bio', type: 'textarea', rows: 10 },
     ],
   },
   {
-    title: 'Imagen y CV',
+    title: 'Image and CV',
     fields: [
-      { key: 'profile_image_url', label: 'Foto de perfil', type: 'image' },
+      { key: 'profile_image_url', label: 'Profile picture', type: 'image' },
       { key: 'cv_pdf_url', label: 'CV (PDF)', type: 'pdf' },
     ],
   },
   {
-    title: 'Contacto',
-    fields: [{ key: 'email', label: 'Email de contacto', type: 'email' }],
+    title: 'Contact',
+    fields: [{ key: 'email', label: 'Contact email', type: 'email' }],
   },
   {
-    title: 'Redes sociales',
+    title: 'Social',
     fields: [
       { key: 'social_twitter', label: 'Twitter / X', type: 'url' },
       { key: 'social_instagram', label: 'Instagram', type: 'url' },

@@ -14,16 +14,23 @@ const COOKIE_NAME = 'sl_admin_jwt'
 
 interface ObraRow {
   id: number
-  title_es: string
-  title_en: string
-  slug_es: string
-  slug_en: string
+  // Flat columns (post monolingual migration). Legacy *_es / *_en still
+  // come back from the Worker until the migration runs; ObraForm tolerates
+  // both shapes.
+  title?: string
+  slug?: string
+  instrumentation?: string
+  description?: string
+  title_es?: string
+  title_en?: string
+  slug_es?: string
+  slug_en?: string
+  instrumentation_es?: string
+  instrumentation_en?: string
+  description_es?: string
+  description_en?: string
   year: number
-  instrumentation_es: string
-  instrumentation_en: string
   duration: number
-  description_es: string
-  description_en: string
   audio_url: string
   audio_duration: number
   image_url: string
@@ -64,16 +71,13 @@ export default async function EditObraPage({
 
   const initialData = {
     id: obra.id,
-    title_es: obra.title_es ?? '',
-    title_en: obra.title_en ?? '',
-    slug_es: obra.slug_es ?? '',
-    slug_en: obra.slug_en ?? '',
+    title: obra.title ?? obra.title_en ?? obra.title_es ?? '',
+    slug: obra.slug ?? obra.slug_en ?? obra.slug_es ?? '',
     year: String(obra.year ?? ''),
-    instrumentation_es: obra.instrumentation_es ?? '',
-    instrumentation_en: obra.instrumentation_en ?? '',
+    instrumentation:
+      obra.instrumentation ?? obra.instrumentation_en ?? obra.instrumentation_es ?? '',
     duration: String(obra.duration ?? ''),
-    description_es: obra.description_es ?? '',
-    description_en: obra.description_en ?? '',
+    description: obra.description ?? obra.description_en ?? obra.description_es ?? '',
     audio_url: obra.audio_url ?? '',
     audio_duration: String(obra.audio_duration ?? ''),
     image_url: obra.image_url ?? '',

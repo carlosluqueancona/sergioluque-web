@@ -178,39 +178,41 @@ function registerCrud(
 
 // ── Register CRUD for each content table ─────────────────────────────────
 
+// Monolingual schema after the /_migrate-monolingual run. Until that
+// migration is executed, INSERT/UPDATE on these tables will fail because
+// the flat columns don't exist yet.
 registerCrud(admin, 'obras', [
-  'title_es', 'title_en', 'slug_es', 'slug_en', 'year',
-  'instrumentation_es', 'instrumentation_en', 'duration',
-  'description_es', 'description_en', 'audio_url', 'audio_duration',
+  'title', 'slug', 'year',
+  'instrumentation', 'duration',
+  'description', 'audio_url', 'audio_duration',
   'image_url', 'premiere_date', 'premiere_venue', 'premiere_city',
   'commissions', 'ensembles', 'is_featured', 'sort_order',
 ]);
 
 registerCrud(admin, 'posts', [
-  'title_es', 'title_en', 'slug_es', 'slug_en',
-  'body_es', 'body_en', 'excerpt_es', 'excerpt_en',
+  'title', 'slug',
+  'body', 'excerpt',
   'tags', 'status', 'published_at', 'image_url',
 ]);
 
 registerCrud(admin, 'proyectos', [
-  'title_es', 'title_en', 'slug_es', 'slug_en', 'year',
-  'description_es', 'description_en', 'images', 'links', 'is_featured',
+  'title', 'slug', 'year',
+  'description', 'images', 'links', 'is_featured',
 ]);
 
 registerCrud(admin, 'eventos', [
-  'title_es', 'title_en', 'event_date', 'venue', 'city', 'country',
-  'description_es', 'description_en', 'external_link', 'image_url',
+  'title', 'event_date', 'venue', 'city', 'country',
+  'description', 'external_link', 'image_url',
 ]);
 
 registerCrud(admin, 'publicaciones', [
-  'title_es', 'title_en', 'journal', 'year',
-  'abstract_es', 'abstract_en', 'pdf_url', 'doi', 'image_url',
+  'title', 'journal', 'year',
+  'abstract', 'pdf_url', 'doi', 'image_url',
 ]);
 
-// ── One-off DB migration ─────────────────────────────────────────────────
-// Adds image_url columns to posts/eventos/publicaciones. Idempotent: each
-// ALTER is wrapped in try/catch so re-runs ignore "duplicate column" errors.
-// Protected by admin JWT. Will be removed once executed.
+// ── One-off DB migrations ────────────────────────────────────────────────
+
+/** Adds image_url columns to posts/eventos/publicaciones. Idempotent. */
 admin.post('/_migrate-images', async (c) => {
   const cors = getCors(c.req.raw, c.env);
   const payload = await guardAuth(c.req.raw, c.env);
@@ -227,6 +229,99 @@ admin.post('/_migrate-images', async (c) => {
     }
   }
   return json({ ok: true, results }, 200, cors);
+});
+
+/**
+ * Collapses every *_es / *_en column pair into a single English-only flat
+ * column across the content tables. Idempotent at the ALTER level (each step
+ * is wrapped in try/catch). Order: ADD flat → COPY (prefer _en, fallback _es)
+ * → DROP _es and _en.
+ *
+ * For the settings key/value table, renames bio_long_en → bio and
+ * bio_short_en → bio_short, then deletes the corresponding _es rows.
+ */
+admin.post('/_migrate-monolingual', async (c) => {
+  const cors = getCors(c.req.raw, c.env);
+  const payload = await guardAuth(c.req.raw, c.env);
+  if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  // Per-table column collapse map: { table: [[base, isUnique]] }
+  // base 'title' will collapse title_es + title_en into 'title'.
+  const plan: Record<string, Array<{ base: string; unique?: boolean }>> = {
+    obras: [
+      { base: 'title' },
+      { base: 'slug', unique: true },
+      { base: 'instrumentation' },
+      { base: 'description' },
+    ],
+    posts: [
+      { base: 'title' },
+      { base: 'slug', unique: true },
+      { base: 'body' },
+      { base: 'excerpt' },
+    ],
+    proyectos: [
+      { base: 'title' },
+      { base: 'slug', unique: true },
+      { base: 'description' },
+    ],
+    eventos: [{ base: 'title' }, { base: 'description' }],
+    publicaciones: [{ base: 'title' }, { base: 'abstract' }],
+  };
+
+  const log: Record<string, string[]> = {};
+
+  for (const [table, fields] of Object.entries(plan)) {
+    log[table] = [];
+    for (const { base } of fields) {
+      // 1. ADD flat column (NOT NULL constraint relaxed to TEXT DEFAULT '').
+      try {
+        await c.env.DB.prepare(`ALTER TABLE ${table} ADD COLUMN ${base} TEXT DEFAULT ''`).run();
+        log[table].push(`added ${base}`);
+      } catch (err) {
+        log[table].push(`add ${base} skipped: ${(err as Error).message}`);
+      }
+      // 2. COPY: prefer _en, fall back to _es.
+      try {
+        await c.env.DB.prepare(
+          `UPDATE ${table} SET ${base} = COALESCE(NULLIF(${base}_en, ''), ${base}_es) WHERE ${base} IS NULL OR ${base} = ''`
+        ).run();
+        log[table].push(`copied ${base}`);
+      } catch (err) {
+        log[table].push(`copy ${base} skipped: ${(err as Error).message}`);
+      }
+      // 3. DROP _es and _en.
+      for (const lang of ['_es', '_en']) {
+        try {
+          await c.env.DB.prepare(`ALTER TABLE ${table} DROP COLUMN ${base}${lang}`).run();
+          log[table].push(`dropped ${base}${lang}`);
+        } catch (err) {
+          log[table].push(`drop ${base}${lang} skipped: ${(err as Error).message}`);
+        }
+      }
+    }
+  }
+
+  // Settings: rename bio_long_en → bio, bio_short_en → bio_short, drop _es rows.
+  const settingsLog: string[] = [];
+  try {
+    await c.env.DB.prepare(
+      `INSERT OR REPLACE INTO settings (key, value)
+       SELECT 'bio', value FROM settings WHERE key = 'bio_long_en'`
+    ).run();
+    await c.env.DB.prepare(
+      `INSERT OR REPLACE INTO settings (key, value)
+       SELECT 'bio_short', value FROM settings WHERE key = 'bio_short_en'`
+    ).run();
+    await c.env.DB.prepare(
+      `DELETE FROM settings WHERE key IN ('bio_long_es','bio_long_en','bio_short_es','bio_short_en','bio_es','bio_en')`
+    ).run();
+    settingsLog.push('migrated bio + bio_short keys');
+  } catch (err) {
+    settingsLog.push(`settings migration error: ${(err as Error).message}`);
+  }
+
+  return json({ ok: true, log, settings: settingsLog }, 200, cors);
 });
 
 // ── Settings (key-value upsert) ───────────────────────────────────────────

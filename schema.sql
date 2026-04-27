@@ -1,7 +1,11 @@
--- Sergio Luque CMS — D1 Schema
+-- Sergio Luque CMS — D1 Schema (English-only, post-monolingual collapse)
 -- Run: npx wrangler d1 execute sergioluque-db --file=schema.sql
 
--- Settings (singleton)
+-- Settings (singleton — key/value)
+-- Recognised keys after migration:
+--   bio, bio_short, profile_image_url, cv_pdf_url, email,
+--   social_twitter, social_instagram, social_youtube, social_soundcloud,
+--   social_bandcamp, social_facebook, social_linkedin
 CREATE TABLE IF NOT EXISTS settings (
   key   TEXT PRIMARY KEY,
   value TEXT NOT NULL DEFAULT ''
@@ -10,16 +14,12 @@ CREATE TABLE IF NOT EXISTS settings (
 -- Obras
 CREATE TABLE IF NOT EXISTS obras (
   id               INTEGER PRIMARY KEY AUTOINCREMENT,
-  title_es         TEXT NOT NULL,
-  title_en         TEXT NOT NULL DEFAULT '',
-  slug_es          TEXT NOT NULL UNIQUE,
-  slug_en          TEXT NOT NULL DEFAULT '',
+  title            TEXT NOT NULL DEFAULT '',
+  slug             TEXT NOT NULL DEFAULT '' UNIQUE,
   year             INTEGER,
-  instrumentation_es TEXT DEFAULT '',
-  instrumentation_en TEXT DEFAULT '',
+  instrumentation  TEXT DEFAULT '',
   duration         TEXT DEFAULT '',
-  description_es   TEXT DEFAULT '',
-  description_en   TEXT DEFAULT '',
+  description      TEXT DEFAULT '',
   audio_url        TEXT DEFAULT '',
   audio_duration   INTEGER DEFAULT 0,
   image_url        TEXT DEFAULT '',
@@ -37,14 +37,10 @@ CREATE TABLE IF NOT EXISTS obras (
 -- Blog posts
 CREATE TABLE IF NOT EXISTS posts (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
-  title_es     TEXT NOT NULL,
-  title_en     TEXT NOT NULL DEFAULT '',
-  slug_es      TEXT NOT NULL UNIQUE,
-  slug_en      TEXT NOT NULL DEFAULT '',
-  body_es      TEXT DEFAULT '',
-  body_en      TEXT DEFAULT '',
-  excerpt_es   TEXT DEFAULT '',
-  excerpt_en   TEXT DEFAULT '',
+  title        TEXT NOT NULL DEFAULT '',
+  slug         TEXT NOT NULL DEFAULT '' UNIQUE,
+  body         TEXT DEFAULT '',
+  excerpt      TEXT DEFAULT '',
   image_url    TEXT DEFAULT '',
   tags         TEXT DEFAULT '',
   status       TEXT DEFAULT 'draft',
@@ -55,47 +51,40 @@ CREATE TABLE IF NOT EXISTS posts (
 
 -- Proyectos
 CREATE TABLE IF NOT EXISTS proyectos (
-  id             INTEGER PRIMARY KEY AUTOINCREMENT,
-  title_es       TEXT NOT NULL,
-  title_en       TEXT NOT NULL DEFAULT '',
-  slug_es        TEXT NOT NULL UNIQUE,
-  slug_en        TEXT NOT NULL DEFAULT '',
-  year           INTEGER,
-  description_es TEXT DEFAULT '',
-  description_en TEXT DEFAULT '',
-  images         TEXT DEFAULT '[]',
-  links          TEXT DEFAULT '[]',
-  is_featured    INTEGER DEFAULT 0,
-  created_at     TEXT DEFAULT (datetime('now')),
-  updated_at     TEXT DEFAULT (datetime('now'))
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  title        TEXT NOT NULL DEFAULT '',
+  slug         TEXT NOT NULL DEFAULT '' UNIQUE,
+  year         INTEGER,
+  description  TEXT DEFAULT '',
+  images       TEXT DEFAULT '[]',
+  links        TEXT DEFAULT '[]',
+  is_featured  INTEGER DEFAULT 0,
+  created_at   TEXT DEFAULT (datetime('now')),
+  updated_at   TEXT DEFAULT (datetime('now'))
 );
 
--- Eventos / Conciertos
+-- Eventos / Concerts
 CREATE TABLE IF NOT EXISTS eventos (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
-  title_es       TEXT NOT NULL,
-  title_en       TEXT NOT NULL DEFAULT '',
+  title          TEXT NOT NULL DEFAULT '',
   event_date     TEXT NOT NULL,
   venue          TEXT DEFAULT '',
   city           TEXT DEFAULT '',
   country        TEXT DEFAULT '',
-  description_es TEXT DEFAULT '',
-  description_en TEXT DEFAULT '',
+  description    TEXT DEFAULT '',
   external_link  TEXT DEFAULT '',
   image_url      TEXT DEFAULT '',
   created_at     TEXT DEFAULT (datetime('now')),
   updated_at     TEXT DEFAULT (datetime('now'))
 );
 
--- Publicaciones académicas
+-- Publications
 CREATE TABLE IF NOT EXISTS publicaciones (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  title_es    TEXT NOT NULL,
-  title_en    TEXT NOT NULL DEFAULT '',
+  title       TEXT NOT NULL DEFAULT '',
   journal     TEXT DEFAULT '',
   year        INTEGER,
-  abstract_es TEXT DEFAULT '',
-  abstract_en TEXT DEFAULT '',
+  abstract    TEXT DEFAULT '',
   pdf_url     TEXT DEFAULT '',
   doi         TEXT DEFAULT '',
   image_url   TEXT DEFAULT '',

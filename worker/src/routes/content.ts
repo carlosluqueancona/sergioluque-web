@@ -5,18 +5,29 @@ import { json, jsonError, corsHeaders, getAllowedOrigins } from '../lib/shared';
 const content = new Hono<{ Bindings: Env }>();
 
 // ── Row mappers ───────────────────────────────────────────────────────────
+// Tolerant by design: read the flat column first, then fall back to *_en
+// and *_es. That way the mappers work both pre- and post-migration to a
+// monolingual schema. Once the legacy columns are dropped the COALESCE
+// chain returns the flat value directly.
 
-function mapObra(row: Record<string, unknown>, locale: string): Obra {
+const pick = (row: Record<string, unknown>, base: string): string | undefined => {
+  return (
+    (row[base] as string) ||
+    (row[`${base}_en`] as string) ||
+    (row[`${base}_es`] as string) ||
+    undefined
+  )
+}
+
+function mapObra(row: Record<string, unknown>, _locale: string): Obra {
   return {
     id: row['id'] as number,
-    title: ((locale === 'en' ? row['title_en'] : row['title_es']) as string) || (row['title_es'] as string),
-    slug: ((locale === 'en' ? row['slug_en'] : row['slug_es']) as string) || (row['slug_es'] as string),
+    title: pick(row, 'title') ?? '',
+    slug: pick(row, 'slug') ?? '',
     year: (row['year'] as number) || undefined,
-    instrumentation:
-      ((locale === 'en' ? row['instrumentation_en'] : row['instrumentation_es']) as string) || undefined,
+    instrumentation: pick(row, 'instrumentation'),
     duration: (row['duration'] as string) || undefined,
-    description:
-      ((locale === 'en' ? row['description_en'] : row['description_es']) as string) || undefined,
+    description: pick(row, 'description'),
     audioUrl: (row['audio_url'] as string) || undefined,
     audioDuration: (row['audio_duration'] as number) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
@@ -29,7 +40,7 @@ function mapObra(row: Record<string, unknown>, locale: string): Obra {
   };
 }
 
-function mapPost(row: Record<string, unknown>, locale: string): Post {
+function mapPost(row: Record<string, unknown>, _locale: string): Post {
   let tags: string[] = [];
   try {
     const raw = row['tags'] as string;
@@ -39,17 +50,17 @@ function mapPost(row: Record<string, unknown>, locale: string): Post {
   }
   return {
     id: row['id'] as number,
-    title: ((locale === 'en' ? row['title_en'] : row['title_es']) as string) || (row['title_es'] as string),
-    slug: ((locale === 'en' ? row['slug_en'] : row['slug_es']) as string) || (row['slug_es'] as string),
-    body: ((locale === 'en' ? row['body_en'] : row['body_es']) as string) || undefined,
-    excerpt: ((locale === 'en' ? row['excerpt_en'] : row['excerpt_es']) as string) || undefined,
+    title: pick(row, 'title') ?? '',
+    slug: pick(row, 'slug') ?? '',
+    body: pick(row, 'body'),
+    excerpt: pick(row, 'excerpt'),
     tags,
     publishedAt: (row['published_at'] as string) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
   };
 }
 
-function mapProyecto(row: Record<string, unknown>, locale: string): Proyecto {
+function mapProyecto(row: Record<string, unknown>, _locale: string): Proyecto {
   let images: string[] = [];
   let links: Array<{ label: string; url: string }> = [];
   try {
@@ -61,39 +72,37 @@ function mapProyecto(row: Record<string, unknown>, locale: string): Proyecto {
 
   return {
     id: row['id'] as number,
-    title: ((locale === 'en' ? row['title_en'] : row['title_es']) as string) || (row['title_es'] as string),
-    slug: ((locale === 'en' ? row['slug_en'] : row['slug_es']) as string) || (row['slug_es'] as string),
+    title: pick(row, 'title') ?? '',
+    slug: pick(row, 'slug') ?? '',
     year: (row['year'] as number) || undefined,
-    description:
-      ((locale === 'en' ? row['description_en'] : row['description_es']) as string) || undefined,
+    description: pick(row, 'description'),
     images,
     links,
     isFeatured: Boolean(row['is_featured']),
   };
 }
 
-function mapEvento(row: Record<string, unknown>, locale: string): Evento {
+function mapEvento(row: Record<string, unknown>, _locale: string): Evento {
   return {
     id: row['id'] as number,
-    title: ((locale === 'en' ? row['title_en'] : row['title_es']) as string) || (row['title_es'] as string),
+    title: pick(row, 'title') ?? '',
     eventDate: row['event_date'] as string,
     venue: (row['venue'] as string) || undefined,
     city: (row['city'] as string) || undefined,
     country: (row['country'] as string) || undefined,
-    description:
-      ((locale === 'en' ? row['description_en'] : row['description_es']) as string) || undefined,
+    description: pick(row, 'description'),
     externalLink: (row['external_link'] as string) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
   };
 }
 
-function mapPublicacion(row: Record<string, unknown>, locale: string): Publicacion {
+function mapPublicacion(row: Record<string, unknown>, _locale: string): Publicacion {
   return {
     id: row['id'] as number,
-    title: ((locale === 'en' ? row['title_en'] : row['title_es']) as string) || (row['title_es'] as string),
+    title: pick(row, 'title') ?? '',
     journal: (row['journal'] as string) || undefined,
     year: (row['year'] as number) || undefined,
-    abstract: ((locale === 'en' ? row['abstract_en'] : row['abstract_es']) as string) || undefined,
+    abstract: pick(row, 'abstract'),
     pdfUrl: (row['pdf_url'] as string) || undefined,
     doi: (row['doi'] as string) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
@@ -296,16 +305,24 @@ content.get('/settings', async (c) => {
       (results ?? []).map((r) => [r.key, r.value])
     );
 
-    // Long bio is stored under bio_long_*; legacy bio_* still accepted as fallback.
+    // Post-monolingual collapse the bio lives under flat 'bio' / 'bio_short'.
+    // Legacy *_en / *_es keys still accepted as fallback.
     const settings: Settings = {
       bio:
-        (locale === 'en' ? kvMap['bio_long_en'] : kvMap['bio_long_es']) ||
-        (locale === 'en' ? kvMap['bio_en'] : kvMap['bio_es']),
-      bioShort: locale === 'en' ? kvMap['bio_short_en'] : kvMap['bio_short_es'],
+        kvMap['bio'] ||
+        kvMap['bio_long_en'] ||
+        kvMap['bio_long_es'] ||
+        kvMap['bio_en'] ||
+        kvMap['bio_es'],
+      bioShort:
+        kvMap['bio_short'] ||
+        kvMap['bio_short_en'] ||
+        kvMap['bio_short_es'],
       email: kvMap['email'],
       cvPdfUrl: kvMap['cv_pdf_url'],
       profileImageUrl: kvMap['profile_image_url'],
     };
+    void locale;
 
     return json(settings, 200, cors);
   } catch (err) {
