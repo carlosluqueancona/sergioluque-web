@@ -1,4 +1,5 @@
 export { Header } from './Header'
 export { Footer } from './Footer'
-export { LanguageSwitcher } from './LanguageSwitcher'
 export { NavLink } from './NavLink'
+export { ThemeToggle } from './ThemeToggle'
+export { MobileNav } from './MobileNav'

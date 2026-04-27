@@ -1,18 +1,15 @@
 import Link from 'next/link'
-import { getTranslations, getLocale } from 'next-intl/server'
+import { S } from '@/lib/strings'
 
-export async function Footer() {
-  const locale = await getLocale()
-  const t = await getTranslations('nav')
-
+export function Footer() {
   const navLinks = [
-    { href: `/${locale}/obras`, label: t('works') },
-    { href: `/${locale}/proyectos`, label: t('projects') },
-    { href: `/${locale}/blog`, label: t('blog') },
-    { href: `/${locale}/bio`, label: t('bio') },
-    { href: `/${locale}/publicaciones`, label: t('publications') },
-    { href: `/${locale}/conciertos`, label: t('concerts') },
-    { href: `/${locale}/contacto`, label: t('contact') },
+    { href: '/obras', label: S.nav.works },
+    { href: '/proyectos', label: S.nav.projects },
+    { href: '/blog', label: S.nav.blog },
+    { href: '/bio', label: S.nav.bio },
+    { href: '/publicaciones', label: S.nav.publications },
+    { href: '/conciertos', label: S.nav.concerts },
+    { href: '/contacto', label: S.nav.contact },
   ]
 
   return (
@@ -47,7 +44,7 @@ export async function Footer() {
           </p>
         </div>
 
-        <nav aria-label="Navegación del pie de página">
+        <nav aria-label="Footer navigation">
           <ul
             style={{
               display: 'flex',

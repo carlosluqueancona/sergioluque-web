@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { z } from 'zod'
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { S } from '@/lib/strings'
 
 const schema = z.object({
   name: z.string().min(1),
@@ -19,7 +19,7 @@ type FormData = z.infer<typeof schema>
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export function ContactForm() {
-  const t = useTranslations('contact')
+  const t = S.contact
   const [status, setStatus] = useState<Status>('idle')
 
   const {
@@ -89,7 +89,7 @@ export function ContactForm() {
   if (status === 'success') {
     return (
       <p style={{ fontFamily: 'var(--font-space-mono)', fontSize: '14px', color: 'var(--success)', padding: '24px 0' }}>
-        {t('success')}
+        {t.success}
       </p>
     )
   }
@@ -99,11 +99,11 @@ export function ContactForm() {
       <input type="text" {...register('_hp')} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
 
       <div style={fieldStyle}>
-        <label htmlFor="name" style={labelStyle}>{t('name')}</label>
+        <label htmlFor="name" style={labelStyle}>{t.name}</label>
         <input
           id="name"
           type="text"
-          placeholder={t('namePlaceholder')}
+          placeholder={t.namePlaceholder}
           style={{ ...inputStyle, borderColor: errors.name ? 'var(--error)' : 'var(--border)' }}
           aria-describedby={errors.name ? 'name-error' : undefined}
           {...register('name')}
@@ -112,11 +112,11 @@ export function ContactForm() {
       </div>
 
       <div style={fieldStyle}>
-        <label htmlFor="email" style={labelStyle}>{t('email')}</label>
+        <label htmlFor="email" style={labelStyle}>{t.email}</label>
         <input
           id="email"
           type="email"
-          placeholder={t('emailPlaceholder')}
+          placeholder={t.emailPlaceholder}
           style={{ ...inputStyle, borderColor: errors.email ? 'var(--error)' : 'var(--border)' }}
           aria-describedby={errors.email ? 'email-error' : undefined}
           {...register('email')}
@@ -125,11 +125,11 @@ export function ContactForm() {
       </div>
 
       <div style={fieldStyle}>
-        <label htmlFor="subject" style={labelStyle}>{t('subject')}</label>
+        <label htmlFor="subject" style={labelStyle}>{t.subject}</label>
         <input
           id="subject"
           type="text"
-          placeholder={t('subjectPlaceholder')}
+          placeholder={t.subjectPlaceholder}
           style={{ ...inputStyle, borderColor: errors.subject ? 'var(--error)' : 'var(--border)' }}
           aria-describedby={errors.subject ? 'subject-error' : undefined}
           {...register('subject')}
@@ -138,11 +138,11 @@ export function ContactForm() {
       </div>
 
       <div style={fieldStyle}>
-        <label htmlFor="message" style={labelStyle}>{t('message')}</label>
+        <label htmlFor="message" style={labelStyle}>{t.message}</label>
         <textarea
           id="message"
           rows={6}
-          placeholder={t('messagePlaceholder')}
+          placeholder={t.messagePlaceholder}
           style={{ ...inputStyle, resize: 'vertical', borderColor: errors.message ? 'var(--error)' : 'var(--border)' }}
           aria-describedby={errors.message ? 'message-error' : undefined}
           {...register('message')}
@@ -152,7 +152,7 @@ export function ContactForm() {
 
       {status === 'error' && (
         <p style={{ fontFamily: 'var(--font-space-mono)', fontSize: '13px', color: 'var(--error)', marginBottom: '16px' }}>
-          {t('error')}
+          {t.error}
         </p>
       )}
 
@@ -172,7 +172,7 @@ export function ContactForm() {
           transition: 'border-color 150ms ease-out',
         }}
       >
-        {status === 'loading' ? t('sending') : t('send')}
+        {status === 'loading' ? t.sending : t.send}
       </button>
     </form>
   )

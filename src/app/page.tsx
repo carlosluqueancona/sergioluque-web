@@ -1,31 +1,22 @@
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
 import { getObrasDestacadas, getEventosProximos } from '@/lib/db/queries'
 import { WorkCard } from '@/components/works'
 import { ConcertItem } from '@/components/concerts'
 import { Hero } from '@/components/home/Hero'
-import type { Locale } from '@/types'
+import { S } from '@/lib/strings'
 
 export const revalidate = 3600
 
-export default async function HomePage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  const t = await getTranslations('home')
-
+export default async function HomePage() {
   const [obras, eventos] = await Promise.all([
-    getObrasDestacadas(locale as Locale),
-    getEventosProximos(locale as Locale),
+    getObrasDestacadas(),
+    getEventosProximos(),
   ])
 
   return (
     <>
-      <Hero locale={locale as Locale} />
+      <Hero />
 
-      {/* Obras destacadas */}
       {obras.length > 0 && (
         <section
           className="page-shell"
@@ -39,21 +30,11 @@ export default async function HomePage({
               marginBottom: '32px',
             }}
           >
-            <h2
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '11px',
-                fontWeight: 400,
-                color: 'var(--text-muted)',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                margin: 0,
-              }}
-            >
-              {t('featuredWorks')}
+            <h2 className="t-label" style={{ margin: 0 }}>
+              {S.home.featuredWorks}
             </h2>
             <Link
-              href={`/${locale}/obras`}
+              href="/obras"
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',
@@ -62,17 +43,16 @@ export default async function HomePage({
                 letterSpacing: '0.1em',
               }}
             >
-              {t('viewAll')} →
+              {S.home.viewAll} →
             </Link>
           </div>
 
           {obras.map((obra) => (
-            <WorkCard key={obra.id} obra={obra} locale={locale as Locale} />
+            <WorkCard key={obra.id} obra={obra} />
           ))}
         </section>
       )}
 
-      {/* Próximos conciertos */}
       {eventos.length > 0 && (
         <section
           className="page-shell"
@@ -86,21 +66,11 @@ export default async function HomePage({
               marginBottom: '32px',
             }}
           >
-            <h2
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '11px',
-                fontWeight: 400,
-                color: 'var(--text-muted)',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                margin: 0,
-              }}
-            >
-              {t('upcomingConcerts')}
+            <h2 className="t-label" style={{ margin: 0 }}>
+              {S.home.upcomingConcerts}
             </h2>
             <Link
-              href={`/${locale}/conciertos`}
+              href="/conciertos"
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',
@@ -109,12 +79,12 @@ export default async function HomePage({
                 letterSpacing: '0.1em',
               }}
             >
-              {t('viewAll')} →
+              {S.home.viewAll} →
             </Link>
           </div>
 
           {eventos.slice(0, 3).map((evento) => (
-            <ConcertItem key={evento.id} evento={evento} locale={locale as Locale} />
+            <ConcertItem key={evento.id} evento={evento} />
           ))}
         </section>
       )}

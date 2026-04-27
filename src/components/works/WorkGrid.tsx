@@ -1,12 +1,11 @@
 import { WorkCard } from './WorkCard'
-import type { Obra, Locale } from '@/types'
+import type { Obra } from '@/types'
 
 interface WorkGridProps {
   obras: Obra[]
-  locale: Locale
 }
 
-export function WorkGrid({ obras, locale }: WorkGridProps) {
+export function WorkGrid({ obras }: WorkGridProps) {
   if (obras.length === 0) {
     return (
       <p
@@ -25,7 +24,7 @@ export function WorkGrid({ obras, locale }: WorkGridProps) {
   return (
     <div>
       {obras.map((obra) => (
-        <WorkCard key={obra.id} obra={obra} locale={locale} />
+        <WorkCard key={obra.id} obra={obra} />
       ))}
     </div>
   )

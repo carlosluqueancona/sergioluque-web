@@ -1,20 +1,19 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Proyecto, Locale } from '@/types'
+import type { Proyecto } from '@/types'
 
 interface ProjectCardProps {
   proyecto: Proyecto
-  locale: Locale
 }
 
-export function ProjectCard({ proyecto, locale }: ProjectCardProps) {
+export function ProjectCard({ proyecto }: ProjectCardProps) {
   const title = proyecto.title
   const slug = proyecto.slug
   const coverImage = proyecto.images?.[0]
 
   return (
     <article style={{ borderBottom: '1px solid var(--border)', padding: '24px 0' }}>
-      <Link href={`/${locale}/proyectos/${slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+      <Link href={`/proyectos/${slug}`} style={{ textDecoration: 'none', display: 'block' }}>
         {coverImage && (
           <Image
             src={coverImage}

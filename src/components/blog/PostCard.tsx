@@ -1,27 +1,24 @@
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
-import type { Post, Locale } from '@/types'
+import type { Post } from '@/types'
 
 interface PostCardProps {
   post: Post
-  locale: Locale
 }
 
-export async function PostCard({ post, locale }: PostCardProps) {
-  await getTranslations('blog')
+export function PostCard({ post }: PostCardProps) {
   const title = post.title
   const excerpt = post.excerpt
   const slug = post.slug
 
   const dateFormatted = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+    ? new Date(post.publishedAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
     : null
 
   return (
     <article style={{ borderBottom: '1px solid var(--border)', padding: '24px 0' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '16px', marginBottom: '8px' }}>
         <Link
-          href={`/${locale}/blog/${slug}`}
+          href={`/blog/${slug}`}
           style={{ fontFamily: 'var(--font-space-mono)', fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', textDecoration: 'none' }}
         >
           {title}

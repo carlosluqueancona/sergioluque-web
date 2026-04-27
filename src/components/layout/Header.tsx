@@ -1,22 +1,18 @@
 import Link from 'next/link'
-import { getTranslations, getLocale } from 'next-intl/server'
-import { LanguageSwitcher } from './LanguageSwitcher'
 import { NavLink } from './NavLink'
 import { ThemeToggle } from './ThemeToggle'
 import { MobileNav } from './MobileNav'
+import { S } from '@/lib/strings'
 
-export async function Header() {
-  const locale = await getLocale()
-  const t = await getTranslations('nav')
-
+export function Header() {
   const navLinks = [
-    { href: `/${locale}/obras`, label: t('works') },
-    { href: `/${locale}/proyectos`, label: t('projects') },
-    { href: `/${locale}/blog`, label: t('blog') },
-    { href: `/${locale}/bio`, label: t('bio') },
-    { href: `/${locale}/publicaciones`, label: t('publications') },
-    { href: `/${locale}/conciertos`, label: t('concerts') },
-    { href: `/${locale}/contacto`, label: t('contact') },
+    { href: '/obras', label: S.nav.works },
+    { href: '/proyectos', label: S.nav.projects },
+    { href: '/blog', label: S.nav.blog },
+    { href: '/bio', label: S.nav.bio },
+    { href: '/publicaciones', label: S.nav.publications },
+    { href: '/conciertos', label: S.nav.concerts },
+    { href: '/contacto', label: S.nav.contact },
   ]
 
   return (
@@ -31,7 +27,7 @@ export async function Header() {
     >
       <div className="site-header-inner">
         <Link
-          href={`/${locale}`}
+          href="/"
           style={{
             fontFamily: 'var(--font-space-mono)',
             fontSize: '14px',
@@ -46,16 +42,13 @@ export async function Header() {
         </Link>
 
         {/* Desktop nav (≥901px) */}
-        <nav aria-label={t('works')}>
+        <nav aria-label="Main navigation">
           <ul className="site-nav-desktop">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <NavLink href={link.href} label={link.label} />
               </li>
             ))}
-            <li>
-              <LanguageSwitcher />
-            </li>
             <li>
               <ThemeToggle />
             </li>
@@ -64,9 +57,8 @@ export async function Header() {
 
         {/* Mobile nav (≤900px) */}
         <div className="site-nav-mobile">
-          <LanguageSwitcher />
           <ThemeToggle />
-          <MobileNav links={navLinks} menuLabel={locale === 'en' ? 'Menu' : 'Menú'} />
+          <MobileNav links={navLinks} menuLabel="Menu" />
         </div>
       </div>
     </header>

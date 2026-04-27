@@ -1,25 +1,23 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
 import { AudioPlayerMini } from '@/components/audio'
-import type { Obra, Locale } from '@/types'
+import { S } from '@/lib/strings'
+import type { Obra } from '@/types'
 
 const isHttpUrl = (s: string | undefined): s is string =>
   !!s && /^https?:\/\//i.test(s)
 
 interface WorkCardProps {
   obra: Obra
-  locale: Locale
 }
 
-export async function WorkCard({ obra, locale }: WorkCardProps) {
-  const t = await getTranslations('works')
+export function WorkCard({ obra }: WorkCardProps) {
   const title = obra.title
   const instrumentation = obra.instrumentation
   const slug = obra.slug
   const showImage = isHttpUrl(obra.imageUrl)
   const showAudio = isHttpUrl(obra.audioUrl)
-  const href = `/${locale}/obras/${slug}`
+  const href = `/obras/${slug}`
 
   return (
     <article
@@ -35,7 +33,6 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
         alignItems: 'start',
       }}
     >
-      {/* Full-card click target. Sits below the audio player so its buttons stay interactive. */}
       <Link
         href={href}
         aria-label={title}
@@ -103,7 +100,7 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
             />
           </div>
         ) : (
-          <p className="t-caption">{t('noAudio')}</p>
+          <p className="t-caption">{S.works.noAudio}</p>
         )}
       </div>
     </article>

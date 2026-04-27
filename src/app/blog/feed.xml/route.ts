@@ -1,12 +1,9 @@
 export const runtime = 'edge'
 
 import { getPosts } from '@/lib/db/queries'
-import { NextRequest } from 'next/server'
-import type { Locale } from '@/types'
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params
-  const posts = await getPosts(locale as Locale)
+export async function GET() {
+  const posts = await getPosts()
 
   const baseUrl = 'https://sergioluque.com'
   const siteTitle = 'Sergio Luque — Blog'
@@ -21,8 +18,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
       return `<item>
         <title><![CDATA[${title}]]></title>
-        <link>${baseUrl}/${locale}/blog/${slug}</link>
-        <guid>${baseUrl}/${locale}/blog/${slug}</guid>
+        <link>${baseUrl}/blog/${slug}</link>
+        <guid>${baseUrl}/blog/${slug}</guid>
         <pubDate>${pubDate}</pubDate>
         <description><![CDATA[${excerpt}]]></description>
       </item>`
@@ -33,10 +30,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${siteTitle}</title>
-    <link>${baseUrl}/${locale}/blog</link>
-    <description>Blog de Sergio Luque</description>
-    <language>${locale}</language>
-    <atom:link href="${baseUrl}/${locale}/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <link>${baseUrl}/blog</link>
+    <description>Sergio Luque's blog</description>
+    <language>en</language>
+    <atom:link href="${baseUrl}/blog/feed.xml" rel="self" type="application/rss+xml"/>
     ${items}
   </channel>
 </rss>`

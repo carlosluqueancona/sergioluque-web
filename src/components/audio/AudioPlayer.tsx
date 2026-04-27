@@ -1,10 +1,10 @@
 'use client'
 
 import { useRef, useState, useCallback } from 'react'
-import { useTranslations } from 'next-intl'
 import { WaveformBars } from './WaveformBars'
 import { formatTime } from '@/lib/utils'
 import { useAudioGraph } from '@/lib/audio/useAudioGraph'
+import { S } from '@/lib/strings'
 
 interface AudioPlayerProps {
   audioUrl: string
@@ -13,7 +13,7 @@ interface AudioPlayerProps {
 }
 
 export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
-  const t = useTranslations('audio')
+  const t = S.audio
   const audioRef = useRef<HTMLAudioElement>(null)
   const { unlock, getAnalyser } = useAudioGraph(audioRef)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -102,7 +102,7 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
         <button
           onClick={togglePlay}
           disabled={isLoading}
-          aria-label={isPlaying ? t('pause') : t('play')}
+          aria-label={isPlaying ? t.pause : t.play}
           style={{
             width: '40px',
             height: '40px',

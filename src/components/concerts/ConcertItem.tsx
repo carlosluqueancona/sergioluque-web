@@ -1,19 +1,18 @@
-import type { Evento, Locale } from '@/types'
+import type { Evento } from '@/types'
 
 interface ConcertItemProps {
   evento: Evento
-  locale: Locale
 }
 
-function formatEventDate(dateStr: string, locale: Locale): string {
-  return new Date(dateStr).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-GB', {
+function formatEventDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
 }
 
-export function ConcertItem({ evento, locale }: ConcertItemProps) {
+export function ConcertItem({ evento }: ConcertItemProps) {
   const title = evento.title
 
   return (
@@ -35,7 +34,7 @@ export function ConcertItem({ evento, locale }: ConcertItemProps) {
           letterSpacing: '0.05em',
         }}
       >
-        {formatEventDate(evento.eventDate, locale)}
+        {formatEventDate(evento.eventDate)}
       </span>
 
       <div>

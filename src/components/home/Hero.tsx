@@ -1,31 +1,16 @@
-import type { Locale } from '@/types'
 import { HeroLissajous } from './HeroLissajous'
 
-interface HeroProps {
-  locale: Locale
-}
-
 const COPY = {
-  es: {
-    role: 'Compositor · Investigador',
-    practice: 'Música acusmática · Electroacústica · Música contemporánea',
-    origin: 'Ciudad de México',
-    catalog: 'Catálogo de obras',
-    scrollHint: 'Desliza para ver el catálogo',
-    seoHeading: 'Compositor e investigador en música electroacústica',
-  },
-  en: {
-    role: 'Composer · Researcher',
-    practice: 'Acousmatic music · Electroacoustic · Contemporary',
-    origin: 'Mexico City',
-    catalog: 'Works catalogue',
-    scrollHint: 'Scroll for catalogue',
-    seoHeading: 'Composer and researcher in electroacoustic music',
-  },
+  role: 'Composer · Researcher',
+  practice: 'Acousmatic music · Electroacoustic · Contemporary',
+  origin: 'Mexico City',
+  catalog: 'Works catalogue',
+  scrollHint: 'Scroll for catalogue',
+  seoHeading: 'Composer and researcher in electroacoustic music',
 } as const
 
-export function Hero({ locale }: HeroProps) {
-  const t = COPY[locale]
+export function Hero() {
+  const t = COPY
   const year = new Date().getFullYear()
 
   return (

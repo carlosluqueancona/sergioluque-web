@@ -1,30 +1,24 @@
 import Image from 'next/image'
 import { getSettings } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
-import { getTranslations } from 'next-intl/server'
+import { S } from '@/lib/strings'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  await params
-  const t = await getTranslations('bio')
-  return { title: `${t('title')} — Sergio Luque` }
+export const metadata: Metadata = {
+  title: S.bio.title,
 }
 
-export default async function BioPage({ params }: { params: Promise<{ locale: string }> }) {
-  await params
-  const t = await getTranslations('bio')
-  const tCv = await getTranslations('cv')
+export default async function BioPage() {
   const settings = await getSettings()
-
   const bio = settings?.bio
   const profileImageUrl = settings?.profileImageUrl
 
   return (
     <div className="page-shell">
       <h1 className="t-h1" style={{ marginBottom: '48px' }}>
-        {t('title')}
+        {S.bio.title}
       </h1>
 
       <div className="aside-grid">
@@ -42,7 +36,7 @@ export default async function BioPage({ params }: { params: Promise<{ locale: st
               className="btn-ghost"
               style={{ marginTop: '32px' }}
             >
-              {tCv('download')} ↓
+              {S.cv.download} ↓
             </a>
           )}
         </div>

@@ -2,7 +2,6 @@ export const runtime = 'edge'
 
 import { ImageResponse } from 'next/og'
 import { getObraBySlug } from '@/lib/db/queries'
-import type { Locale } from '@/types'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
@@ -10,10 +9,10 @@ export const contentType = 'image/png'
 export default async function Image({
   params,
 }: {
-  params: Promise<{ locale: string; slug: string }>
+  params: Promise<{ slug: string }>
 }) {
-  const { locale, slug } = await params
-  const obra = await getObraBySlug(slug, locale as Locale)
+  const { slug } = await params
+  const obra = await getObraBySlug(slug)
 
   const title = obra ? obra.title : 'Sergio Luque'
   const instrumentation = obra?.instrumentation ?? ''
