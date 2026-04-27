@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { FileUpload } from './FileUpload'
 
 interface SettingsFormProps {
   initial: Record<string, string>
@@ -234,26 +235,30 @@ function SettingField({
   uploadFile: (f: File) => Promise<string | null>
   deleteFile: (url: string) => Promise<boolean>
 }) {
-  const ref = useRef<HTMLInputElement>(null)
-  const [uploading, setUploading] = useState(false)
-
-  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    const url = await uploadFile(file)
-    if (url) onChange(url)
-    setUploading(false)
-    if (ref.current) ref.current.value = ''
+  if (field.type === 'image') {
+    return (
+      <FileUpload
+        label={field.label}
+        kind="image"
+        value={value}
+        onChange={onChange}
+        uploadFile={uploadFile}
+        deleteFile={deleteFile}
+      />
+    )
   }
 
-  async function handleRemove() {
-    if (!value) return
-    if (/\/media\//.test(value)) {
-      if (!confirm('¿Eliminar el archivo del servidor?')) return
-      await deleteFile(value)
-    }
-    onChange('')
+  if (field.type === 'pdf') {
+    return (
+      <FileUpload
+        label={field.label}
+        kind="pdf"
+        value={value}
+        onChange={onChange}
+        uploadFile={uploadFile}
+        deleteFile={deleteFile}
+      />
+    )
   }
 
   return (
@@ -276,82 +281,6 @@ function SettingField({
           onChange={(e) => onChange(e.target.value)}
           style={inputStyle}
         />
-      )}
-
-      {field.type === 'image' && (
-        <>
-          {value && (
-            <img
-              src={value}
-              alt=""
-              style={{
-                display: 'block',
-                maxWidth: '200px',
-                maxHeight: '200px',
-                border: '1px solid var(--border)',
-                marginBottom: '8px',
-              }}
-            />
-          )}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <input
-              ref={ref}
-              type="file"
-              accept="image/*"
-              onChange={handleFile}
-              style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
-            />
-            {value && (
-              <button type="button" onClick={handleRemove} style={smallButton}>
-                Quitar
-              </button>
-            )}
-          </div>
-          {uploading && (
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-              Subiendo…
-            </p>
-          )}
-        </>
-      )}
-
-      {field.type === 'pdf' && (
-        <>
-          {value && (
-            <a
-              href={value}
-              target="_blank"
-              rel="noopener"
-              style={{
-                color: 'var(--accent)',
-                fontSize: '12px',
-                display: 'block',
-                marginBottom: '8px',
-              }}
-            >
-              {value.split('/').pop()}
-            </a>
-          )}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <input
-              ref={ref}
-              type="file"
-              accept="application/pdf"
-              onChange={handleFile}
-              style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
-            />
-            {value && (
-              <button type="button" onClick={handleRemove} style={smallButton}>
-                Quitar
-              </button>
-            )}
-          </div>
-          {uploading && (
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-              Subiendo…
-            </p>
-          )}
-        </>
       )}
     </div>
   )
