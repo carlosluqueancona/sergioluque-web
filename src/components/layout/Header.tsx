@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { NavLink } from './NavLink'
+import { ThemeToggle } from './ThemeToggle'
 
 export async function Header() {
   const locale = await getLocale()
@@ -70,6 +71,9 @@ export async function Header() {
             ))}
             <li>
               <LanguageSwitcher />
+            </li>
+            <li>
+              <ThemeToggle />
             </li>
           </ul>
         </nav>

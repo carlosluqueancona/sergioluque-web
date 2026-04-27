@@ -40,7 +40,12 @@
   --radius-xl: calc(var(--radius) * 1.4);
 }
 
-:root {
+/* Default = dark. The bootstrap script in <head> sets data-theme on <html> before
+   first paint so a fresh visitor's preference (or the OS default) is applied
+   without a flash. */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0A0A0A;
   --surface: #141414;
   --surface-hover: #1E1E1E;
@@ -51,6 +56,23 @@
   --accent: #D4D4D4;
   --error: #EF4444;
   --success: #22C55E;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --surface-hover: #F0F0F0;
+  --border: #E2E2E2;
+  --text-primary: #0A0A0A;
+  --text-secondary: #555555;
+  --text-muted: #8A8A8A;
+  --accent: #1A1A1A;
+  --error: #DC2626;
+  --success: #16A34A;
+}
+
+:root {
 
   --background: var(--bg);
   --foreground: var(--text-primary);
@@ -66,7 +88,7 @@
   --muted-foreground: var(--text-secondary);
   --accent-foreground: var(--bg);
   --destructive: var(--error);
-  --input: #2A2A2A;
+  --input: var(--border);
   --ring: var(--accent);
   --radius: 0rem;
   --sidebar: var(--surface);
@@ -88,6 +110,7 @@
     background: var(--bg);
     color: var(--text-primary);
     font-family: var(--font-ibm-plex-sans), sans-serif;
+    transition: background-color 200ms ease, color 200ms ease;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-space-mono), monospace;
@@ -95,8 +118,15 @@
 }
 
 /* Work cards */
+.work-card {
+  transition: background-color 150ms ease-out;
+}
 .work-card:hover {
-  background: var(--surface-hover);
+  background: var(--surface);
+}
+.work-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 /* Admin light theme — scoped via data attribute so the public site is unaffected */

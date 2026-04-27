@@ -3,6 +3,7 @@ export const runtime = 'edge'
 import type { Metadata } from 'next'
 import { Space_Mono, IBM_Plex_Sans } from 'next/font/google'
 import './globals.css'
+import { themeBootstrapScript } from '@/components/layout/ThemeToggle'
 
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
@@ -27,6 +28,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning>
+      <head>
+        {/* Runs before paint so the chosen theme is on <html> the first frame. */}
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+      </head>
       <body className={`${spaceMono.variable} ${ibmPlexSans.variable} antialiased`}>
         {children}
       </body>

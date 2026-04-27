@@ -33,7 +33,6 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
         gridTemplateColumns: showImage ? '120px 1fr' : '1fr',
         gap: '24px',
         alignItems: 'start',
-        transition: 'background-color 150ms ease-out',
       }}
     >
       {/* Full-card click target. Sits below the audio player so its buttons stay interactive. */}
@@ -144,13 +143,6 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
         )}
       </div>
 
-      <style>{`
-        .work-card:hover { background-color: var(--surface); }
-        .work-card-link:focus-visible {
-          outline: 2px solid var(--accent);
-          outline-offset: -2px;
-        }
-      `}</style>
     </article>
   )
 }
