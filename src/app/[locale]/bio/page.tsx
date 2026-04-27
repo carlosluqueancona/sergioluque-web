@@ -39,18 +39,8 @@ export default async function BioPage({ params }: { params: Promise<{ locale: st
             <a
               href={settings.cvPdfUrl}
               download
-              style={{
-                display: 'inline-block',
-                marginTop: '32px',
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '11px',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                border: '1px solid var(--border)',
-                padding: '12px 24px',
-              }}
+              className="btn-ghost"
+              style={{ marginTop: '32px' }}
             >
               {tCv('download')} ↓
             </a>

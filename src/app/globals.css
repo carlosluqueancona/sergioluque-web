@@ -312,6 +312,170 @@
   .hero-wordmark > span { animation: none; }
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   Micro-interactions — small affordances that reward pointer focus.
+   All respect prefers-reduced-motion via the global block at the
+   bottom of this file.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Header nav links: underline that slides in from the left + color shift */
+.nav-link {
+  position: relative;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 200ms ease-out;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 350ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.nav-link:hover { color: var(--text-primary); }
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* Language switcher and small icon toggles: subtle press feedback */
+.lang-btn {
+  transition: color 200ms ease-out, transform 180ms ease-out;
+}
+.lang-btn:hover { transform: scale(1.08); }
+.icon-toggle {
+  transition: transform 180ms ease-out, border-color 180ms ease-out, background-color 180ms ease-out;
+}
+.icon-toggle:hover { transform: translateY(-1px); border-color: var(--text-primary); }
+.icon-toggle:active { transform: translateY(1px); }
+
+/* WorkCard image: subtle zoom on card hover. Wrapper handles overflow so
+   the scale doesn't push neighbouring text. */
+.work-card-image {
+  overflow: hidden;
+  display: block;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+.work-card-image img {
+  transition: transform 700ms cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+.work-card:hover .work-card-image img {
+  transform: scale(1.06);
+}
+
+/* Bottom-rail scroll hint — gentle vertical nudge on the arrow only */
+.hero-scroll-hint {
+  display: inline-block;
+  animation: hero-scroll-hint-nudge 2.4s ease-in-out infinite;
+}
+@keyframes hero-scroll-hint-nudge {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%      { transform: translateY(3px); opacity: 1; }
+}
+
+/* "Ghost" button — fills on hover (CV download, send, etc.) */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 12px 24px;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 250ms cubic-bezier(0.2, 0.6, 0.2, 1),
+              color 250ms cubic-bezier(0.2, 0.6, 0.2, 1),
+              border-color 250ms cubic-bezier(0.2, 0.6, 0.2, 1),
+              transform 200ms ease-out;
+}
+.btn-ghost:hover {
+  background: var(--text-primary);
+  color: var(--bg);
+  border-color: var(--text-primary);
+}
+.btn-ghost:active { transform: translateY(1px); }
+
+/* "← Back" arrow link — slides slightly left on hover */
+.back-link {
+  display: inline-block;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: color 200ms ease-out, transform 250ms cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+.back-link:hover {
+  color: var(--text-primary);
+  transform: translateX(-3px);
+}
+
+/* Inline links in body copy — animated underline that wipes from left
+   to right on hover, retracts to the right on leave. */
+.body-link {
+  position: relative;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.body-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 350ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.body-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* Audio play button: stronger border on hover */
+.work-card .work-card audio + button,
+button[aria-label="Reproducir"],
+button[aria-label="Pausar"],
+button[aria-label="Play"],
+button[aria-label="Pause"] {
+  transition: border-color 200ms ease-out, background-color 200ms ease-out, transform 180ms ease-out !important;
+}
+button[aria-label="Reproducir"]:hover,
+button[aria-label="Pausar"]:hover,
+button[aria-label="Play"]:hover,
+button[aria-label="Pause"]:hover {
+  border-color: var(--text-primary) !important;
+  background: var(--surface) !important;
+}
+
+/* Honour reduced-motion for all the above non-CSS-animation transitions */
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::after,
+  .lang-btn,
+  .icon-toggle,
+  .work-card-image img,
+  .btn-ghost,
+  .back-link,
+  .body-link::after,
+  button[aria-label] {
+    transition: none !important;
+  }
+  .hero-scroll-hint { animation: none !important; }
+}
+
 /* Hero responsive tweaks: pull padding in on mobile */
 @media (max-width: 768px) {
   .hero-section {

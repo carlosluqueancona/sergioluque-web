@@ -26,6 +26,7 @@ export function LanguageSwitcher() {
     >
       <button
         onClick={() => switchLocale('es')}
+        className="lang-btn"
         style={{
           color: locale === 'es' ? 'var(--text-primary)' : 'var(--text-muted)',
           textDecoration: locale === 'es' ? 'underline' : 'none',
@@ -44,6 +45,7 @@ export function LanguageSwitcher() {
       <span style={{ color: 'var(--text-muted)' }}>/</span>
       <button
         onClick={() => switchLocale('en')}
+        className="lang-btn"
         style={{
           color: locale === 'en' ? 'var(--text-primary)' : 'var(--text-muted)',
           textDecoration: locale === 'en' ? 'underline' : 'none',

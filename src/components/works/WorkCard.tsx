@@ -44,18 +44,20 @@ export async function WorkCard({ obra, locale }: WorkCardProps) {
       />
 
       {showImage && (
-        <Image
-          src={obra.imageUrl as string}
-          alt={title}
-          width={120}
-          height={120}
-          style={{
-            display: 'block',
-            objectFit: 'cover',
-            width: '120px',
-            height: '120px',
-          }}
-        />
+        <span className="work-card-image">
+          <Image
+            src={obra.imageUrl as string}
+            alt={title}
+            width={120}
+            height={120}
+            style={{
+              display: 'block',
+              objectFit: 'cover',
+              width: '120px',
+              height: '120px',
+            }}
+          />
+        </span>
       )}
 
       <div>

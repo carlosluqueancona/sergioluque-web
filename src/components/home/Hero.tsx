@@ -119,45 +119,24 @@ export function Hero({ locale }: HeroProps) {
           }}
         >
           <span style={{ display: 'block' }}>SERGIO</span>
-          <span
-            style={{
-              display: 'block',
-              color: 'transparent',
-              WebkitTextStroke: '1.5px var(--text-primary)',
-              fontStyle: 'italic',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            LUQUE
-          </span>
+          <span style={{ display: 'block' }}>LUQUE</span>
         </h1>
 
-        {/* Subtitle band */}
-        <div
-          className="hero-subtitle-grid"
+        {/* Subtitle */}
+        <p
           style={{
             paddingLeft: '40px',
             marginTop: '40px',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-            gap: '40px',
-            alignItems: 'start',
+            fontFamily: 'var(--font-ibm-plex-sans)',
+            fontSize: '15px',
+            color: 'var(--text-secondary)',
+            margin: '40px 0 0',
+            maxWidth: '480px',
+            lineHeight: 1.55,
           }}
         >
-          <p
-            style={{
-              fontFamily: 'var(--font-ibm-plex-sans)',
-              fontSize: '15px',
-              color: 'var(--text-secondary)',
-              margin: 0,
-              maxWidth: '480px',
-              lineHeight: 1.55,
-            }}
-          >
-            {t.practice}
-          </p>
-          <DecorativeScore />
-        </div>
+          {t.practice}
+        </p>
       </div>
 
       {/* Bottom rail */}
@@ -176,7 +155,9 @@ export function Hero({ locale }: HeroProps) {
           color: 'var(--text-muted)',
         }}
       >
-        <span>{`↓ ${t.scrollHint}`}</span>
+        <span>
+          <span className="hero-scroll-hint" aria-hidden>↓</span> {t.scrollHint}
+        </span>
         <span>{t.catalog}</span>
       </div>
       </div>
@@ -245,35 +226,3 @@ export function HeroNoise() {
   )
 }
 
-function DecorativeScore() {
-  // Static "score" — vertical bars of varying heights, evokes a waveform / spectrogram
-  const bars = [
-    14, 38, 22, 56, 30, 70, 18, 44, 26, 62, 12, 48, 34, 80, 24, 58, 16, 40, 28,
-    72, 20, 52, 36, 64, 30, 46, 18, 60, 22, 38, 26, 50, 14, 68, 32, 44,
-  ]
-  return (
-    <div
-      aria-hidden
-      style={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-        gap: '3px',
-        height: '64px',
-      }}
-    >
-      {bars.map((h, i) => (
-        <span
-          key={i}
-          style={{
-            display: 'block',
-            width: '2px',
-            height: `${h}%`,
-            background: 'var(--accent)',
-            opacity: 0.55,
-          }}
-        />
-      ))}
-    </div>
-  )
-}

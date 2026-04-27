@@ -41,6 +41,7 @@ export function MobileNav({ links, menuLabel }: MobileNavProps) {
         aria-expanded={open}
         aria-label={menuLabel}
         onClick={() => setOpen((v) => !v)}
+        className="icon-toggle"
         style={{
           background: 'none',
           border: '1px solid var(--border)',

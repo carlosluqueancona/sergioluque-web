@@ -42,6 +42,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={ariaLabel}
+      className="icon-toggle"
       style={{
         background: 'none',
         border: '1px solid var(--border)',
@@ -56,7 +57,6 @@ export function ThemeToggle() {
         cursor: 'pointer',
         padding: 0,
         lineHeight: 1,
-        transition: 'border-color 150ms ease, background-color 150ms ease',
       }}
     >
       {label}
