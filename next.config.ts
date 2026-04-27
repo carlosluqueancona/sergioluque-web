@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts')
 
 const nextConfig: NextConfig = {
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,6 +14,14 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'pub-*.r2.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sergioluque-cms.carlosluque-095.workers.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.sergioluque.com',
       },
     ],
   },
