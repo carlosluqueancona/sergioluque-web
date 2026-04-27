@@ -10,6 +10,10 @@ const ALLOWED_MIME = new Set([
   'image/webp',
   'audio/mpeg',
   'audio/mp3',
+  'audio/mp4',
+  'audio/x-m4a',
+  'audio/m4a',
+  'audio/aac',
 ]);
 
 // Magic byte signatures
@@ -39,6 +43,31 @@ function detectMime(bytes: Uint8Array): string | null {
     return 'audio/mpeg';
   // ID3 (MP3 with ID3 tag): 49 44 33
   if (bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33) return 'audio/mpeg';
+  // MP4 / M4A container: bytes 4-7 = "ftyp" (66 74 79 70). Major brand at 8-11.
+  if (
+    bytes.length >= 12 &&
+    bytes[4] === 0x66 &&
+    bytes[5] === 0x74 &&
+    bytes[6] === 0x79 &&
+    bytes[7] === 0x70
+  ) {
+    const brand = String.fromCharCode(bytes[8], bytes[9], bytes[10], bytes[11]);
+    // Common audio/MP4 brands. iTunes/QuickTime export ".m4a" as M4A.
+    if (
+      brand === 'M4A ' ||
+      brand === 'M4B ' ||
+      brand === 'M4P ' ||
+      brand === 'mp41' ||
+      brand === 'mp42' ||
+      brand === 'isom' ||
+      brand === 'iso2' ||
+      brand === 'dash'
+    ) {
+      return 'audio/mp4';
+    }
+  }
+  // ADTS AAC: FF F1 / FF F9
+  if (bytes[0] === 0xff && (bytes[1] === 0xf1 || bytes[1] === 0xf9)) return 'audio/aac';
   return null;
 }
 

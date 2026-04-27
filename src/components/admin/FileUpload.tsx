@@ -14,15 +14,15 @@ interface FileUploadProps {
 }
 
 const ACCEPT: Record<FileKind, string> = {
-  audio: 'audio/mpeg,audio/mp3,audio/*',
+  audio: 'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/m4a,audio/aac,.mp3,.m4a,.mp4,.aac',
   image: 'image/*',
   pdf: 'application/pdf',
 }
 
 const HINT: Record<FileKind, string> = {
-  audio: 'MP3 · arrastra o haz clic',
-  image: 'JPG · PNG · WebP · arrastra o haz clic',
-  pdf: 'PDF · arrastra o haz clic',
+  audio: 'MP3 · M4A · MP4 · AAC',
+  image: 'JPG · PNG · WebP',
+  pdf: 'PDF',
 }
 
 const ICON: Record<FileKind, string> = {
