@@ -111,4 +111,39 @@ upload.post('/', async (c) => {
   }
 });
 
+// ── Delete object from R2 ─────────────────────────────────────────────────
+upload.delete('/', async (c) => {
+  const origin = c.req.raw.headers.get('origin') ?? '';
+  const cors = corsHeaders(origin, getAllowedOrigins(c.env), 'DELETE, OPTIONS');
+
+  const payload = await requireAuth(c.req.raw, c.env);
+  if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  // Accept ?key=... or ?url=...
+  const url = new URL(c.req.url);
+  let key = url.searchParams.get('key') ?? '';
+  const fullUrl = url.searchParams.get('url') ?? '';
+
+  if (!key && fullUrl) {
+    // Extract key from URL (everything after /media/)
+    const match = /\/media\/(.+)$/.exec(fullUrl);
+    if (match) key = match[1] ?? '';
+  }
+
+  if (!key) return jsonError('Missing key or url parameter', 400, cors);
+
+  // Safety: only allow keys under our managed prefixes
+  if (!/^(images|audio|files)\//.test(key)) {
+    return jsonError('Invalid key prefix', 400, cors);
+  }
+
+  try {
+    await c.env.MEDIA.delete(key);
+    return json({ ok: true, deleted: key }, 200, cors);
+  } catch (err) {
+    console.error('R2 delete error', err);
+    return jsonError('Delete failed', 500, cors);
+  }
+});
+
 export { upload };

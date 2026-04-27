@@ -9,6 +9,25 @@ const WORKER_BASE =
 
 const COOKIE_NAME = 'sl_admin_jwt'
 
+export async function DELETE(req: NextRequest) {
+  try {
+    const token = req.cookies.get(COOKIE_NAME)?.value
+    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const url = req.nextUrl.searchParams.get('url')
+    if (!url) return NextResponse.json({ error: 'url required' }, { status: 400 })
+
+    const res = await fetch(`${WORKER_BASE}/admin/upload?url=${encodeURIComponent(url)}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const data = (await res.json()) as Record<string, unknown>
+    return NextResponse.json(data, { status: res.status })
+  } catch {
+    return NextResponse.json({ error: 'Worker unavailable' }, { status: 503 })
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const token = req.cookies.get(COOKIE_NAME)?.value

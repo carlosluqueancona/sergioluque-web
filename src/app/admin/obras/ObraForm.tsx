@@ -133,9 +133,13 @@ export function ObraForm({ initialData }: ObraFormProps) {
     }
   }
 
+  const [uploadingField, setUploadingField] = useState<string | null>(null)
+
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>, field: 'audio_url' | 'image_url') {
     const file = e.target.files?.[0]
     if (!file) return
+    setError('')
+    setUploadingField(field)
     const fd = new FormData()
     fd.append('file', file)
     try {
@@ -143,10 +147,30 @@ export function ObraForm({ initialData }: ObraFormProps) {
       if (res.ok) {
         const { url } = await res.json() as { url: string }
         set(field, url)
+      } else {
+        const data = (await res.json()) as { error?: string }
+        setError(data.error ?? 'Error al subir archivo')
       }
     } catch {
       setError('Error al subir archivo')
+    } finally {
+      setUploadingField(null)
+      e.target.value = ''
     }
+  }
+
+  async function handleFileRemove(field: 'audio_url' | 'image_url') {
+    const url = form[field]
+    if (!url) return
+    if (/\/media\//.test(url)) {
+      if (!confirm('¿Eliminar el archivo del servidor? Esta acción no se puede deshacer.')) return
+      try {
+        await fetch(`/api/admin/upload?url=${encodeURIComponent(url)}`, { method: 'DELETE' })
+      } catch {
+        // ignore — we still clear the field
+      }
+    }
+    set(field, '')
   }
 
   return (
@@ -205,18 +229,94 @@ export function ObraForm({ initialData }: ObraFormProps) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Audio URL</label>
-          <input style={inputStyle} value={form.audio_url} onChange={(e) => set('audio_url', e.target.value)} />
-          <input type="file" accept="audio/*" onChange={(e) => handleFileUpload(e, 'audio_url')} style={{ marginTop: '4px', fontSize: '11px', color: 'var(--text-muted)' }} />
+          <label style={labelStyle}>Audio</label>
+          {form.audio_url && (
+            <audio
+              controls
+              src={form.audio_url}
+              style={{ width: '100%', marginBottom: '8px', height: '36px' }}
+            />
+          )}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <input
+              type="file"
+              accept="audio/mpeg,audio/mp3,audio/*"
+              onChange={(e) => handleFileUpload(e, 'audio_url')}
+              style={{ flex: 1, fontSize: '11px', color: 'var(--text-muted)' }}
+            />
+            {form.audio_url && (
+              <button
+                type="button"
+                onClick={() => handleFileRemove('audio_url')}
+                style={{
+                  background: 'var(--surface-hover)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                  padding: '6px 12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+          {uploadingField === 'audio_url' && (
+            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+              Subiendo audio…
+            </p>
+          )}
         </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Audio Duración (seg)</label>
           <input style={inputStyle} type="number" value={form.audio_duration} onChange={(e) => set('audio_duration', e.target.value)} />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Imagen URL</label>
-          <input style={inputStyle} value={form.image_url} onChange={(e) => set('image_url', e.target.value)} />
-          <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'image_url')} style={{ marginTop: '4px', fontSize: '11px', color: 'var(--text-muted)' }} />
+          <label style={labelStyle}>Imagen</label>
+          {form.image_url && (
+            <img
+              src={form.image_url}
+              alt=""
+              style={{
+                display: 'block',
+                maxWidth: '200px',
+                maxHeight: '200px',
+                border: '1px solid var(--border)',
+                marginBottom: '8px',
+              }}
+            />
+          )}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e, 'image_url')}
+              style={{ flex: 1, fontSize: '11px', color: 'var(--text-muted)' }}
+            />
+            {form.image_url && (
+              <button
+                type="button"
+                onClick={() => handleFileRemove('image_url')}
+                style={{
+                  background: 'var(--surface-hover)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                  padding: '6px 12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+          {uploadingField === 'image_url' && (
+            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+              Subiendo imagen…
+            </p>
+          )}
         </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Premiere fecha</label>

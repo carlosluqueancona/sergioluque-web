@@ -117,6 +117,18 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
     }
   }
 
+  async function deleteFile(url: string): Promise<boolean> {
+    if (!url || !/\/media\//.test(url)) return true
+    try {
+      const res = await fetch(`/api/admin/upload?url=${encodeURIComponent(url)}`, {
+        method: 'DELETE',
+      })
+      return res.ok
+    } catch {
+      return false
+    }
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
@@ -184,6 +196,7 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
           value={form[field.key]}
           onChange={(v) => set(field.key, v)}
           uploadFile={uploadFile}
+          deleteFile={deleteFile}
         />
       ))}
 
@@ -251,9 +264,10 @@ interface FieldRendererProps {
   value: FormValue
   onChange: (v: FormValue) => void
   uploadFile: (file: File) => Promise<string | null>
+  deleteFile: (url: string) => Promise<boolean>
 }
 
-function FieldRenderer({ field, value, onChange, uploadFile }: FieldRendererProps) {
+function FieldRenderer({ field, value, onChange, uploadFile, deleteFile }: FieldRendererProps) {
   if (field.type === 'image-upload' || field.type === 'pdf-upload') {
     return (
       <FileField
@@ -261,6 +275,7 @@ function FieldRenderer({ field, value, onChange, uploadFile }: FieldRendererProp
         value={String(value ?? '')}
         onChange={(v) => onChange(v)}
         uploadFile={uploadFile}
+        deleteFile={deleteFile}
         accept={field.type === 'image-upload' ? 'image/*' : 'application/pdf'}
       />
     )
@@ -273,6 +288,7 @@ function FieldRenderer({ field, value, onChange, uploadFile }: FieldRendererProp
         value={Array.isArray(value) ? (value as string[]) : []}
         onChange={(v) => onChange(v)}
         uploadFile={uploadFile}
+        deleteFile={deleteFile}
       />
     )
   }
@@ -353,12 +369,14 @@ function FileField({
   value,
   onChange,
   uploadFile,
+  deleteFile,
   accept,
 }: {
   field: FieldDef
   value: string
   onChange: (v: string) => void
   uploadFile: (file: File) => Promise<string | null>
+  deleteFile: (url: string) => Promise<boolean>
   accept: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
@@ -372,6 +390,15 @@ function FileField({
     if (url) onChange(url)
     setUploading(false)
     if (ref.current) ref.current.value = ''
+  }
+
+  async function handleRemove() {
+    if (!value) return
+    if (/\/media\//.test(value)) {
+      if (!confirm('¿Eliminar el archivo del servidor? Esta acción no se puede deshacer.')) return
+      await deleteFile(value)
+    }
+    onChange('')
   }
 
   return (
@@ -409,7 +436,7 @@ function FileField({
           style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
         />
         {value && (
-          <button type="button" onClick={() => onChange('')} style={smallButton}>
+          <button type="button" onClick={handleRemove} style={smallButton}>
             Quitar
           </button>
         )}
@@ -431,11 +458,13 @@ function ImageListField({
   value,
   onChange,
   uploadFile,
+  deleteFile,
 }: {
   field: FieldDef
   value: string[]
   onChange: (v: string[]) => void
   uploadFile: (file: File) => Promise<string | null>
+  deleteFile: (url: string) => Promise<boolean>
 }) {
   const ref = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
@@ -454,7 +483,12 @@ function ImageListField({
     if (ref.current) ref.current.value = ''
   }
 
-  function remove(idx: number) {
+  async function remove(idx: number) {
+    const url = value[idx]
+    if (url && /\/media\//.test(url)) {
+      if (!confirm('¿Eliminar la imagen del servidor?')) return
+      await deleteFile(url)
+    }
     onChange(value.filter((_, i) => i !== idx))
   }
 
