@@ -32,14 +32,16 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       style={{
-        background: 'none',
-        border: '1px solid var(--border)',
-        color: 'var(--text-muted)',
+        background: 'var(--text-primary)',
+        border: 'none',
+        color: 'var(--bg)',
         fontFamily: 'monospace',
         fontSize: '11px',
-        padding: '4px 12px',
+        fontWeight: 700,
+        padding: '5px 13px',
         cursor: 'pointer',
         letterSpacing: '0.1em',
+        transition: 'background 150ms ease, color 150ms ease',
       }}
     >
       {theme === 'dark' ? '☀  LIGHT' : '☾  DARK'}
