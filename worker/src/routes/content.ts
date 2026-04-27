@@ -293,8 +293,11 @@ content.get('/settings', async (c) => {
       (results ?? []).map((r) => [r.key, r.value])
     );
 
+    // Long bio is stored under bio_long_*; legacy bio_* still accepted as fallback.
     const settings: Settings = {
-      bio: locale === 'en' ? kvMap['bio_en'] : kvMap['bio_es'],
+      bio:
+        (locale === 'en' ? kvMap['bio_long_en'] : kvMap['bio_long_es']) ||
+        (locale === 'en' ? kvMap['bio_en'] : kvMap['bio_es']),
       bioShort: locale === 'en' ? kvMap['bio_short_en'] : kvMap['bio_short_es'],
       email: kvMap['email'],
       cvPdfUrl: kvMap['cv_pdf_url'],
