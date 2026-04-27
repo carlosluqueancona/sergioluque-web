@@ -40,6 +40,13 @@ export default async function AdminDashboardPage() {
       emoji: s.emoji ?? '◇',
       special: false,
     })),
+    {
+      route: 'settings',
+      label: 'Configuración',
+      labelSingular: 'Configuración',
+      emoji: '⚙',
+      special: true,
+    },
   ]
 
   return (

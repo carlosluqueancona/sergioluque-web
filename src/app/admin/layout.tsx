@@ -45,6 +45,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <a href="/admin/proyectos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Proyectos</a>
           <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Conciertos</a>
           <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Publicaciones</a>
+          <a href="/admin/settings" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Settings</a>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <ThemeToggle />
             <form action="/api/admin/logout" method="post">
