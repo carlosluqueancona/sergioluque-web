@@ -20,6 +20,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Worker dependencies
+        run: npm ci
+        working-directory: worker
+
       # Worker deploy is best-effort: it requires CLOUDFLARE_API_TOKEN to have
       # Workers Scripts:Edit + User Details:Read. If the token only has Pages
       # perms the step fails; Pages still ships. Deploy the worker manually
