@@ -17,7 +17,7 @@ export function WorkCard({ obra }: WorkCardProps) {
   const slug = obra.slug
   const showImage = isHttpUrl(obra.imageUrl)
   const showAudio = isHttpUrl(obra.audioUrl)
-  const href = `/obras/${slug}`
+  const href = `/works/${slug}`
 
   return (
     <article

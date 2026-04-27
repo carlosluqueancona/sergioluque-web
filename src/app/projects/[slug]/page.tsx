@@ -35,7 +35,7 @@ export default async function ProyectoPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="page-shell">
-      <Link href="/proyectos" className="back-link" style={{ marginBottom: '32px' }}>
+      <Link href="/projects" className="back-link" style={{ marginBottom: '32px' }}>
         ← {S.common.backToList}
       </Link>
 

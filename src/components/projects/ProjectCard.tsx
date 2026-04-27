@@ -13,7 +13,7 @@ export function ProjectCard({ proyecto }: ProjectCardProps) {
 
   return (
     <article style={{ borderBottom: '1px solid var(--border)', padding: '24px 0' }}>
-      <Link href={`/proyectos/${slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+      <Link href={`/projects/${slug}`} style={{ textDecoration: 'none', display: 'block' }}>
         {coverImage && (
           <Image
             src={coverImage}

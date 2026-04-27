@@ -8,13 +8,13 @@ const BASE_URL = 'https://sergioluque.com'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = [
     '',
-    '/obras',
-    '/proyectos',
+    '/works',
+    '/projects',
     '/blog',
     '/bio',
-    '/publicaciones',
-    '/conciertos',
-    '/contacto',
+    '/publications',
+    '/concerts',
+    '/contact',
   ]
 
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((path) => ({
@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const obra of obrasR.value) {
       if (obra.slug) {
         dynamicEntries.push({
-          url: `${BASE_URL}/obras/${obra.slug}`,
+          url: `${BASE_URL}/works/${obra.slug}`,
           lastModified: new Date(),
           changeFrequency: 'monthly' as const,
           priority: 0.7,
@@ -62,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const proyecto of proyectosR.value) {
       if (proyecto.slug) {
         dynamicEntries.push({
-          url: `${BASE_URL}/proyectos/${proyecto.slug}`,
+          url: `${BASE_URL}/projects/${proyecto.slug}`,
           lastModified: new Date(),
           changeFrequency: 'monthly' as const,
           priority: 0.6,

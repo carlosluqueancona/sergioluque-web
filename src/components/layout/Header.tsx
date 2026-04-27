@@ -6,13 +6,13 @@ import { S } from '@/lib/strings'
 
 export function Header() {
   const navLinks = [
-    { href: '/obras', label: S.nav.works },
-    { href: '/proyectos', label: S.nav.projects },
+    { href: '/works', label: S.nav.works },
+    { href: '/projects', label: S.nav.projects },
     { href: '/blog', label: S.nav.blog },
     { href: '/bio', label: S.nav.bio },
-    { href: '/publicaciones', label: S.nav.publications },
-    { href: '/conciertos', label: S.nav.concerts },
-    { href: '/contacto', label: S.nav.contact },
+    { href: '/publications', label: S.nav.publications },
+    { href: '/concerts', label: S.nav.concerts },
+    { href: '/contact', label: S.nav.contact },
   ]
 
   return (

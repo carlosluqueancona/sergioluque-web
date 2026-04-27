@@ -34,7 +34,7 @@ export default async function HomePage() {
               {S.home.featuredWorks}
             </h2>
             <Link
-              href="/obras"
+              href="/works"
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',
@@ -70,7 +70,7 @@ export default async function HomePage() {
               {S.home.upcomingConcerts}
             </h2>
             <Link
-              href="/conciertos"
+              href="/concerts"
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',
