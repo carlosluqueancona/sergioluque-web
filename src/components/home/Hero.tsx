@@ -1,4 +1,5 @@
 import type { Locale } from '@/types'
+import { ScrambleText } from './ScrambleText'
 
 interface HeroProps {
   locale: Locale
@@ -57,11 +58,13 @@ export function Hero({ locale }: HeroProps) {
           color: 'var(--text-muted)',
         }}
       >
-        <span>S/L · {t.origin}</span>
-        <span style={{ textAlign: 'center' }}>{t.role}</span>
-        <span style={{ textAlign: 'right' }}>
-          MMXX <span style={{ color: 'var(--text-secondary)' }}>—</span> {year}
-        </span>
+        <ScrambleText delay={0}>{`S/L · ${t.origin}`}</ScrambleText>
+        <ScrambleText delay={6} style={{ textAlign: 'center' }}>
+          {t.role}
+        </ScrambleText>
+        <ScrambleText delay={12} style={{ textAlign: 'right' }}>
+          {`MMXX — ${year}`}
+        </ScrambleText>
       </div>
 
       {/* Main wordmark */}
@@ -96,6 +99,7 @@ export function Hero({ locale }: HeroProps) {
         </div>
 
         <h1
+          className="hero-wordmark"
           style={{
             fontFamily: 'var(--font-space-mono)',
             fontSize: 'clamp(56px, 13vw, 200px)',
@@ -133,7 +137,10 @@ export function Hero({ locale }: HeroProps) {
             alignItems: 'start',
           }}
         >
-          <p
+          <ScrambleText
+            as="p"
+            delay={28}
+            charStep={1.2}
             style={{
               fontFamily: 'var(--font-ibm-plex-sans)',
               fontSize: '15px',
@@ -144,7 +151,7 @@ export function Hero({ locale }: HeroProps) {
             }}
           >
             {t.practice}
-          </p>
+          </ScrambleText>
           <DecorativeScore />
         </div>
       </div>
@@ -165,8 +172,8 @@ export function Hero({ locale }: HeroProps) {
           color: 'var(--text-muted)',
         }}
       >
-        <span>↓ {t.scrollHint}</span>
-        <span>{t.catalog}</span>
+        <ScrambleText delay={36}>{`↓ ${t.scrollHint}`}</ScrambleText>
+        <ScrambleText delay={44}>{t.catalog}</ScrambleText>
       </div>
     </section>
   )

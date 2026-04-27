@@ -295,6 +295,23 @@
   color: var(--text-primary);
 }
 
+/* Hero wordmark entrance — staggered fade-in + subtle Y rise.
+   Each line of the wordmark animates independently so SERGIO arrives
+   first and LUQUE follows, mirroring the score's two-bar phrasing. */
+.hero-wordmark > span {
+  animation: hero-wordmark-in 1.1s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+.hero-wordmark > span:nth-child(2) {
+  animation-delay: 0.22s;
+}
+@keyframes hero-wordmark-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-wordmark > span { animation: none; }
+}
+
 /* Hero responsive tweaks: pull padding in on mobile */
 @media (max-width: 768px) {
   .hero-section {
