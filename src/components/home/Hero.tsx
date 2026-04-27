@@ -2,11 +2,13 @@ import { HeroLissajous } from './HeroLissajous'
 
 const COPY = {
   role: 'Composer · Researcher',
-  practice: 'Electroacoustic · Microtonal · Contemporary',
+  practice: 'Composer and researcher in electroacoustic music',
   origin: 'Mexico City',
   catalog: 'Works catalogue',
   scrollHint: 'Scroll for catalogue',
-  seoHeading: 'Composer and researcher in electroacoustic music',
+  // Three-word manifesto: each word stands alone as a complete statement
+  // about the practice. Rendered one-per-line for giant-scale impact.
+  headingWords: ['Electroacoustic.', 'Microtonal.', 'Formalised.'] as const,
 } as const
 
 export function Hero() {
@@ -93,26 +95,29 @@ export function Hero() {
         </div>
 
         {/*
-          Hero H1 — placeholder copy. Replace with the agreed brand line.
-          Lives at giant scale (the size the SERGIO LUQUE wordmark used to
-          occupy) so it functions both as the visual anchor and as the
-          semantic page heading. Keywords for SEO live inside the line.
+          Hero H1 — three-word manifesto, each on its own line at giant
+          scale. Functions as visual anchor + semantic page heading. The
+          descriptive sentence with all the SEO-target keywords lives in
+          the subtitle <p> below.
         */}
         <h1
           className="hero-wordmark"
           style={{
             fontFamily: 'var(--font-space-mono)',
-            fontSize: 'clamp(40px, 9vw, 132px)',
+            fontSize: 'clamp(36px, 8vw, 120px)',
             fontWeight: 700,
             color: 'var(--text-primary)',
             margin: 0,
-            lineHeight: 0.95,
+            lineHeight: 0.96,
             letterSpacing: '-0.035em',
             paddingLeft: '40px',
-            maxWidth: '14ch',
           }}
         >
-          {t.seoHeading}
+          {t.headingWords.map((word) => (
+            <span key={word} style={{ display: 'block' }}>
+              {word}
+            </span>
+          ))}
         </h1>
 
         {/* Subtitle */}
