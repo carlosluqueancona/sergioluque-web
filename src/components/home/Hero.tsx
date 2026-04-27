@@ -2,7 +2,7 @@ import { HeroLissajous } from './HeroLissajous'
 
 const COPY = {
   role: 'Composer · Researcher',
-  practice: 'Acousmatic music · Electroacoustic · Contemporary',
+  practice: 'Electroacoustic · Microtonal · Contemporary',
   origin: 'Mexico City',
   catalog: 'Works catalogue',
   scrollHint: 'Scroll for catalogue',
@@ -93,44 +93,27 @@ export function Hero() {
         </div>
 
         {/*
-          Real, visible H1 sits as a small eyebrow above the wordmark.
-          Keywords ride here ("compositor", "música electroacústica",
-          "investigador"); the giant SERGIO LUQUE underneath is purely
-          decorative (<div aria-hidden>).
+          Hero H1 — placeholder copy. Replace with the agreed brand line.
+          Lives at giant scale (the size the SERGIO LUQUE wordmark used to
+          occupy) so it functions both as the visual anchor and as the
+          semantic page heading. Keywords for SEO live inside the line.
         */}
         <h1
+          className="hero-wordmark"
           style={{
-            paddingLeft: '40px',
-            margin: '0 0 16px',
             fontFamily: 'var(--font-space-mono)',
-            fontSize: '12px',
-            fontWeight: 400,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: 'var(--text-secondary)',
-            maxWidth: '720px',
-            lineHeight: 1.5,
+            fontSize: 'clamp(40px, 9vw, 132px)',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            margin: 0,
+            lineHeight: 0.95,
+            letterSpacing: '-0.035em',
+            paddingLeft: '40px',
+            maxWidth: '14ch',
           }}
         >
           {t.seoHeading}
         </h1>
-        <div
-          className="hero-wordmark"
-          aria-hidden="true"
-          style={{
-            fontFamily: 'var(--font-space-mono)',
-            fontSize: 'clamp(56px, 13vw, 200px)',
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            margin: 0,
-            lineHeight: 0.92,
-            letterSpacing: '-0.045em',
-            paddingLeft: '40px',
-          }}
-        >
-          <span style={{ display: 'block' }}>SERGIO</span>
-          <span style={{ display: 'block' }}>LUQUE</span>
-        </div>
 
         {/* Subtitle */}
         <p
