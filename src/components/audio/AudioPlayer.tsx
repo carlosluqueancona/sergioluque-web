@@ -4,6 +4,7 @@ import { useRef, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { WaveformBars } from './WaveformBars'
 import { formatTime } from '@/lib/utils'
+import { useAudioGraph } from '@/lib/audio/useAudioGraph'
 
 interface AudioPlayerProps {
   audioUrl: string
@@ -14,6 +15,7 @@ interface AudioPlayerProps {
 export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
   const t = useTranslations('audio')
   const audioRef = useRef<HTMLAudioElement>(null)
+  const { unlock, getAnalyser } = useAudioGraph(audioRef)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [audioDuration, setAudioDuration] = useState(duration ?? 0)
@@ -27,6 +29,8 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
       audio.pause()
       setIsPlaying(false)
     } else {
+      // Synchronously inside the user gesture so iOS unlocks WebAudio.
+      unlock()
       setIsLoading(true)
       try {
         await audio.play()
@@ -37,7 +41,7 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
         setIsLoading(false)
       }
     }
-  }, [isPlaying])
+  }, [isPlaying, unlock])
 
   const handleTimeUpdate = useCallback(() => {
     const audio = audioRef.current
@@ -80,13 +84,19 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
         ref={audioRef}
         src={audioUrl}
         preload="metadata"
+        crossOrigin="anonymous"
         hidden
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
       />
 
-      <WaveformBars isPlaying={isPlaying} audioUrl={audioUrl} />
+      <WaveformBars
+        getAnalyser={getAnalyser}
+        isPlaying={isPlaying}
+        bars={56}
+        height={56}
+      />
 
       <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '16px' }}>
         <button

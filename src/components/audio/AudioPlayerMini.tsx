@@ -2,7 +2,9 @@
 
 import { useRef, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
+import { WaveformBars } from './WaveformBars'
 import { formatTime } from '@/lib/utils'
+import { useAudioGraph } from '@/lib/audio/useAudioGraph'
 
 interface AudioPlayerMiniProps {
   audioUrl: string
@@ -13,6 +15,7 @@ interface AudioPlayerMiniProps {
 export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlayerMiniProps) {
   const t = useTranslations('audio')
   const audioRef = useRef<HTMLAudioElement>(null)
+  const { unlock, getAnalyser } = useAudioGraph(audioRef)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [audioDuration, setAudioDuration] = useState(duration ?? 0)
@@ -26,6 +29,7 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
       audio.pause()
       setIsPlaying(false)
     } else {
+      unlock() // iOS WebAudio unlock — must run inside the click gesture.
       setIsLoading(true)
       try {
         await audio.play()
@@ -36,7 +40,7 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
         setIsLoading(false)
       }
     }
-  }, [isPlaying])
+  }, [isPlaying, unlock])
 
   const handleTimeUpdate = useCallback(() => {
     setCurrentTime(audioRef.current?.currentTime ?? 0)
@@ -51,7 +55,18 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
     setCurrentTime(0)
   }, [])
 
-  const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0
+  const progress = audioDuration > 0 ? currentTime / audioDuration : 0
+
+  const handleSeek = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const audio = audioRef.current
+      if (!audio || audioDuration === 0) return
+      const rect = e.currentTarget.getBoundingClientRect()
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audioDuration
+      setCurrentTime(audio.currentTime)
+    },
+    [audioDuration]
+  )
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -59,6 +74,7 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
         ref={audioRef}
         src={audioUrl}
         preload="metadata"
+        crossOrigin="anonymous"
         hidden
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
@@ -101,13 +117,7 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
       </button>
 
       <div
-        onClick={(e) => {
-          const audio = audioRef.current
-          if (!audio || audioDuration === 0) return
-          const rect = e.currentTarget.getBoundingClientRect()
-          audio.currentTime = ((e.clientX - rect.left) / rect.width) * audioDuration
-          setCurrentTime(audio.currentTime)
-        }}
+        onClick={handleSeek}
         role="slider"
         aria-label="Posición"
         aria-valuemin={0}
@@ -115,23 +125,19 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
         aria-valuenow={Math.round(currentTime)}
         style={{
           flex: 1,
-          height: '3px',
-          background: 'var(--border)',
+          height: '24px',
           cursor: 'pointer',
           position: 'relative',
-          borderRadius: '2px',
         }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            height: '100%',
-            width: `${progress}%`,
-            background: 'var(--accent)',
-            borderRadius: '2px',
-          }}
+        <WaveformBars
+          getAnalyser={getAnalyser}
+          isPlaying={isPlaying}
+          bars={32}
+          height={24}
+          barWidth={2}
+          gap={2}
+          progress={progress}
         />
       </div>
 
