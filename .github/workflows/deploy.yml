@@ -37,11 +37,20 @@ jobs:
           workingDirectory: worker
           command: deploy
 
+      # NEXT_PUBLIC_* env vars are inlined at build time, so they must be
+      # available to both `pnpm build` and `next-on-pages`. Set the value
+      # in GitHub → Settings → Secrets and variables → Actions → Variables
+      # (NEXT_PUBLIC_GA_ID = G-XXXXXXXXXX). It's safe as a plain variable —
+      # GA Measurement IDs are public.
       - name: Build Next.js
         run: pnpm build
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
 
       - name: Build for Cloudflare Pages
         run: pnpm dlx @cloudflare/next-on-pages@1
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
 
       - name: Create Pages project (if not exists)
         continue-on-error: true

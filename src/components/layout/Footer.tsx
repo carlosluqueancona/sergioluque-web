@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { S } from '@/lib/strings'
+import { CookiePreferencesLink } from './CookiePreferencesLink'
 
 export function Footer() {
   const navLinks = [
@@ -31,7 +32,7 @@ export function Footer() {
           gap: '24px',
         }}
       >
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <p
             style={{
               fontFamily: 'var(--font-space-mono)',
@@ -42,6 +43,7 @@ export function Footer() {
           >
             © {new Date().getFullYear()} Sergio Luque
           </p>
+          <CookiePreferencesLink />
         </div>
 
         <nav aria-label="Footer navigation">

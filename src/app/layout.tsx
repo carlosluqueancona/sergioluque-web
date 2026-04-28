@@ -6,6 +6,8 @@ import './globals.css'
 import { themeBootstrapScript } from '@/components/layout/ThemeToggle'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { CookieBanner } from '@/components/layout/CookieBanner'
+import { GoogleAnalytics } from '@/components/layout/GoogleAnalytics'
 import { ExclusivePlayback } from '@/components/audio/ExclusivePlayback'
 import { getSettings } from '@/lib/db/queries'
 
@@ -83,6 +85,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Header />
         <main>{children}</main>
         <Footer />
+        <CookieBanner />
+        <GoogleAnalytics />
       </body>
     </html>
   )
