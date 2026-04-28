@@ -4,6 +4,17 @@ export interface Env {
   JWT_SECRET: string;
   ALLOWED_ORIGINS?: string;
   MEDIA_PUBLIC_URL?: string;
+  // R2 S3-compatible API credentials, used to sign presigned PUT URLs so
+  // the browser can upload files larger than the 100 MB Worker request
+  // body limit directly to R2. Configure with:
+  //   wrangler secret put R2_ACCOUNT_ID
+  //   wrangler secret put R2_ACCESS_KEY_ID
+  //   wrangler secret put R2_SECRET_ACCESS_KEY
+  //   wrangler secret put R2_BUCKET_NAME   (or set in wrangler.toml [vars])
+  R2_ACCOUNT_ID?: string;
+  R2_ACCESS_KEY_ID?: string;
+  R2_SECRET_ACCESS_KEY?: string;
+  R2_BUCKET_NAME?: string;
 }
 
 export interface Obra {

@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { FileUpload } from '@/components/admin/FileUpload'
+import { uploadViaPresign } from '@/lib/admin/upload'
 
 interface ObraData {
   id?: number
@@ -124,19 +125,11 @@ export function ObraForm({ initialData }: ObraFormProps) {
   }
 
   async function uploadFile(file: File): Promise<string | null> {
-    const fd = new FormData()
-    fd.append('file', file)
     try {
-      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-      if (!res.ok) {
-        const data = (await res.json()) as { error?: string }
-        setError(data.error ?? 'Upload failed')
-        return null
-      }
-      const { url } = (await res.json()) as { url: string }
+      const { url } = await uploadViaPresign(file)
       return url
-    } catch {
-      setError('Upload failed')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Upload failed')
       return null
     }
   }

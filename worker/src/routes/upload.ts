@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import type { Env } from '../types';
 import { requireAuth, json, jsonError, corsHeaders, getAllowedOrigins } from '../lib/shared';
+import { presignR2PutUrl } from '../lib/sigv4';
 
 const upload = new Hono<{ Bindings: Env }>();
 
@@ -143,6 +144,75 @@ upload.post('/', async (c) => {
     console.error('R2 upload error', err);
     return jsonError('Upload failed', 500, cors);
   }
+});
+
+// ── Presigned PUT URL for direct browser → R2 uploads ────────────────────
+// Files larger than ~95 MB blow past the Worker request body limit, so the
+// admin client uses this endpoint to mint a short-lived presigned URL,
+// uploads straight to R2, and the Worker is no longer in the data path.
+//
+// Body: { filename: string, contentType: string }
+// Returns: { uploadUrl, publicUrl, key }
+upload.post('/presign', async (c) => {
+  const origin = c.req.raw.headers.get('origin') ?? '';
+  const cors = corsHeaders(origin, getAllowedOrigins(c.env), 'POST, OPTIONS');
+
+  const payload = await requireAuth(c.req.raw, c.env);
+  if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  let body: { filename?: string; contentType?: string };
+  try {
+    body = await c.req.json<{ filename?: string; contentType?: string }>();
+  } catch {
+    return jsonError('Invalid JSON body', 400, cors);
+  }
+
+  const filename = (body.filename ?? '').trim();
+  const contentType = (body.contentType ?? '').trim();
+  if (!filename || !contentType) {
+    return jsonError('filename and contentType are required', 400, cors);
+  }
+  if (!ALLOWED_MIME.has(contentType)) {
+    return jsonError(`File type not allowed: ${contentType}`, 400, cors);
+  }
+
+  const accountId = c.env.R2_ACCOUNT_ID;
+  const accessKeyId = c.env.R2_ACCESS_KEY_ID;
+  const secretAccessKey = c.env.R2_SECRET_ACCESS_KEY;
+  const bucket = c.env.R2_BUCKET_NAME ?? 'sergioluque-media';
+  if (!accountId || !accessKeyId || !secretAccessKey) {
+    return jsonError(
+      'Direct uploads not configured (missing R2 API credentials)',
+      503,
+      cors
+    );
+  }
+
+  const year = new Date().getFullYear();
+  const folder = fileTypeFolder(contentType);
+  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const key = `${folder}/${year}/${randomHex()}-${safeName}`;
+
+  let uploadUrl: string;
+  try {
+    uploadUrl = await presignR2PutUrl({
+      accountId,
+      bucket,
+      key,
+      accessKeyId,
+      secretAccessKey,
+      contentType,
+      expiresIn: 600, // 10 min — enough for slow uploads of 100+ MB on bad wifi
+    });
+  } catch (err) {
+    console.error('presign error', err);
+    return jsonError('Failed to mint upload URL', 500, cors);
+  }
+
+  const publicBase =
+    c.env.MEDIA_PUBLIC_URL ??
+    `https://${c.req.raw.headers.get('host') ?? 'sergioluque-cms.carlosluque-095.workers.dev'}/media`;
+  return json({ uploadUrl, publicUrl: `${publicBase}/${key}`, key }, 200, cors);
 });
 
 // ── Delete object from R2 ─────────────────────────────────────────────────

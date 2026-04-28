@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type DragEvent } from 'react'
+import { uploadViaPresign } from '@/lib/admin/upload'
 
 type Kind = 'image' | 'audio' | 'pdf'
 
@@ -20,14 +21,13 @@ const KIND_LABEL: Record<Kind, string> = {
 
 const KIND_ACCEPT: Record<Kind, string> = {
   image: 'image/*',
-  audio:
-    'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/m4a,audio/aac,audio/flac,audio/x-flac,.mp3,.m4a,.mp4,.aac,.flac',
+  audio: 'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/m4a,audio/aac,.mp3,.m4a,.mp4,.aac',
   pdf: 'application/pdf',
 }
 
 const KIND_HINT: Record<Kind, string> = {
   image: 'JPG · PNG · WebP — drag, click, or browse',
-  audio: 'MP3 · M4A · MP4 · AAC · FLAC — drag, click, or browse',
+  audio: 'MP3 · M4A · MP4 · AAC — drag, click, or browse',
   pdf: 'PDF — drag, click, or browse',
 }
 
@@ -94,25 +94,14 @@ export function MediaManager() {
   async function handleUpload(file: File) {
     setUploadError('')
     setUploading(true)
-    setUploadProgress(20)
-    const tick = setInterval(() => {
-      setUploadProgress((p) => (p < 85 ? p + 5 : p))
-    }, 150)
+    setUploadProgress(0)
     try {
-      const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-      clearInterval(tick)
-      setUploadProgress(100)
-      if (!res.ok) {
-        const data = (await res.json()) as { error?: string }
-        setUploadError(data.error ?? 'Upload failed')
-      } else {
-        await load(kind)
-      }
-    } catch {
-      clearInterval(tick)
-      setUploadError('Upload failed (connection)')
+      await uploadViaPresign(file, {
+        onProgress: (p) => setUploadProgress(p),
+      })
+      await load(kind)
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : 'Upload failed')
     } finally {
       setTimeout(() => {
         setUploading(false)
