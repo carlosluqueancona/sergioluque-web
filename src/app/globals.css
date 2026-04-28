@@ -543,8 +543,13 @@ button[aria-label="Pause"]:hover {
   }
 }
 
-/* Admin light theme — scoped via data attribute so the public site is unaffected */
+/* Admin theme — scoped via data attribute on <html>. Both states redefine
+   the full variable set so the admin theme always overrides the public
+   theme regardless of which one the visitor has chosen for the public site.
+   Without this, when public=light and admin=dark the page stays light
+   because admin-dark wasn't redefining --bg etc. */
 [data-admin-theme="light"] {
+  color-scheme: light;
   --bg: #FAFAFA;
   --surface: #FFFFFF;
   --surface-hover: #F0F0F0;
@@ -557,15 +562,24 @@ button[aria-label="Pause"]:hover {
   color: var(--text-primary);
 }
 
+[data-admin-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0A0A0A;
+  --surface: #141414;
+  --surface-hover: #1E1E1E;
+  --border: #2A2A2A;
+  --text-primary: #F0F0F0;
+  --text-secondary: #888888;
+  --text-muted: #555555;
+  --accent: #D4D4D4;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
 [data-admin-theme="light"] input,
 [data-admin-theme="light"] textarea,
 [data-admin-theme="light"] select {
   background: var(--surface) !important;
   color: var(--text-primary) !important;
   border-color: var(--border) !important;
-}
-
-[data-admin-theme="dark"] {
-  background: var(--bg);
-  color: var(--text-primary);
 }

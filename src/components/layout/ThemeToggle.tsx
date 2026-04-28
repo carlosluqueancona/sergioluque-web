@@ -84,13 +84,10 @@ export const themeBootstrapScript = `
       // public site after navigating away from /admin.
       document.documentElement.removeAttribute('data-admin-theme');
     }
+    // Default = dark. Only honour the stored preference; ignore OS so the
+    // home renders as designed unless the visitor explicitly chose light.
     var stored = localStorage.getItem('${THEME_STORAGE_KEY}');
-    var theme;
-    if (stored === 'light' || stored === 'dark') {
-      theme = stored;
-    } else {
-      theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
-    }
+    var theme = (stored === 'light' || stored === 'dark') ? stored : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'dark');

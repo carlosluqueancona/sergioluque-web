@@ -23,7 +23,7 @@ export default function LoginPage() {
       })
 
       if (res.ok) {
-        router.push('/admin/obras')
+        router.push('/admin')
       } else {
         const data = await res.json() as { error?: string }
         setError(data.error ?? 'Login failed')
