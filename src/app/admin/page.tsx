@@ -41,6 +41,13 @@ export default async function AdminDashboardPage() {
       special: false,
     })),
     {
+      route: 'media',
+      label: 'Media library',
+      labelSingular: 'Media library',
+      emoji: '▤',
+      special: true,
+    },
+    {
       route: 'settings',
       label: 'Settings',
       labelSingular: 'Settings',

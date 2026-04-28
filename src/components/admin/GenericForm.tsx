@@ -3,6 +3,8 @@
 import { useState, useRef, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import type { EntitySchema, FieldDef } from '@/lib/admin/schemas'
+import { FileUpload } from './FileUpload'
+import { MediaPicker } from './MediaPicker'
 
 interface GenericFormProps {
   schema: EntitySchema
@@ -270,13 +272,13 @@ interface FieldRendererProps {
 function FieldRenderer({ field, value, onChange, uploadFile, deleteFile }: FieldRendererProps) {
   if (field.type === 'image-upload' || field.type === 'pdf-upload') {
     return (
-      <FileField
-        field={field}
+      <FileUpload
+        label={field.label}
+        kind={field.type === 'image-upload' ? 'image' : 'pdf'}
         value={String(value ?? '')}
         onChange={(v) => onChange(v)}
         uploadFile={uploadFile}
         deleteFile={deleteFile}
-        accept={field.type === 'image-upload' ? 'image/*' : 'application/pdf'}
       />
     )
   }
@@ -362,95 +364,6 @@ function FieldRenderer({ field, value, onChange, uploadFile, deleteFile }: Field
   )
 }
 
-// ─── File Field (single image or pdf) ────────────────────────────────────
-
-function FileField({
-  field,
-  value,
-  onChange,
-  uploadFile,
-  deleteFile,
-  accept,
-}: {
-  field: FieldDef
-  value: string
-  onChange: (v: string) => void
-  uploadFile: (file: File) => Promise<string | null>
-  deleteFile: (url: string) => Promise<boolean>
-  accept: string
-}) {
-  const ref = useRef<HTMLInputElement>(null)
-  const [uploading, setUploading] = useState(false)
-
-  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    const url = await uploadFile(file)
-    if (url) onChange(url)
-    setUploading(false)
-    if (ref.current) ref.current.value = ''
-  }
-
-  async function handleRemove() {
-    if (!value) return
-    if (/\/media\//.test(value)) {
-      if (!confirm('Delete this file from the server? This cannot be undone.')) return
-      await deleteFile(value)
-    }
-    onChange('')
-  }
-
-  return (
-    <div style={fieldStyle}>
-      <label style={labelStyle}>{field.label}</label>
-      {value && accept.startsWith('image/') && (
-        <img
-          src={value}
-          alt=""
-          style={{
-            display: 'block',
-            maxWidth: '200px',
-            maxHeight: '200px',
-            border: '1px solid var(--border)',
-            marginBottom: '8px',
-          }}
-        />
-      )}
-      {value && accept === 'application/pdf' && (
-        <a
-          href={value}
-          target="_blank"
-          rel="noopener"
-          style={{ color: 'var(--accent)', fontSize: '12px', display: 'block', marginBottom: '8px' }}
-        >
-          {value.split('/').pop()}
-        </a>
-      )}
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <input
-          ref={ref}
-          type="file"
-          accept={accept}
-          onChange={handleFile}
-          style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
-        />
-        {value && (
-          <button type="button" onClick={handleRemove} style={smallButton}>
-            Remove
-          </button>
-        )}
-      </div>
-      {uploading && (
-        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-          Uploading…
-        </p>
-      )}
-      <input type="hidden" value={value} readOnly />
-    </div>
-  )
-}
-
 // ─── Image List Field ────────────────────────────────────────────────────
 
 function ImageListField({
@@ -458,7 +371,6 @@ function ImageListField({
   value,
   onChange,
   uploadFile,
-  deleteFile,
 }: {
   field: FieldDef
   value: string[]
@@ -468,6 +380,7 @@ function ImageListField({
 }) {
   const ref = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
+  const [picking, setPicking] = useState(false)
 
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
@@ -483,12 +396,8 @@ function ImageListField({
     if (ref.current) ref.current.value = ''
   }
 
-  async function remove(idx: number) {
-    const url = value[idx]
-    if (url && /\/media\//.test(url)) {
-      if (!confirm('Delete this image from the server?')) return
-      await deleteFile(url)
-    }
+  // UNLINK semantics: only remove from this list. File stays in R2.
+  function remove(idx: number) {
     onChange(value.filter((_, i) => i !== idx))
   }
 
@@ -568,18 +477,34 @@ function ImageListField({
           ))}
         </div>
       )}
-      <input
-        ref={ref}
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFiles}
-        style={{ ...inputStyle, padding: '6px', fontSize: '11px' }}
-      />
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <input
+          ref={ref}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleFiles}
+          style={{ ...inputStyle, padding: '6px', fontSize: '11px', flex: '1 1 auto', minWidth: '200px' }}
+        />
+        <button
+          type="button"
+          onClick={() => setPicking(true)}
+          style={{ ...smallButton, padding: '6px 12px', fontSize: '11px' }}
+        >
+          + From library
+        </button>
+      </div>
       {uploading && (
         <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
           Uploading images…
         </p>
+      )}
+      {picking && (
+        <MediaPicker
+          kind="image"
+          onSelect={(url) => onChange([...value, url])}
+          onClose={() => setPicking(false)}
+        />
       )}
     </div>
   )

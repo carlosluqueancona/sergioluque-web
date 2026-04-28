@@ -210,6 +210,59 @@ registerCrud(admin, 'publicaciones', [
   'abstract', 'pdf_url', 'doi', 'image_url',
 ]);
 
+// ── Media library — list R2 objects under a kind prefix ─────────────────
+//
+// GET /admin/media?kind=image|audio|pdf
+// Returns the objects under images/ , audio/ , or files/ as a flat list:
+//   { items: [{ key, url, size, uploadedAt, contentType }] }
+// Used by the admin MediaPicker modal so creators can pick already-uploaded
+// files instead of re-uploading.
+
+const KIND_PREFIX: Record<string, string> = {
+  image: 'images/',
+  audio: 'audio/',
+  pdf: 'files/',
+};
+
+admin.get('/media', async (c) => {
+  const cors = getCors(c.req.raw, c.env);
+  const payload = await guardAuth(c.req.raw, c.env);
+  if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  const kind = c.req.query('kind') ?? 'image';
+  const prefix = KIND_PREFIX[kind];
+  if (!prefix) return jsonError('Invalid kind', 400, cors);
+
+  // Walk all pages — R2 returns up to 1000 per page. Personal site, so
+  // small total counts; just paginate until truncated=false.
+  type Item = { key: string; url: string; size: number; uploadedAt: string; contentType: string };
+  const items: Item[] = [];
+  const baseUrl =
+    c.env.MEDIA_PUBLIC_URL ??
+    `https://${c.req.raw.headers.get('host') ?? 'sergioluque-cms.carlosluque-095.workers.dev'}/media`;
+
+  let cursor: string | undefined;
+  for (let i = 0; i < 10; i++) {
+    const page: R2Objects = await c.env.MEDIA.list({ prefix, cursor, limit: 1000 });
+    for (const obj of page.objects) {
+      items.push({
+        key: obj.key,
+        url: `${baseUrl}/${obj.key}`,
+        size: obj.size,
+        uploadedAt: obj.uploaded.toISOString(),
+        contentType: obj.httpMetadata?.contentType ?? '',
+      });
+    }
+    if (!page.truncated) break;
+    cursor = page.cursor;
+  }
+
+  // Newest first.
+  items.sort((a, b) => (a.uploadedAt < b.uploadedAt ? 1 : -1));
+
+  return json({ items }, 200, cors);
+});
+
 // ── One-off DB migrations ────────────────────────────────────────────────
 
 /** Adds image_url columns to posts/eventos/publicaciones. Idempotent. */

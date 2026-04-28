@@ -45,6 +45,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <a href="/admin/proyectos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Projects</a>
           <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Concerts</a>
           <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Publications</a>
+          <a href="/admin/media" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Media</a>
           <a href="/admin/settings" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Settings</a>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <ThemeToggle />

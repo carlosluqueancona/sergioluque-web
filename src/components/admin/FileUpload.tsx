@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, type DragEvent } from 'react'
+import { MediaPicker } from './MediaPicker'
 
 type FileKind = 'audio' | 'image' | 'pdf'
 
@@ -10,7 +11,13 @@ interface FileUploadProps {
   value: string
   onChange: (url: string) => void
   uploadFile: (file: File) => Promise<string | null>
-  deleteFile: (url: string) => Promise<boolean>
+  /**
+   * Kept in the prop signature for backward compatibility but no longer
+   * called from here. REMOVE used to delete the file from R2; the new
+   * "UNLINK" semantics only clears the field. Use the /admin/media page
+   * to actually purge files from R2.
+   */
+  deleteFile?: (url: string) => Promise<boolean>
 }
 
 const ACCEPT: Record<FileKind, string> = {
@@ -20,9 +27,9 @@ const ACCEPT: Record<FileKind, string> = {
 }
 
 const HINT: Record<FileKind, string> = {
-  audio: 'MP3 · M4A · MP4 · AAC — drag or click',
-  image: 'JPG · PNG · WebP — drag or click',
-  pdf: 'PDF — drag or click',
+  audio: 'MP3 · M4A · MP4 · AAC — drag, click, or browse library',
+  image: 'JPG · PNG · WebP — drag, click, or browse library',
+  pdf: 'PDF — drag, click, or browse library',
 }
 
 const ICON: Record<FileKind, string> = {
@@ -40,19 +47,30 @@ const labelStyle: React.CSSProperties = {
   textTransform: 'uppercase',
 }
 
+const ghostBtnStyle: React.CSSProperties = {
+  background: 'none',
+  border: '1px solid var(--border)',
+  color: 'var(--text-secondary)',
+  fontFamily: 'monospace',
+  fontSize: '10px',
+  padding: '4px 10px',
+  cursor: 'pointer',
+  letterSpacing: '0.05em',
+}
+
 export function FileUpload({
   label,
   kind,
   value,
   onChange,
   uploadFile,
-  deleteFile,
 }: FileUploadProps) {
   const ref = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState('')
+  const [picking, setPicking] = useState(false)
 
   async function handleFile(file: File) {
     setError('')
@@ -65,7 +83,7 @@ export function FileUpload({
     clearInterval(tick)
     setProgress(100)
     if (url) onChange(url)
-    else setError('No se pudo subir')
+    else setError('Upload failed')
     setTimeout(() => {
       setUploading(false)
       setProgress(0)
@@ -85,12 +103,10 @@ export function FileUpload({
     if (file) void handleFile(file)
   }
 
-  async function handleRemove() {
-    if (!value) return
-    if (/\/media\//.test(value)) {
-      if (!confirm('Delete this file from the server? This cannot be undone.')) return
-      await deleteFile(value)
-    }
+  // UNLINK semantics: just clear the field on this entry. The file stays
+  // in R2 so other entries that reference it keep working. Purging from
+  // R2 is done from the /admin/media page.
+  function handleUnlink() {
     onChange('')
   }
 
@@ -110,6 +126,7 @@ export function FileUpload({
           }}
         >
           {kind === 'image' ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={value}
               alt=""
@@ -165,49 +182,31 @@ export function FileUpload({
                 href={value}
                 target="_blank"
                 rel="noopener"
-                style={{
-                  color: 'var(--accent)',
-                  fontSize: '11px',
-                  fontFamily: 'monospace',
-                }}
+                style={{ color: 'var(--accent)', fontSize: '11px', fontFamily: 'monospace' }}
               >
-                Abrir PDF →
+                Open PDF →
               </a>
             )}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flexShrink: 0 }}>
-            <button
-              type="button"
-              onClick={() => ref.current?.click()}
-              style={{
-                background: 'none',
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-                fontFamily: 'monospace',
-                fontSize: '10px',
-                padding: '4px 10px',
-                cursor: 'pointer',
-                letterSpacing: '0.05em',
-              }}
-            >
+            <button type="button" onClick={() => ref.current?.click()} style={ghostBtnStyle}>
               REPLACE
+            </button>
+            <button type="button" onClick={() => setPicking(true)} style={ghostBtnStyle}>
+              LIBRARY
             </button>
             <button
               type="button"
-              onClick={handleRemove}
+              onClick={handleUnlink}
+              title="Clear this field. The file stays in R2 — manage it from /admin/media."
               style={{
-                background: 'none',
-                border: '1px solid var(--error)',
-                color: 'var(--error)',
-                fontFamily: 'monospace',
-                fontSize: '10px',
-                padding: '4px 10px',
-                cursor: 'pointer',
-                letterSpacing: '0.05em',
+                ...ghostBtnStyle,
+                borderColor: 'var(--text-muted)',
+                color: 'var(--text-muted)',
               }}
             >
-              REMOVE
+              UNLINK
             </button>
           </div>
         </div>
@@ -218,8 +217,13 @@ export function FileUpload({
           onChange={onPick}
           style={{ display: 'none' }}
         />
-        {error && (
-          <p style={{ color: 'var(--error)', fontSize: '11px', marginTop: '4px' }}>{error}</p>
+        {error && <p style={{ color: 'var(--error)', fontSize: '11px', marginTop: '4px' }}>{error}</p>}
+        {picking && (
+          <MediaPicker
+            kind={kind}
+            onSelect={(url) => onChange(url)}
+            onClose={() => setPicking(false)}
+          />
         )}
       </div>
     )
@@ -248,13 +252,7 @@ export function FileUpload({
           overflow: 'hidden',
         }}
       >
-        <div
-          style={{
-            fontSize: '24px',
-            color: 'var(--text-secondary)',
-            marginBottom: '6px',
-          }}
-        >
+        <div style={{ fontSize: '24px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
           {ICON[kind]}
         </div>
         <div
@@ -292,6 +290,25 @@ export function FileUpload({
           />
         )}
       </div>
+      <button
+        type="button"
+        onClick={() => setPicking(true)}
+        disabled={uploading}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'var(--accent)',
+          fontFamily: 'monospace',
+          fontSize: '11px',
+          letterSpacing: '0.05em',
+          marginTop: '8px',
+          cursor: uploading ? 'wait' : 'pointer',
+          padding: 0,
+          textDecoration: 'underline',
+        }}
+      >
+        Or browse library →
+      </button>
       <input
         ref={ref}
         type="file"
@@ -299,8 +316,13 @@ export function FileUpload({
         onChange={onPick}
         style={{ display: 'none' }}
       />
-      {error && (
-        <p style={{ color: 'var(--error)', fontSize: '11px', marginTop: '4px' }}>{error}</p>
+      {error && <p style={{ color: 'var(--error)', fontSize: '11px', marginTop: '4px' }}>{error}</p>}
+      {picking && (
+        <MediaPicker
+          kind={kind}
+          onSelect={(url) => onChange(url)}
+          onClose={() => setPicking(false)}
+        />
       )}
     </div>
   )
