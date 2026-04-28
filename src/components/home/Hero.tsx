@@ -90,8 +90,8 @@ export function Hero() {
             letterSpacing: '0.15em',
           }}
         >
-          <span>01</span>
-          <span>02</span>
+{/*           <span>01</span>
+          <span>02</span> */}
         </div>
 
         {/*
