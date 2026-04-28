@@ -133,8 +133,11 @@ export function HeroLissajous() {
         const r = ratios[i % ratios.length]
         // Radius interpolated between 0.42 (i=0) and 0.18 (i=N-1).
         const radiusScale = N === 1 ? 0.36 : 0.42 - (0.24 * i) / (N - 1)
-        // Outer figures slightly more visible; inner taper to ~half.
-        const alphaScale = 0.22 - (0.14 * i) / Math.max(1, N - 1)
+        // Outer figures more visible; inner taper to ~half. Bumped from
+        // (0.22, 0.14) — the previous values read as "ghostly tenue" once
+        // the trail-fade and additive blend tweaks landed; this restores
+        // a confident weight without crossing into busy.
+        const alphaScale = 0.42 - (0.22 * i) / Math.max(1, N - 1)
         // Slight per-figure speed variation so they don't tick in unison
         // (audibly: they detune relative to one another).
         const speedScale = 1 + i * 0.13

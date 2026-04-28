@@ -185,23 +185,25 @@ export function ObraForm({ initialData }: ObraFormProps) {
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <FileUpload
-          label="Audio"
-          kind="audio"
-          value={form.audio_url}
-          onChange={(v) => set('audio_url', v)}
-          uploadFile={uploadFile}
-          deleteFile={deleteFile}
-        />
-        <FileUpload
-          label="Image"
-          kind="image"
-          value={form.image_url}
-          onChange={(v) => set('image_url', v)}
-          uploadFile={uploadFile}
-          deleteFile={deleteFile}
-        />
+      <FileUpload
+        label="Audio"
+        kind="audio"
+        value={form.audio_url}
+        onChange={(v) => set('audio_url', v)}
+        uploadFile={uploadFile}
+        deleteFile={deleteFile}
+      />
+
+      <FileUpload
+        label="Image"
+        kind="image"
+        value={form.image_url}
+        onChange={(v) => set('image_url', v)}
+        uploadFile={uploadFile}
+        deleteFile={deleteFile}
+      />
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
         <div style={fieldStyle}>
           <label style={labelStyle}>Premiere date</label>
           <input
