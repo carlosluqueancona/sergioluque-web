@@ -44,12 +44,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Read the global appearance toggle from settings so we can paint orange
   // CTAs server-side. Tolerant of Worker outages — falls through to the
   // default monochrome accent when the fetch fails.
+  // Lissajous KV is also read here once and stuffed into a global the Hero
+  // component picks up — saves a second fetch on the home page.
   let ctaOrange = false
+  let lissajousJson = '{}'
   try {
     const settings = await getSettings()
     ctaOrange = !!settings?.ctaOrange
+    if (settings?.lissajous) {
+      // Escape </ so the JSON can't terminate the inline <script> tag,
+      // and the unicode-2028/9 forms which break JS string literals.
+      lissajousJson = JSON.stringify(settings.lissajous)
+        .replace(/</g, '\\u003c')
+        .replace(/ /g, '\\u2028')
+        .replace(/ /g, '\\u2029')
+    }
   } catch {
-    /* ignore — keep default accent */
+    /* ignore — keep default accent + default Lissajous look */
   }
 
   return (
@@ -57,6 +68,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* Runs before paint so the chosen theme is on <html> the first frame. */}
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+        {/*
+          Stash the Lissajous config on window before the Hero component
+          mounts. Read by HeroLissajous which is a client component without
+          access to server data otherwise. JSON-encoded literal — safe.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__LIS_CFG__ = ${lissajousJson};`,
+          }}
+        />
       </head>
       <body className={`${spaceMono.variable} ${ibmPlexSans.variable} antialiased`}>
         <ExclusivePlayback />

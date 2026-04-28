@@ -295,6 +295,15 @@ content.get('/settings', async (c) => {
 
     // Post-monolingual collapse the bio lives under flat 'bio' / 'bio_short'.
     // Legacy *_en / *_es keys still accepted as fallback.
+    //
+    // Forward every `lis_*` key verbatim under settings.lissajous so the
+    // Hero canvas can parse them client-side. Worker stays dumb about
+    // Lissajous semantics — it just hands back the raw strings.
+    const lissajous: Record<string, string> = {};
+    for (const [key, value] of Object.entries(kvMap)) {
+      if (key.startsWith('lis_')) lissajous[key] = value;
+    }
+
     const settings: Settings = {
       bio:
         kvMap['bio'] ||
@@ -310,6 +319,7 @@ content.get('/settings', async (c) => {
       cvPdfUrl: kvMap['cv_pdf_url'],
       profileImageUrl: kvMap['profile_image_url'],
       ctaOrange: kvMap['cta_orange'] === '1',
+      lissajous: Object.keys(lissajous).length ? lissajous : undefined,
     };
     void locale;
 

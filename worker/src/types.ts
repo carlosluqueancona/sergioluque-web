@@ -74,4 +74,10 @@ export interface Settings {
   cvPdfUrl?: string;
   profileImageUrl?: string;
   ctaOrange?: boolean;
+  /**
+   * Raw `lis_*` keys passed through verbatim from the settings table so
+   * the Hero canvas can parse them client-side. The Worker stays dumb
+   * about Lissajous semantics — it just forwards the strings.
+   */
+  lissajous?: Record<string, string>;
 }

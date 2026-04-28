@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { FileUpload } from './FileUpload'
+import { LISSAJOUS_PRESETS } from '@/lib/lissajous-presets'
 
 interface SettingsFormProps {
   initial: Record<string, string>
@@ -11,9 +12,25 @@ interface SettingsFormProps {
 interface FieldConfig {
   key: string
   label: string
-  type: 'text' | 'textarea' | 'image' | 'pdf' | 'email' | 'url' | 'switch'
+  type:
+    | 'text'
+    | 'textarea'
+    | 'image'
+    | 'pdf'
+    | 'email'
+    | 'url'
+    | 'switch'
+    | 'color'
+    | 'range'
+    | 'select'
   rows?: number
   hint?: string
+  min?: number
+  max?: number
+  step?: number
+  options?: { value: string; label: string }[]
+  /** Suffix shown after the slider value (e.g. 'px', '×') */
+  suffix?: string
 }
 
 const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
@@ -43,6 +60,180 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         label: 'Orange call-to-action accent',
         type: 'switch',
         hint: 'Replaces the monochrome accent with orange across links, buttons and audio progress.',
+      },
+    ],
+  },
+  {
+    title: 'Hero — Lissajous curves',
+    fields: [
+      // Color
+      {
+        key: 'lis_color_mode',
+        label: 'Stroke colour mode',
+        type: 'select',
+        options: [
+          { value: 'accent', label: 'Match accent (auto-orange)' },
+          { value: 'custom', label: 'Custom hex' },
+        ],
+        hint: 'In "accent" the curves follow --accent and turn orange when the toggle above is on.',
+      },
+      { key: 'lis_color', label: 'Custom colour (used when mode = custom)', type: 'color' },
+      // Geometry / count
+      {
+        key: 'lis_count',
+        label: 'Number of figures',
+        type: 'range',
+        min: 1,
+        max: 7,
+        step: 1,
+      },
+      {
+        key: 'lis_ratios',
+        label: 'Frequency ratios (a:b, comma-separated, φ for golden)',
+        type: 'text',
+        hint: 'Used in order. e.g. 3:2, 4:3, 5:4, 2:1, 7:5, 8:5, φ. Extra ratios cycle if count > list length.',
+      },
+      {
+        key: 'lis_segments',
+        label: 'Segments per curve (smoothness)',
+        type: 'range',
+        min: 64,
+        max: 2048,
+        step: 32,
+      },
+      // Stroke
+      {
+        key: 'lis_line_width',
+        label: 'Line thickness',
+        type: 'range',
+        min: 0.3,
+        max: 3,
+        step: 0.1,
+        suffix: 'px',
+      },
+      {
+        key: 'lis_dash',
+        label: 'Stroke pattern',
+        type: 'select',
+        options: [
+          { value: 'solid', label: 'Solid' },
+          { value: 'dotted', label: 'Dotted (1·3)' },
+          { value: 'dash-short', label: 'Dashed short (3·4)' },
+          { value: 'dash-long', label: 'Dashed long (8·6)' },
+          { value: 'dash-irregular', label: 'Irregular (12·3·2·3)' },
+        ],
+      },
+      {
+        key: 'lis_line_cap',
+        label: 'Line cap',
+        type: 'select',
+        options: [
+          { value: 'butt', label: 'Butt (sharp)' },
+          { value: 'round', label: 'Round (soft)' },
+        ],
+      },
+      // Motion
+      {
+        key: 'lis_drift',
+        label: 'Irrational drift (how far a/b stray)',
+        type: 'range',
+        min: 0,
+        max: 1.5,
+        step: 0.05,
+      },
+      {
+        key: 'lis_phase',
+        label: 'Phase offset δ (degrees)',
+        type: 'range',
+        min: 0,
+        max: 180,
+        step: 1,
+        suffix: '°',
+      },
+      {
+        key: 'lis_speed',
+        label: 'Animation speed',
+        type: 'range',
+        min: 0.25,
+        max: 3,
+        step: 0.05,
+        suffix: '×',
+      },
+      {
+        key: 'lis_rotation',
+        label: 'Continuous rotation rate',
+        type: 'range',
+        min: 0,
+        max: 0.005,
+        step: 0.0001,
+      },
+      {
+        key: 'lis_trails',
+        label: 'Frame clear (1 = full clear, lower = trails)',
+        type: 'range',
+        min: 0.02,
+        max: 1,
+        step: 0.01,
+        hint: 'Below ~0.3 the previous frames persist and the curves leave glowing trails.',
+      },
+      // Composition
+      {
+        key: 'lis_blend',
+        label: 'Blend mode',
+        type: 'select',
+        options: [
+          { value: 'source-over', label: 'Normal' },
+          { value: 'lighter', label: 'Lighter (additive — bright at crossings)' },
+          { value: 'screen', label: 'Screen (soft additive)' },
+        ],
+      },
+      {
+        key: 'lis_size',
+        label: 'Overall size',
+        type: 'range',
+        min: 0.4,
+        max: 1.4,
+        step: 0.02,
+        suffix: '×',
+      },
+      {
+        key: 'lis_center_x',
+        label: 'Centre X (0 = left, 1 = right)',
+        type: 'range',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+      {
+        key: 'lis_center_y',
+        label: 'Centre Y (0 = top, 1 = bottom)',
+        type: 'range',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+      {
+        key: 'lis_opacity',
+        label: 'Opacity multiplier',
+        type: 'range',
+        min: 0.3,
+        max: 2,
+        step: 0.05,
+        suffix: '×',
+      },
+      {
+        key: 'lis_glow',
+        label: 'Glow (shadow blur)',
+        type: 'range',
+        min: 0,
+        max: 20,
+        step: 1,
+        suffix: 'px',
+      },
+      {
+        key: 'lis_static',
+        label: 'Freeze on first frame (no animation)',
+        type: 'switch',
       },
     ],
   },
@@ -106,6 +297,13 @@ export function SettingsForm({ initial }: SettingsFormProps) {
 
   function set(key: string, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
+    setSuccess(false)
+  }
+
+  function applyPreset(presetKey: string) {
+    const preset = LISSAJOUS_PRESETS[presetKey]
+    if (!preset) return
+    setForm((prev) => ({ ...prev, ...preset }))
     setSuccess(false)
   }
 
@@ -189,6 +387,36 @@ export function SettingsForm({ initial }: SettingsFormProps) {
           >
             {section.title}
           </h2>
+
+          {/* Preset dropdown only for the Lissajous section */}
+          {section.title.startsWith('Hero') && (
+            <div style={{ marginBottom: '24px' }}>
+              <label style={labelStyle}>Preset (overwrites all values below)</label>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {Object.keys(LISSAJOUS_PRESETS).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => applyPreset(p)}
+                    style={smallButton}
+                  >
+                    {p.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+              <p
+                style={{
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                  color: 'var(--text-muted)',
+                  marginTop: '8px',
+                }}
+              >
+                Click to populate the form. You still have to hit SAVE SETTINGS.
+              </p>
+            </div>
+          )}
+
           {section.fields.map((field) => (
             <SettingField
               key={field.key}
@@ -317,6 +545,112 @@ function SettingField({
     )
   }
 
+  if (field.type === 'color') {
+    return (
+      <div style={{ marginBottom: '20px' }}>
+        <label style={labelStyle}>{field.label}</label>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <input
+            type="color"
+            value={value || '#D4D4D4'}
+            onChange={(e) => onChange(e.target.value)}
+            style={{
+              width: '48px',
+              height: '32px',
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              padding: 0,
+              cursor: 'pointer',
+            }}
+          />
+          <input
+            type="text"
+            value={value}
+            placeholder="#D4D4D4"
+            onChange={(e) => onChange(e.target.value)}
+            style={{ ...inputStyle, width: '120px' }}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  if (field.type === 'range') {
+    const numeric = value === '' ? field.min ?? 0 : Number(value)
+    return (
+      <div style={{ marginBottom: '20px' }}>
+        <label style={labelStyle}>{field.label}</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <input
+            type="range"
+            min={field.min}
+            max={field.max}
+            step={field.step}
+            value={Number.isFinite(numeric) ? numeric : field.min ?? 0}
+            onChange={(e) => onChange(e.target.value)}
+            style={{ flex: 1, accentColor: 'var(--accent)' }}
+          />
+          <span
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '12px',
+              color: 'var(--text-primary)',
+              minWidth: '60px',
+              textAlign: 'right',
+            }}
+          >
+            {Number.isFinite(numeric) ? numeric : field.min}
+            {field.suffix ?? ''}
+          </span>
+        </div>
+        {field.hint && (
+          <p
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '11px',
+              color: 'var(--text-muted)',
+              marginTop: '6px',
+            }}
+          >
+            {field.hint}
+          </p>
+        )}
+      </div>
+    )
+  }
+
+  if (field.type === 'select') {
+    return (
+      <div style={{ marginBottom: '20px' }}>
+        <label style={labelStyle}>{field.label}</label>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="">— default —</option>
+          {field.options?.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        {field.hint && (
+          <p
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '11px',
+              color: 'var(--text-muted)',
+              marginTop: '6px',
+            }}
+          >
+            {field.hint}
+          </p>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div style={{ marginBottom: '20px' }}>
       <label style={labelStyle}>{field.label}</label>
@@ -337,6 +671,19 @@ function SettingField({
           onChange={(e) => onChange(e.target.value)}
           style={inputStyle}
         />
+      )}
+
+      {field.hint && (
+        <p
+          style={{
+            fontFamily: 'monospace',
+            fontSize: '11px',
+            color: 'var(--text-muted)',
+            marginTop: '6px',
+          }}
+        >
+          {field.hint}
+        </p>
       )}
     </div>
   )

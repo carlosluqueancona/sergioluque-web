@@ -34,6 +34,9 @@ export function Hero() {
         the Lissajous canvas is the active background. Swap by toggling
         which of the two next lines is rendered.
         <HeroNoise />
+
+        HeroLissajous reads its config from window.__LIS_CFG__, populated
+        by the inline script in <head> from layout.tsx. No props needed.
       */}
       <HeroLissajous />
 
