@@ -77,7 +77,16 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         ],
         hint: 'In "accent" the curves follow --accent and turn orange when the toggle above is on.',
       },
-      { key: 'lis_color', label: 'Custom colour (used when mode = custom)', type: 'color' },
+      {
+        key: 'lis_color_dark',
+        label: 'Custom colour — dark theme (used when mode = custom)',
+        type: 'color',
+      },
+      {
+        key: 'lis_color_light',
+        label: 'Custom colour — light theme (used when mode = custom)',
+        type: 'color',
+      },
       // Geometry / count
       {
         key: 'lis_count',

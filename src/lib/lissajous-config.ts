@@ -18,7 +18,10 @@ export type ColorModeKey = 'accent' | 'custom'
 
 export interface LissajousConfig {
   colorMode: ColorModeKey
-  color: string
+  /** Stroke colour used when data-theme="dark" (the site default). */
+  colorDark: string
+  /** Stroke colour used when data-theme="light". */
+  colorLight: string
   count: number
   /** Pre-parsed list of {a, b} numeric pairs derived from the comma string. */
   ratios: Array<{ a: number; b: number }>
@@ -95,9 +98,18 @@ export function parseLissajousConfig(
   const blendRaw = (k['lis_blend'] ?? 'source-over') as BlendKey
   const lineCapRaw = (k['lis_line_cap'] ?? 'butt') as LineCapKey
 
+  // Backward compatibility: pre-light/dark databases stored a single
+  // `lis_color`. If only that one exists, use it for both themes.
+  const legacyColor = (k['lis_color'] ?? '').trim()
+  const colorDark =
+    (k['lis_color_dark'] ?? '').trim() || legacyColor || '#D4D4D4'
+  const colorLight =
+    (k['lis_color_light'] ?? '').trim() || legacyColor || '#1A1A1A'
+
   return {
     colorMode,
-    color: (k['lis_color'] ?? '').trim() || '#D4D4D4',
+    colorDark,
+    colorLight,
     count: clamp(Math.round(num(k['lis_count'], 3)), 1, 7),
     ratios: parseRatios(k['lis_ratios']),
     segments: clamp(Math.round(num(k['lis_segments'], 540)), 64, 4096),

@@ -13,7 +13,8 @@
 export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
   academico: {
     lis_color_mode: 'accent',
-    lis_color: '#D4D4D4',
+    lis_color_dark: '#D4D4D4',
+    lis_color_light: '#1A1A1A',
     lis_count: '3',
     lis_ratios: '3:2,4:3,5:4',
     lis_segments: '540',
@@ -36,7 +37,8 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
 
   denso: {
     lis_color_mode: 'accent',
-    lis_color: '#D4D4D4',
+    lis_color_dark: '#D4D4D4',
+    lis_color_light: '#1A1A1A',
     lis_count: '6',
     lis_ratios: '3:2,4:3,5:4,7:5,8:5,φ',
     lis_segments: '1024',
@@ -59,7 +61,8 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
 
   minimal: {
     lis_color_mode: 'accent',
-    lis_color: '#D4D4D4',
+    lis_color_dark: '#D4D4D4',
+    lis_color_light: '#1A1A1A',
     lis_count: '1',
     lis_ratios: '3:2',
     lis_segments: '800',
@@ -82,7 +85,8 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
 
   psicodelico: {
     lis_color_mode: 'custom',
-    lis_color: '#FF6A1E',
+    lis_color_dark: '#FF6A1E',
+    lis_color_light: '#E55A00',
     lis_count: '5',
     lis_ratios: '5:4,7:5,φ,3:2,4:3',
     lis_segments: '1600',

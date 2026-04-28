@@ -77,9 +77,14 @@ export function HeroLissajous() {
     }
 
     const readStrokeRGB = (): [number, number, number] => {
-      // Custom mode → static hex from settings.
+      // Custom mode → pick the dark or light hex from settings depending
+      // on the active theme. The MutationObserver below already watches
+      // data-theme, so flipping themes re-runs this and the colour
+      // updates without a remount.
       if (cfg.colorMode === 'custom') {
-        return hexToRGB(cfg.color) ?? [212, 212, 212]
+        const theme = document.documentElement.getAttribute('data-theme')
+        const hex = theme === 'light' ? cfg.colorLight : cfg.colorDark
+        return hexToRGB(hex) ?? [212, 212, 212]
       }
       // Accent mode → follow --accent (which itself flips with the
       // orange CTA toggle and the light/dark theme).
