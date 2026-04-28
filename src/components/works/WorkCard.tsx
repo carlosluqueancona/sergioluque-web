@@ -12,14 +12,68 @@ interface WorkCardProps {
   obra: Obra
 }
 
+// Strip HTML tags + collapse whitespace, then trim to a card-sized excerpt.
+// `description` can be authored as rich text (PostBody renders it on the
+// detail page); on the listing we just want a teaser.
+function descriptionExcerpt(raw: string | undefined, max = 220): string | null {
+  if (!raw) return null
+  const plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (!plain) return null
+  if (plain.length <= max) return plain
+  // Cut on a word boundary close to the limit so we don't slice mid-word.
+  const slice = plain.slice(0, max)
+  const lastSpace = slice.lastIndexOf(' ')
+  return (lastSpace > max * 0.6 ? slice.slice(0, lastSpace) : slice).trimEnd() + '…'
+}
+
+const metaRowStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '110px 1fr',
+  gap: '12px',
+  alignItems: 'baseline',
+  margin: '0 0 4px',
+}
+
+interface MetaRowProps {
+  label: string
+  value: string
+}
+
+function MetaRow({ label, value }: MetaRowProps) {
+  return (
+    <div style={metaRowStyle}>
+      <span className="t-label">{label}</span>
+      <span
+        className="t-meta"
+        style={{ color: 'var(--text-secondary)', margin: 0 }}
+      >
+        {value}
+      </span>
+    </div>
+  )
+}
+
 export function WorkCard({ obra }: WorkCardProps) {
   const title = obra.title
-  const instrumentation = obra.instrumentation
   const slug = obra.slug
   const showImage = isHttpUrl(obra.imageUrl)
   const showAudio = isHttpUrl(obra.audioUrl)
   const audioFormat = showAudio ? detectAudioFormat(obra.audioUrl) : null
   const href = `/works/${slug}`
+
+  const premiereInfo = [obra.premiereDate, obra.premiereVenue, obra.premiereCity]
+    .filter(Boolean)
+    .join(', ')
+  const excerpt = descriptionExcerpt(obra.description)
+
+  // Decide if there's any auxiliary metadata worth rendering — used to keep
+  // the meta block from collapsing to an empty <div> when none of these
+  // fields are populated for a given obra.
+  const hasMeta =
+    Boolean(premiereInfo) ||
+    Boolean(obra.commissions) ||
+    Boolean(obra.ensembles) ||
+    Boolean(excerpt)
 
   return (
     <article
@@ -60,6 +114,7 @@ export function WorkCard({ obra }: WorkCardProps) {
       )}
 
       <div>
+        {/* Title row */}
         <div
           style={{
             display: 'flex',
@@ -77,13 +132,14 @@ export function WorkCard({ obra }: WorkCardProps) {
           )}
         </div>
 
-        {(instrumentation || obra.duration) && (
+        {/* Instrumentation + composed duration (e.g. "violin solo · 12'30") */}
+        {(obra.instrumentation || obra.duration) && (
           <p className="t-meta" style={{ margin: '0 0 12px' }}>
-            {instrumentation}
+            {obra.instrumentation}
             {obra.duration && (
               <span
                 style={{
-                  marginLeft: instrumentation ? '16px' : 0,
+                  marginLeft: obra.instrumentation ? '16px' : 0,
                   color: 'var(--text-muted)',
                 }}
               >
@@ -93,8 +149,9 @@ export function WorkCard({ obra }: WorkCardProps) {
           </p>
         )}
 
+        {/* Audio player */}
         {showAudio ? (
-          <div style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ position: 'relative', zIndex: 2, marginBottom: hasMeta ? '16px' : 0 }}>
             {audioFormat && (
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                 <AudioFormatTag format={audioFormat} />
@@ -103,7 +160,33 @@ export function WorkCard({ obra }: WorkCardProps) {
             <AudioPlayerMini audioUrl={obra.audioUrl as string} title={title} />
           </div>
         ) : (
-          <p className="t-caption">{S.works.noAudio}</p>
+          <p className="t-caption" style={{ marginBottom: hasMeta ? '16px' : 0 }}>
+            {S.works.noAudio}
+          </p>
+        )}
+
+        {/* Auxiliary metadata: premiere, commissions, performers */}
+        {hasMeta && (
+          <div>
+            {premiereInfo && <MetaRow label={S.works.premiere} value={premiereInfo} />}
+            {obra.commissions && <MetaRow label={S.works.commissions} value={obra.commissions} />}
+            {obra.ensembles && <MetaRow label={S.works.ensembles} value={obra.ensembles} />}
+            {excerpt && (
+              <p
+                className="t-meta"
+                style={{
+                  margin: '8px 0 0',
+                  color: 'var(--text-secondary)',
+                  letterSpacing: 0,
+                  fontFamily: 'var(--font-ibm-plex-sans), sans-serif',
+                  fontSize: '14px',
+                  lineHeight: 1.55,
+                }}
+              >
+                {excerpt}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </article>
