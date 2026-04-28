@@ -195,6 +195,7 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
           { value: 'lighter', label: 'Lighter (additive — bright at crossings)' },
           { value: 'screen', label: 'Screen (soft additive)' },
         ],
+        hint: 'Lighter / Screen are designed for dark backgrounds. They auto-fall-back to Normal when the site is in light theme so strokes stay visible.',
       },
       {
         key: 'lis_size',

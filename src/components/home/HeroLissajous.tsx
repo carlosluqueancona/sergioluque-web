@@ -188,7 +188,15 @@ export function HeroLissajous() {
         ctx.fillRect(0, 0, W, H)
       }
 
-      ctx.globalCompositeOperation = cfg.blend
+      // Additive blend modes (lighter / screen) are designed for dark
+      // backgrounds — they push pixels towards white. On a light theme
+      // they wash dark strokes out to invisible from the first frame.
+      // Auto-fall-back to source-over so psicodélico-style presets keep
+      // working when Sergio toggles to light mode.
+      const isLight =
+        document.documentElement.getAttribute('data-theme') === 'light'
+      const additive = cfg.blend === 'lighter' || cfg.blend === 'screen'
+      ctx.globalCompositeOperation = isLight && additive ? 'source-over' : cfg.blend
       ctx.lineCap = cfg.lineCap
 
       const [r, g, bb] = strokeRGB
