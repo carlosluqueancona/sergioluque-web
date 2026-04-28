@@ -32,7 +32,14 @@ export function Footer() {
           gap: '24px',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '6px',
+          }}
+        >
           <p
             style={{
               fontFamily: 'var(--font-space-mono)',
@@ -43,7 +50,7 @@ export function Footer() {
           >
             © {new Date().getFullYear()} Sergio Luque
           </p>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Link
               href="/privacy"
               style={{
@@ -57,6 +64,12 @@ export function Footer() {
             >
               Privacy
             </Link>
+            <span
+              aria-hidden
+              style={{ color: 'var(--text-muted)', fontSize: '10px', opacity: 0.6 }}
+            >
+              ·
+            </span>
             <CookiePreferencesLink />
           </div>
         </div>
