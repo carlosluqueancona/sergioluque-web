@@ -309,6 +309,7 @@ content.get('/settings', async (c) => {
       email: kvMap['email'],
       cvPdfUrl: kvMap['cv_pdf_url'],
       profileImageUrl: kvMap['profile_image_url'],
+      ctaOrange: kvMap['cta_orange'] === '1',
     };
     void locale;
 

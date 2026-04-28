@@ -7,6 +7,7 @@ import { themeBootstrapScript } from '@/components/layout/ThemeToggle'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ExclusivePlayback } from '@/components/audio/ExclusivePlayback'
+import { getSettings } from '@/lib/db/queries'
 
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
@@ -39,9 +40,20 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://sergioluque.com'),
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Read the global appearance toggle from settings so we can paint orange
+  // CTAs server-side. Tolerant of Worker outages — falls through to the
+  // default monochrome accent when the fetch fails.
+  let ctaOrange = false
+  try {
+    const settings = await getSettings()
+    ctaOrange = !!settings?.ctaOrange
+  } catch {
+    /* ignore — keep default accent */
+  }
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-cta={ctaOrange ? 'orange' : 'default'} suppressHydrationWarning>
       <head>
         {/* Runs before paint so the chosen theme is on <html> the first frame. */}
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />

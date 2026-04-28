@@ -72,6 +72,19 @@
   --success: #16A34A;
 }
 
+/* Optional orange CTA accent — toggled from /admin/settings via the
+   data-cta attribute on <html>. Higher specificity than the theme rules
+   above so it wins regardless of light/dark mode.
+   Two slightly different oranges so the colour reads well on each theme:
+   a punchier tone on dark, a more grounded one on light. */
+html[data-cta="orange"][data-theme="dark"],
+html[data-cta="orange"]:not([data-theme="light"]) {
+  --accent: #FF6A1E;
+}
+html[data-cta="orange"][data-theme="light"] {
+  --accent: #E55A00;
+}
+
 :root {
 
   --background: var(--bg);

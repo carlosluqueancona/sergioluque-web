@@ -11,8 +11,9 @@ interface SettingsFormProps {
 interface FieldConfig {
   key: string
   label: string
-  type: 'text' | 'textarea' | 'image' | 'pdf' | 'email' | 'url'
+  type: 'text' | 'textarea' | 'image' | 'pdf' | 'email' | 'url' | 'switch'
   rows?: number
+  hint?: string
 }
 
 const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
@@ -33,6 +34,17 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
   {
     title: 'Contact',
     fields: [{ key: 'email', label: 'Contact email', type: 'email' }],
+  },
+  {
+    title: 'Appearance',
+    fields: [
+      {
+        key: 'cta_orange',
+        label: 'Orange call-to-action accent',
+        type: 'switch',
+        hint: 'Replaces the monochrome accent with orange across links, buttons and audio progress.',
+      },
+    ],
   },
   {
     title: 'Social',
@@ -256,6 +268,52 @@ function SettingField({
         uploadFile={uploadFile}
         deleteFile={deleteFile}
       />
+    )
+  }
+
+  if (field.type === 'switch') {
+    const on = value === '1'
+    return (
+      <div style={{ marginBottom: '20px' }}>
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            cursor: 'pointer',
+            userSelect: 'none',
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={on}
+            onChange={(e) => onChange(e.target.checked ? '1' : '')}
+            style={{ width: '16px', height: '16px', accentColor: 'var(--accent)' }}
+          />
+          <span
+            style={{
+              fontSize: '13px',
+              color: 'var(--text-primary)',
+              fontFamily: 'monospace',
+            }}
+          >
+            {field.label}
+          </span>
+        </label>
+        {field.hint && (
+          <p
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '11px',
+              color: 'var(--text-muted)',
+              marginTop: '6px',
+              marginLeft: '28px',
+            }}
+          >
+            {field.hint}
+          </p>
+        )}
+      </div>
     )
   }
 

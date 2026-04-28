@@ -73,4 +73,5 @@ export interface Settings {
   email?: string;
   cvPdfUrl?: string;
   profileImageUrl?: string;
+  ctaOrange?: boolean;
 }
