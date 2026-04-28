@@ -64,6 +64,7 @@ export function HeroLissajous() {
     let raf = 0
     let t = 0
     let strokeRGB: [number, number, number] = [212, 212, 212]
+    let bgRGB: [number, number, number] = [10, 10, 10]
 
     const hexToRGB = (hex: string): [number, number, number] | null => {
       const cleaned = hex.replace('#', '').trim()
@@ -93,10 +94,19 @@ export function HeroLissajous() {
       return hexToRGB(raw) ?? [212, 212, 212]
     }
 
+    const readBgRGB = (): [number, number, number] => {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bg')
+        .trim()
+      return hexToRGB(raw) ?? [10, 10, 10]
+    }
+
     strokeRGB = readStrokeRGB()
+    bgRGB = readBgRGB()
 
     const observer = new MutationObserver(() => {
       strokeRGB = readStrokeRGB()
+      bgRGB = readBgRGB()
     })
     observer.observe(document.documentElement, {
       attributes: true,
@@ -156,19 +166,25 @@ export function HeroLissajous() {
     const fadeAlpha = cfg.trails
 
     const frame = () => {
+      ctx.globalCompositeOperation = 'source-over'
       if (fadeAlpha >= 0.999) {
         // No trails: hard clear each frame.
-        ctx.globalCompositeOperation = 'source-over'
         ctx.clearRect(0, 0, W, H)
       } else {
-        // Trails: fade existing pixels towards transparent (NOT towards
-        // the bg colour) using destination-out. This way the fade behaves
-        // the same in light and dark themes, and works correctly with the
-        // additive blend modes (lighter / screen) which would otherwise
-        // wash the strokes out when fillRect painted the bg colour over
-        // them on a light background.
-        ctx.globalCompositeOperation = 'destination-out'
-        ctx.fillStyle = `rgba(0, 0, 0, ${fadeAlpha})`
+        // Trails: paint the page bg over the previous frame at fadeAlpha
+        // opacity. Two-fold benefit over destination-out:
+        //   1. heavily-trafficked regions (the centre, where Lissajous
+        //      curves concentrate) converge to bg colour — no halo of
+        //      residual stroke pixels.
+        //   2. The visual character matches what designers expect from
+        //      a "trail to the background" effect.
+        // The bg readback is theme-aware, so light/dark flips fade
+        // toward the appropriate colour automatically. With
+        // additive blends (lighter / screen) the bg fillRect still
+        // gets painted with source-over (set explicitly above), so the
+        // fade behaves the same regardless of the user's stroke blend.
+        const [br, bg, bbg] = bgRGB
+        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${fadeAlpha})`
         ctx.fillRect(0, 0, W, H)
       }
 
