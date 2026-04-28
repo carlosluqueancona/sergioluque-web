@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getPostBySlug } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
@@ -8,6 +9,9 @@ import type { Metadata } from 'next'
 // Render on-demand. See works/[slug] for the rationale.
 export const dynamic = 'force-dynamic'
 export const runtime = 'edge'
+
+const isHttpUrl = (s: string | undefined): s is string =>
+  !!s && /^https?:\/\//i.test(s)
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
@@ -42,6 +46,18 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <p style={{ fontFamily: 'var(--font-space-mono)', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '48px', letterSpacing: '0.1em' }}>
           {S.blog.publishedAt} {dateFormatted}
         </p>
+      )}
+
+      {isHttpUrl(post.imageUrl) && (
+        <div style={{ marginBottom: '48px' }}>
+          <Image
+            src={post.imageUrl}
+            alt={title}
+            width={1600}
+            height={900}
+            style={{ display: 'block', width: '100%', height: 'auto' }}
+          />
+        </div>
       )}
 
       {body && <PostBody value={body} />}
