@@ -38,7 +38,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         ← {S.common.backToList}
       </Link>
 
-      <h1 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '28px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.02em' }}>
+      <h1 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '28px', fontWeight: 700, color: 'var(--heading)', marginBottom: '16px', letterSpacing: '-0.02em' }}>
         {title}
       </h1>
 

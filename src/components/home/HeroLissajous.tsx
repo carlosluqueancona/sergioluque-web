@@ -11,10 +11,12 @@ import { useEffect, useRef } from 'react'
  * — perfect fifth, perfect fourth, major third) and drifting through
  * irrational neighbourhoods so the curves morph continuously.
  *
- * Pure canvas 2D, no library. Reads --text-primary so the strokes follow
- * the active theme; a MutationObserver re-reads when data-theme flips.
- * Caps at devicePixelRatio 2 to keep mobile GPUs honest. Honours
- * prefers-reduced-motion (renders one static frame, then stops).
+ * Pure canvas 2D, no library. Reads --accent so the strokes follow the
+ * active theme AND the orange CTA toggle (--accent flips to #FF6A1E when
+ * html[data-cta="orange"] is set). A MutationObserver re-reads when either
+ * data-theme or data-cta flips. Caps at devicePixelRatio 2 to keep mobile
+ * GPUs honest. Honours prefers-reduced-motion (renders one static frame,
+ * then stops).
  */
 export function HeroLissajous() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -51,7 +53,7 @@ export function HeroLissajous() {
     // and `ctx` from the early returns above persists in these closures.
     const readStrokeRGB = (): [number, number, number] => {
       const raw = getComputedStyle(document.documentElement)
-        .getPropertyValue('--text-primary')
+        .getPropertyValue('--accent')
         .trim()
       const hex = raw.replace('#', '')
       if (hex.length !== 6) return [240, 240, 240]
@@ -68,7 +70,7 @@ export function HeroLissajous() {
     })
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['data-theme'],
+      attributeFilter: ['data-theme', 'data-cta'],
     })
 
     const resize = () => {

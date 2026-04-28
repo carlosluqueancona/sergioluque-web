@@ -46,7 +46,7 @@ export function PostCard({ post }: PostCardProps) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '16px', marginBottom: '8px' }}>
           <Link
             href={`/blog/${slug}`}
-            style={{ fontFamily: 'var(--font-space-mono)', fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', textDecoration: 'none' }}
+            style={{ fontFamily: 'var(--font-space-mono)', fontSize: '16px', fontWeight: 700, color: 'var(--heading)', textDecoration: 'none' }}
           >
             {title}
           </Link>
