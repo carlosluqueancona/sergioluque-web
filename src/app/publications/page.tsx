@@ -45,7 +45,7 @@ export default async function PublicacionesPage() {
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '16px', marginBottom: '4px' }}>
-                <h2 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                <h2 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '14px', fontWeight: 700, color: 'var(--heading)', margin: 0 }}>
                   {pub.title}
                 </h2>
                 {pub.year && (

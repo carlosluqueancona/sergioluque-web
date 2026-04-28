@@ -24,7 +24,7 @@ export function ProjectCard({ proyecto }: ProjectCardProps) {
           />
         )}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <h2 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+          <h2 style={{ fontFamily: 'var(--font-space-mono)', fontSize: '15px', fontWeight: 700, color: 'var(--heading)', margin: 0 }}>
             {title}
           </h2>
           {proyecto.year && (

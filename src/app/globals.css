@@ -72,6 +72,16 @@
   --success: #16A34A;
 }
 
+/* --heading drives h2 / h3 / card-title colour. Defaults to --text-primary
+   so the stark monochrome layout reads as before. When the orange CTA
+   toggle flips it points at --accent so headings get the orange too —
+   one switch, coherent editorial vs brutalist looks. */
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+  --heading: var(--text-primary);
+}
+
 /* Optional orange CTA accent — toggled from /admin/settings via the
    data-cta attribute on <html>. Higher specificity than the theme rules
    above so it wins regardless of light/dark mode.
@@ -80,9 +90,11 @@
 html[data-cta="orange"][data-theme="dark"],
 html[data-cta="orange"]:not([data-theme="light"]) {
   --accent: #FF6A1E;
+  --heading: #FF6A1E;
 }
 html[data-cta="orange"][data-theme="light"] {
   --accent: #E55A00;
+  --heading: #E55A00;
 }
 
 :root {
@@ -162,17 +174,20 @@ html[data-cta="orange"][data-theme="light"] {
   letter-spacing: 0.05em;
 }
 
-/* Card title (work cards, list items). */
+/* Card title (work cards, list items). Rendered as <h3>. */
 .t-card-title {
   font-family: var(--font-space-mono), monospace;
   font-size: 15px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--heading);
   letter-spacing: -0.01em;
   margin: 0;
 }
 
-/* Page heading (page titles like "Obras", "Bio", etc.). */
+/* Page heading (page titles like "Works", "Bio", etc.). Rendered as <h1>.
+   H1 stays --text-primary by design — the wordmark / page title is the
+   site's anchor and shouldn't compete with CTAs even when the orange
+   accent is on. */
 .t-h1 {
   font-family: var(--font-space-mono), monospace;
   font-size: 32px;
@@ -182,12 +197,14 @@ html[data-cta="orange"][data-theme="light"] {
   margin: 0 0 8px;
 }
 
-/* Detail heading (single-obra title). */
+/* Detail heading (single-obra title). Used inside <h1> on detail pages
+   but the same visual weight as a section h2 — drives off --heading so
+   it follows the orange toggle. */
 .t-h2 {
   font-family: var(--font-space-mono), monospace;
   font-size: 36px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--heading);
   letter-spacing: -0.02em;
   margin: 0 0 8px;
 }
