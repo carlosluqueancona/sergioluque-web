@@ -20,75 +20,142 @@ interface ObraRow {
   sort_order: number
 }
 
+// Mirrors src/app/admin/[entity]/page.tsx so the Works list looks identical
+// to Posts / Projects / Concerts / Publications. Works keeps its own route
+// only because the edit form is custom (audio + image upload).
 export default async function AdminObrasPage() {
   const cookieStore = await cookies()
   const token = cookieStore.get(COOKIE_NAME)?.value
   if (!token) redirect('/admin/login')
 
-  let obras: ObraRow[] = []
+  let rows: ObraRow[] = []
   try {
     const res = await fetch(`${WORKER_BASE}/admin/obras`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (res.status === 401) redirect('/admin/login')
     if (res.ok) {
-      obras = (await res.json()) as ObraRow[]
+      rows = (await res.json()) as ObraRow[]
     }
   } catch {
     // Worker unreachable — show empty state
   }
 
+  const listColumns: { key: keyof ObraRow; label: string }[] = [
+    { key: 'title', label: 'Title' },
+    { key: 'year', label: 'Year' },
+    { key: 'is_featured', label: 'Featured' },
+  ]
+
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '0.1em', margin: 0, textTransform: 'uppercase', color: 'var(--text-primary)' }}>
-          Works ({obras.length})
+    <main style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '32px',
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: 'var(--font-space-mono)',
+            fontSize: '20px',
+            fontWeight: 700,
+            margin: 0,
+            letterSpacing: '0.05em',
+          }}
+        >
+          Works{' '}
+          <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '14px' }}>
+            ({rows.length})
+          </span>
         </h1>
         <Link
           href="/admin/obras/new"
           style={{
+            background: 'var(--text-primary)',
+            color: 'var(--bg)',
+            padding: '8px 16px',
             fontFamily: 'monospace',
             fontSize: '11px',
             letterSpacing: '0.1em',
-            color: 'var(--bg)',
-            background: 'var(--text-primary)',
             textDecoration: 'none',
-            padding: '8px 16px',
-            textTransform: 'uppercase',
           }}
         >
-          + New work
+          + NEW WORK
         </Link>
       </div>
 
-      {obras.length === 0 && (
-        <p style={{ color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '13px' }}>
-          No works yet. Create the first one with the button above.
+      {rows.length === 0 ? (
+        <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
+          No records yet. Create the first one.
         </p>
-      )}
-
-      {obras.length > 0 && (
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+      ) : (
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            fontFamily: 'monospace',
+            fontSize: '12px',
+          }}
+        >
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Title</th>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Year</th>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Featured</th>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Actions</th>
+              <th
+                style={{
+                  textAlign: 'left',
+                  padding: '8px 12px',
+                  color: 'var(--text-muted)',
+                  fontWeight: 400,
+                  fontSize: '10px',
+                  letterSpacing: '0.1em',
+                  width: '60px',
+                }}
+              >
+                ID
+              </th>
+              {listColumns.map((col) => (
+                <th
+                  key={col.key}
+                  style={{
+                    textAlign: 'left',
+                    padding: '8px 12px',
+                    color: 'var(--text-muted)',
+                    fontWeight: 400,
+                    fontSize: '10px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {col.label}
+                </th>
+              ))}
+              <th style={{ width: '80px' }} />
             </tr>
           </thead>
           <tbody>
-            {obras.map((obra) => (
-              <tr key={obra.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '12px 0', color: 'var(--text-primary)' }}>{obra.title}</td>
-                <td style={{ padding: '12px 0', color: 'var(--text-muted)' }}>{obra.year}</td>
-                <td style={{ padding: '12px 0', color: 'var(--text-muted)' }}>{obra.is_featured ? '★' : '—'}</td>
-                <td style={{ padding: '12px 0' }}>
+            {rows.map((row) => (
+              <tr key={row.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                <td style={{ padding: '12px', color: 'var(--text-muted)' }}>{row.id}</td>
+                {listColumns.map((col) => {
+                  const v = row[col.key]
+                  let display: string
+                  if (v == null || v === '') display = '—'
+                  else if (col.key === 'is_featured') display = v === 1 ? '✓' : '—'
+                  else display = String(v).slice(0, 80)
+                  return (
+                    <td key={col.key} style={{ padding: '12px' }}>
+                      {display}
+                    </td>
+                  )
+                })}
+                <td style={{ padding: '12px', textAlign: 'right' }}>
                   <Link
-                    href={`/admin/obras/${obra.id}`}
-                    style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--accent)', textDecoration: 'none', marginRight: '16px' }}
+                    href={`/admin/obras/${row.id}`}
+                    style={{ color: 'var(--accent)', fontSize: '11px' }}
                   >
-                    Edit
+                    Edit →
                   </Link>
                 </td>
               </tr>
@@ -96,6 +163,6 @@ export default async function AdminObrasPage() {
           </tbody>
         </table>
       )}
-    </div>
+    </main>
   )
 }
