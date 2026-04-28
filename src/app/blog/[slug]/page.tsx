@@ -1,22 +1,13 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getPostBySlug, getPosts } from '@/lib/db/queries'
+import { getPostBySlug } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
 import type { Metadata } from 'next'
 
-export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const result = await Promise.allSettled([getPosts()])
-  const params: Array<{ slug: string }> = []
-  if (result[0].status === 'fulfilled') {
-    for (const p of result[0].value) {
-      if (p.slug) params.push({ slug: p.slug })
-    }
-  }
-  return params
-}
+// Render on-demand. See works/[slug] for the rationale.
+export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params

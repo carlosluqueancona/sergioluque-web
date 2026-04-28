@@ -1,22 +1,14 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getProyectoBySlug, getProyectos } from '@/lib/db/queries'
+import { getProyectoBySlug } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
 import type { Metadata } from 'next'
 
-export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const result = await Promise.allSettled([getProyectos()])
-  const proyectos = result[0].status === 'fulfilled' ? result[0].value : []
-  const params: Array<{ slug: string }> = []
-  for (const p of proyectos) {
-    if (p.slug) params.push({ slug: p.slug })
-  }
-  return params
-}
+// Render on-demand. See works/[slug] for the rationale.
+export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params

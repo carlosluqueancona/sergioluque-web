@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getObraBySlug, getObras } from '@/lib/db/queries'
+import { getObraBySlug } from '@/lib/db/queries'
 import { AudioPlayer } from '@/components/audio'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
@@ -9,17 +9,13 @@ import type { Metadata } from 'next'
 const isHttpUrl = (s: string | undefined): s is string =>
   !!s && /^https?:\/\//i.test(s)
 
-export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const result = await Promise.allSettled([getObras()])
-  const obras = result[0].status === 'fulfilled' ? result[0].value : []
-  const params: Array<{ slug: string }> = []
-  for (const obra of obras) {
-    if (obra.slug) params.push({ slug: obra.slug })
-  }
-  return params
-}
+// Render on-demand instead of pre-generating per-slug paths at build time.
+// @cloudflare/next-on-pages doesn't fall back to runtime rendering for
+// slugs absent from generateStaticParams, so any work added via admin
+// after a deploy returned 404 until the next build. Dynamic + edge cache
+// (1h revalidate) is the right trade-off for a content-driven catalog.
+export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
 
 export async function generateMetadata({
   params,
