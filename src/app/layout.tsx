@@ -52,12 +52,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     const settings = await getSettings()
     ctaOrange = !!settings?.ctaOrange
     if (settings?.lissajous) {
-      // Escape </ so the JSON can't terminate the inline <script> tag,
-      // and the unicode-2028/9 forms which break JS string literals.
-      lissajousJson = JSON.stringify(settings.lissajous)
-        .replace(/</g, '\\u003c')
-        .replace(/ /g, '\\u2028')
-        .replace(/ /g, '\\u2029')
+      // Escape `<` so the inline JSON can't close the <script> tag.
+      // All lis_* values are constrained (numbers, hex colours, enum
+      // strings, CSV ratios) so this is the only character that can
+      // realistically appear and break the inline script.
+      lissajousJson = JSON.stringify(settings.lissajous).replace(/</g, '\\u003c')
     }
   } catch {
     /* ignore — keep default accent + default Lissajous look */
