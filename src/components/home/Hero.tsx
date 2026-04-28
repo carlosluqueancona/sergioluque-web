@@ -1,9 +1,7 @@
 import { HeroLissajous } from './HeroLissajous'
 
 const COPY = {
-  role: 'Composer · Researcher',
   practice: 'Composer and researcher in electroacoustic music',
-  origin: 'Mexico City',
   catalog: 'Works catalogue',
   scrollHint: 'Scroll for catalogue',
   // Three-word manifesto: each word stands alone as a complete statement
@@ -13,7 +11,6 @@ const COPY = {
 
 export function Hero() {
   const t = COPY
-  const year = new Date().getFullYear()
 
   return (
     <section
@@ -44,27 +41,6 @@ export function Hero() {
           Lissajous canvas (z-index 0) stays behind without each child
           needing its own positioning. */}
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
-
-      {/* Top meta bar */}
-      <div
-        className="hero-meta-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          alignItems: 'center',
-          paddingBottom: '14px',
-          borderBottom: '1px solid var(--border)',
-          fontFamily: 'var(--font-space-mono)',
-          fontSize: '10px',
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: 'var(--text-muted)',
-        }}
-      >
-        <span>{`S/L · ${t.origin}`}</span>
-        <span style={{ textAlign: 'center' }}>{t.role}</span>
-        <span style={{ textAlign: 'right' }}>{`MMXX — ${year}`}</span>
-      </div>
 
       {/* Main wordmark */}
       <div
