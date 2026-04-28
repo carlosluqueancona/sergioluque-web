@@ -184,7 +184,7 @@ function registerCrud(
 registerCrud(admin, 'obras', [
   'title', 'slug', 'year',
   'instrumentation', 'duration',
-  'description', 'audio_url', 'audio_duration',
+  'description', 'audio_url',
   'image_url', 'premiere_date', 'premiere_venue', 'premiere_city',
   'commissions', 'ensembles', 'is_featured', 'sort_order',
 ]);

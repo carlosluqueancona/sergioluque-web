@@ -13,7 +13,6 @@ interface ObraData {
   duration: string
   description: string
   audio_url: string
-  audio_duration: string
   image_url: string
   premiere_date: string
   premiere_venue: string
@@ -61,7 +60,6 @@ export function ObraForm({ initialData }: ObraFormProps) {
     duration: initialData?.duration ?? '',
     description: initialData?.description ?? '',
     audio_url: initialData?.audio_url ?? '',
-    audio_duration: initialData?.audio_duration ?? '',
     image_url: initialData?.image_url ?? '',
     premiere_date: initialData?.premiere_date ?? '',
     premiere_venue: initialData?.premiere_venue ?? '',
@@ -88,7 +86,6 @@ export function ObraForm({ initialData }: ObraFormProps) {
         ...form,
         ...(initialData?.id != null ? { id: initialData.id } : {}),
         year: form.year ? parseInt(form.year) : null,
-        audio_duration: form.audio_duration ? parseInt(form.audio_duration) : 0,
         sort_order: parseInt(form.sort_order) || 0,
         is_featured: form.is_featured ? 1 : 0,
       }
@@ -204,15 +201,6 @@ export function ObraForm({ initialData }: ObraFormProps) {
           uploadFile={uploadFile}
           deleteFile={deleteFile}
         />
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Audio duration (sec)</label>
-          <input
-            style={inputStyle}
-            type="number"
-            value={form.audio_duration}
-            onChange={(e) => set('audio_duration', e.target.value)}
-          />
-        </div>
         <FileUpload
           label="Image"
           kind="image"

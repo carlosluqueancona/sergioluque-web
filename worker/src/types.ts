@@ -15,7 +15,6 @@ export interface Obra {
   duration?: string;
   description?: string;
   audioUrl?: string;
-  audioDuration?: number;
   imageUrl?: string;
   premiereDate?: string;
   premiereVenue?: string;

@@ -12,6 +12,12 @@ CREATE TABLE IF NOT EXISTS settings (
 );
 
 -- Obras
+-- Note: `duration` is the composer's authored length string ("12'30"). A
+-- previous numeric `audio_duration` column was removed — the AudioPlayer
+-- reads the file's real length from `<audio>.duration` on metadata load,
+-- so storing it manually only added friction. Drop it on existing DBs:
+--   wrangler d1 execute sergioluque-db --remote \
+--     --command "ALTER TABLE obras DROP COLUMN audio_duration"
 CREATE TABLE IF NOT EXISTS obras (
   id               INTEGER PRIMARY KEY AUTOINCREMENT,
   title            TEXT NOT NULL DEFAULT '',
@@ -21,7 +27,6 @@ CREATE TABLE IF NOT EXISTS obras (
   duration         TEXT DEFAULT '',
   description      TEXT DEFAULT '',
   audio_url        TEXT DEFAULT '',
-  audio_duration   INTEGER DEFAULT 0,
   image_url        TEXT DEFAULT '',
   premiere_date    TEXT DEFAULT '',
   premiere_venue   TEXT DEFAULT '',

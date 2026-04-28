@@ -21,7 +21,6 @@ interface ObraRow {
   duration: string
   description: string
   audio_url: string
-  audio_duration: number
   image_url: string
   premiere_date: string
   premiere_venue: string
@@ -67,7 +66,6 @@ export default async function EditObraPage({
     duration: String(obra.duration ?? ''),
     description: obra.description ?? '',
     audio_url: obra.audio_url ?? '',
-    audio_duration: String(obra.audio_duration ?? ''),
     image_url: obra.image_url ?? '',
     premiere_date: obra.premiere_date ?? '',
     premiere_venue: obra.premiere_venue ?? '',

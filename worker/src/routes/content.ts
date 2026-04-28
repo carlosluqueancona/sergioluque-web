@@ -29,7 +29,6 @@ function mapObra(row: Record<string, unknown>, _locale: string): Obra {
     duration: (row['duration'] as string) || undefined,
     description: pick(row, 'description'),
     audioUrl: (row['audio_url'] as string) || undefined,
-    audioDuration: (row['audio_duration'] as number) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
     premiereDate: (row['premiere_date'] as string) || undefined,
     premiereVenue: (row['premiere_venue'] as string) || undefined,
