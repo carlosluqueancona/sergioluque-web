@@ -64,7 +64,6 @@ export function HeroLissajous() {
     let raf = 0
     let t = 0
     let strokeRGB: [number, number, number] = [212, 212, 212]
-    let bgRGB: [number, number, number] = [10, 10, 10]
 
     const hexToRGB = (hex: string): [number, number, number] | null => {
       const cleaned = hex.replace('#', '').trim()
@@ -94,19 +93,10 @@ export function HeroLissajous() {
       return hexToRGB(raw) ?? [212, 212, 212]
     }
 
-    const readBgRGB = (): [number, number, number] => {
-      const raw = getComputedStyle(document.documentElement)
-        .getPropertyValue('--bg')
-        .trim()
-      return hexToRGB(raw) ?? [10, 10, 10]
-    }
-
     strokeRGB = readStrokeRGB()
-    bgRGB = readBgRGB()
 
     const observer = new MutationObserver(() => {
       strokeRGB = readStrokeRGB()
-      bgRGB = readBgRGB()
     })
     observer.observe(document.documentElement, {
       attributes: true,
@@ -166,16 +156,19 @@ export function HeroLissajous() {
     const fadeAlpha = cfg.trails
 
     const frame = () => {
-      // Composite mode + glow are global, set once per frame.
-      ctx.globalCompositeOperation = 'source-over'
       if (fadeAlpha >= 0.999) {
+        // No trails: hard clear each frame.
+        ctx.globalCompositeOperation = 'source-over'
         ctx.clearRect(0, 0, W, H)
       } else {
-        // Fade towards the page background colour. bgRGB is refreshed by
-        // the same MutationObserver that watches --accent, so light/dark
-        // theme flips in mid-animation are tracked correctly.
-        const [br, bg, bbg] = bgRGB
-        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${fadeAlpha})`
+        // Trails: fade existing pixels towards transparent (NOT towards
+        // the bg colour) using destination-out. This way the fade behaves
+        // the same in light and dark themes, and works correctly with the
+        // additive blend modes (lighter / screen) which would otherwise
+        // wash the strokes out when fillRect painted the bg colour over
+        // them on a light background.
+        ctx.globalCompositeOperation = 'destination-out'
+        ctx.fillStyle = `rgba(0, 0, 0, ${fadeAlpha})`
         ctx.fillRect(0, 0, W, H)
       }
 
