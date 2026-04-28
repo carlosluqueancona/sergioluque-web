@@ -80,7 +80,7 @@ export function Hero() {
           the subtitle <p> below.
         */}
         <h1
-          className="hero-wordmark"
+          className="hero-wordmark hero-indent"
           style={{
             fontFamily: 'var(--font-space-mono)',
             fontSize: 'clamp(36px, 8vw, 120px)',
@@ -89,7 +89,6 @@ export function Hero() {
             margin: 0,
             lineHeight: 0.96,
             letterSpacing: '-0.035em',
-            paddingLeft: '40px',
           }}
         >
           {t.headingWords.map((word) => (
@@ -101,8 +100,8 @@ export function Hero() {
 
         {/* Subtitle */}
         <p
+          className="hero-indent"
           style={{
-            paddingLeft: '40px',
             marginTop: '40px',
             fontFamily: 'var(--font-ibm-plex-sans)',
             fontSize: '15px',

@@ -526,11 +526,18 @@ button[aria-label="Pause"]:hover {
   .hero-scroll-hint { animation: none !important; }
 }
 
+/* Inner hero indent (h1 + subtitle). Desktop: pulls text in 40px from
+   the section padding for a deliberate column. Mobile: the section
+   padding alone provides enough room — drop the indent so the wordmark
+   aligns with the SERGIO LUQUE header above it. */
+.hero-indent { padding-left: 40px; }
+
 /* Hero responsive tweaks: pull padding in on mobile */
 @media (max-width: 768px) {
   .hero-section {
     padding: 16px 20px 0 !important;
   }
+  .hero-indent { padding-left: 0; }
   .hero-meta-grid {
     grid-template-columns: 1fr !important;
     gap: 4px !important;
