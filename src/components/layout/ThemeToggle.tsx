@@ -72,9 +72,18 @@ export function ThemeToggle() {
 export const themeBootstrapScript = `
 (function() {
   try {
-    // Clear any leftover admin theme attribute so admin's CSS doesn't bleed
-    // into the public site after navigating away from /admin.
-    document.documentElement.removeAttribute('data-admin-theme');
+    var isAdmin = location.pathname.indexOf('/admin') === 0;
+    if (isAdmin) {
+      // Restore the admin theme on first paint so the toggle persists across
+      // hard navigations inside the admin (admin nav uses plain <a> hrefs).
+      var at = localStorage.getItem('sl-admin-theme');
+      if (at !== 'light' && at !== 'dark') at = 'dark';
+      document.documentElement.setAttribute('data-admin-theme', at);
+    } else {
+      // Clear any leftover admin theme so admin's CSS doesn't bleed into the
+      // public site after navigating away from /admin.
+      document.documentElement.removeAttribute('data-admin-theme');
+    }
     var stored = localStorage.getItem('${THEME_STORAGE_KEY}');
     var theme;
     if (stored === 'light' || stored === 'dark') {
