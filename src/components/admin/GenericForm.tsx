@@ -112,7 +112,7 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
       const { url } = (await res.json()) as { url: string }
       return url
     } catch {
-      setError('Error de conexión al subir archivo')
+      setError('Upload failed (connection)')
       return null
     }
   }
@@ -160,17 +160,17 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
         router.refresh()
       } else {
         const data = (await res.json()) as { error?: string }
-        setError(data.error ?? 'Error al guardar')
+        setError(data.error ?? 'Save failed')
       }
     } catch {
-      setError('Error de conexión')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
   }
 
   async function handleDelete() {
-    if (!id || !confirm(`¿Eliminar este registro?`)) return
+    if (!id || !confirm('Delete this record?')) return
     setLoading(true)
     try {
       const res = await fetch(`/api/admin/${schema.route}?id=${id}`, { method: 'DELETE' })
@@ -178,10 +178,10 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
         router.push(`/admin/${schema.route}`)
         router.refresh()
       } else {
-        setError('Error al eliminar')
+        setError('Delete failed')
       }
     } catch {
-      setError('Error de conexión')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -231,7 +231,7 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
             opacity: loading ? 0.5 : 1,
           }}
         >
-          {loading ? 'GUARDANDO…' : id ? 'GUARDAR CAMBIOS' : 'CREAR'}
+          {loading ? 'SAVING…' : id ? 'SAVE CHANGES' : 'CREATE'}
         </button>
         {id && (
           <button
@@ -249,7 +249,7 @@ export function GenericForm({ schema, initialData }: GenericFormProps) {
               cursor: 'pointer',
             }}
           >
-            ELIMINAR
+            DELETE
           </button>
         )}
       </div>
@@ -395,7 +395,7 @@ function FileField({
   async function handleRemove() {
     if (!value) return
     if (/\/media\//.test(value)) {
-      if (!confirm('¿Eliminar el archivo del servidor? Esta acción no se puede deshacer.')) return
+      if (!confirm('Delete this file from the server? This cannot be undone.')) return
       await deleteFile(value)
     }
     onChange('')
@@ -437,13 +437,13 @@ function FileField({
         />
         {value && (
           <button type="button" onClick={handleRemove} style={smallButton}>
-            Quitar
+            Remove
           </button>
         )}
       </div>
       {uploading && (
         <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-          Subiendo…
+          Uploading…
         </p>
       )}
       <input type="hidden" value={value} readOnly />
@@ -486,7 +486,7 @@ function ImageListField({
   async function remove(idx: number) {
     const url = value[idx]
     if (url && /\/media\//.test(url)) {
-      if (!confirm('¿Eliminar la imagen del servidor?')) return
+      if (!confirm('Delete this image from the server?')) return
       await deleteFile(url)
     }
     onChange(value.filter((_, i) => i !== idx))
@@ -578,7 +578,7 @@ function ImageListField({
       />
       {uploading && (
         <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-          Subiendo imágenes…
+          Uploading images…
         </p>
       )}
     </div>
@@ -623,7 +623,7 @@ function LinkListField({
           }}
         >
           <input
-            placeholder="Etiqueta"
+            placeholder="Label"
             value={item.label}
             onChange={(e) => update(i, 'label', e.target.value)}
             style={inputStyle}
@@ -649,7 +649,7 @@ function LinkListField({
         </div>
       ))}
       <button type="button" onClick={add} style={smallButton}>
-        + Agregar enlace
+        + Add link
       </button>
     </div>
   )

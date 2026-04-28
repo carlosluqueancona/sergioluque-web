@@ -65,7 +65,7 @@ export default async function EntityListPage({
           </span>
         </h1>
         <Link
-          href={`/admin/${schema.route}/nueva`}
+          href={`/admin/${schema.route}/new`}
           style={{
             background: 'var(--text-primary)',
             color: 'var(--bg)',
@@ -76,13 +76,13 @@ export default async function EntityListPage({
             textDecoration: 'none',
           }}
         >
-          + NUEVA {schema.labelSingular.toUpperCase()}
+          + NEW {schema.labelSingular.toUpperCase()}
         </Link>
       </div>
 
       {rows.length === 0 ? (
         <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
-          Sin registros. Crea el primero.
+          No records yet. Create the first one.
         </p>
       ) : (
         <table
@@ -153,7 +153,7 @@ export default async function EntityListPage({
                     href={`/admin/${schema.route}/${row.id}`}
                     style={{ color: 'var(--accent)', fontSize: '11px' }}
                   >
-                    Editar →
+                    Edit →
                   </Link>
                 </td>
               </tr>

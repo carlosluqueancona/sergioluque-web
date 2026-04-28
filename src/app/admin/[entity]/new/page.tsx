@@ -1,21 +1,30 @@
 export const runtime = 'edge'
 
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ObraForm } from '../ObraForm'
+import { getSchema } from '@/lib/admin/schemas'
+import { GenericForm } from '@/components/admin/GenericForm'
 
 const COOKIE_NAME = 'sl_admin_jwt'
 
-export default async function NuevaObraPage() {
+export default async function NewEntityPage({
+  params,
+}: {
+  params: Promise<{ entity: string }>
+}) {
+  const { entity } = await params
+  const schema = getSchema(entity)
+  if (!schema) notFound()
+
   const cookieStore = await cookies()
   const token = cookieStore.get(COOKIE_NAME)?.value
   if (!token) redirect('/admin/login')
 
   return (
-    <main style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
+    <main style={{ maxWidth: 800, margin: '0 auto' }}>
       <Link
-        href="/admin/obras"
+        href={`/admin/${schema.route}`}
         style={{
           fontSize: '11px',
           color: 'var(--text-muted)',
@@ -24,7 +33,7 @@ export default async function NuevaObraPage() {
           textTransform: 'uppercase',
         }}
       >
-        ← Volver a obras
+        ← Back to {schema.label}
       </Link>
       <h1
         style={{
@@ -35,9 +44,9 @@ export default async function NuevaObraPage() {
           letterSpacing: '0.05em',
         }}
       >
-        Nueva obra
+        New {schema.labelSingular.toLowerCase()}
       </h1>
-      <ObraForm />
+      <GenericForm schema={schema} />
     </main>
   )
 }

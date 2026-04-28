@@ -3,7 +3,7 @@ import { ThemeToggle, themeBootstrapScript } from '@/components/admin/ThemeToggl
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="en">
       <head>
         {/* Set theme before paint to avoid flash of wrong colors */}
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
@@ -40,11 +40,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           >
             SL / ADMIN
           </a>
-          <a href="/admin/obras" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Obras</a>
+          <a href="/admin/obras" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Works</a>
           <a href="/admin/posts" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Blog</a>
-          <a href="/admin/proyectos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Proyectos</a>
-          <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Conciertos</a>
-          <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Publicaciones</a>
+          <a href="/admin/proyectos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Projects</a>
+          <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Concerts</a>
+          <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Publications</a>
           <a href="/admin/settings" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Settings</a>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <ThemeToggle />

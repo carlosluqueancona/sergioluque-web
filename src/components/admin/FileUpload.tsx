@@ -20,9 +20,9 @@ const ACCEPT: Record<FileKind, string> = {
 }
 
 const HINT: Record<FileKind, string> = {
-  audio: 'MP3 · M4A · MP4 · AAC',
-  image: 'JPG · PNG · WebP',
-  pdf: 'PDF',
+  audio: 'MP3 · M4A · MP4 · AAC — drag or click',
+  image: 'JPG · PNG · WebP — drag or click',
+  pdf: 'PDF — drag or click',
 }
 
 const ICON: Record<FileKind, string> = {
@@ -88,7 +88,7 @@ export function FileUpload({
   async function handleRemove() {
     if (!value) return
     if (/\/media\//.test(value)) {
-      if (!confirm('¿Eliminar el archivo del servidor? Esta acción no se puede deshacer.')) return
+      if (!confirm('Delete this file from the server? This cannot be undone.')) return
       await deleteFile(value)
     }
     onChange('')
@@ -191,7 +191,7 @@ export function FileUpload({
                 letterSpacing: '0.05em',
               }}
             >
-              REEMPLAZAR
+              REPLACE
             </button>
             <button
               type="button"
@@ -207,7 +207,7 @@ export function FileUpload({
                 letterSpacing: '0.05em',
               }}
             >
-              QUITAR
+              REMOVE
             </button>
           </div>
         </div>
@@ -266,7 +266,7 @@ export function FileUpload({
             marginBottom: '4px',
           }}
         >
-          {uploading ? `Subiendo… ${progress}%` : 'SELECCIONAR ARCHIVO'}
+          {uploading ? `Uploading… ${progress}%` : 'SELECT FILE'}
         </div>
         <div
           style={{

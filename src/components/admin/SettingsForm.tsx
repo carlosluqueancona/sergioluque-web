@@ -110,7 +110,7 @@ export function SettingsForm({ initial }: SettingsFormProps) {
       const { url } = (await res.json()) as { url: string }
       return url
     } catch {
-      setError('Error de conexión al subir archivo')
+      setError('Upload failed (connection)')
       return null
     }
   }
@@ -146,7 +146,7 @@ export function SettingsForm({ initial }: SettingsFormProps) {
         setError(data.error ?? 'Error al guardar')
       }
     } catch {
-      setError('Error de conexión')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -214,7 +214,7 @@ export function SettingsForm({ initial }: SettingsFormProps) {
           opacity: loading ? 0.5 : 1,
         }}
       >
-        {loading ? 'GUARDANDO…' : 'GUARDAR CONFIGURACIÓN'}
+        {loading ? 'SAVING…' : 'SAVE SETTINGS'}
       </button>
     </form>
   )

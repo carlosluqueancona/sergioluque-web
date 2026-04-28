@@ -14,23 +14,12 @@ const COOKIE_NAME = 'sl_admin_jwt'
 
 interface ObraRow {
   id: number
-  // Flat columns (post monolingual migration). Legacy *_es / *_en still
-  // come back from the Worker until the migration runs; ObraForm tolerates
-  // both shapes.
-  title?: string
-  slug?: string
-  instrumentation?: string
-  description?: string
-  title_es?: string
-  title_en?: string
-  slug_es?: string
-  slug_en?: string
-  instrumentation_es?: string
-  instrumentation_en?: string
-  description_es?: string
-  description_en?: string
+  title: string
+  slug: string
   year: number
-  duration: number
+  instrumentation: string
+  duration: string
+  description: string
   audio_url: string
   audio_duration: number
   image_url: string
@@ -71,13 +60,12 @@ export default async function EditObraPage({
 
   const initialData = {
     id: obra.id,
-    title: obra.title ?? obra.title_en ?? obra.title_es ?? '',
-    slug: obra.slug ?? obra.slug_en ?? obra.slug_es ?? '',
+    title: obra.title ?? '',
+    slug: obra.slug ?? '',
     year: String(obra.year ?? ''),
-    instrumentation:
-      obra.instrumentation ?? obra.instrumentation_en ?? obra.instrumentation_es ?? '',
+    instrumentation: obra.instrumentation ?? '',
     duration: String(obra.duration ?? ''),
-    description: obra.description ?? obra.description_en ?? obra.description_es ?? '',
+    description: obra.description ?? '',
     audio_url: obra.audio_url ?? '',
     audio_duration: String(obra.audio_duration ?? ''),
     image_url: obra.image_url ?? '',
@@ -102,7 +90,7 @@ export default async function EditObraPage({
           textTransform: 'uppercase',
         }}
       >
-        ← Volver a obras
+        ← Back to works
       </Link>
       <h1
         style={{
@@ -113,7 +101,7 @@ export default async function EditObraPage({
           letterSpacing: '0.05em',
         }}
       >
-        Editar obra
+        Edit work
       </h1>
       <ObraForm initialData={initialData} />
     </main>

@@ -26,10 +26,10 @@ export default function LoginPage() {
         router.push('/admin/obras')
       } else {
         const data = await res.json() as { error?: string }
-        setError(data.error ?? 'Error al iniciar sesión')
+        setError(data.error ?? 'Login failed')
       }
     } catch {
-      setError('Error de conexión')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -136,7 +136,7 @@ export default function LoginPage() {
             textTransform: 'uppercase',
           }}
         >
-          {loading ? 'ENTRANDO...' : 'ENTRAR'}
+          {loading ? 'SIGNING IN…' : 'SIGN IN'}
         </button>
       </form>
     </div>

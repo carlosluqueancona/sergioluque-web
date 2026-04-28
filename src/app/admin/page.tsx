@@ -28,8 +28,8 @@ export default async function AdminDashboardPage() {
   const sections = [
     {
       route: 'obras',
-      label: 'Obras',
-      labelSingular: 'Obra',
+      label: 'Works',
+      labelSingular: 'Work',
       emoji: '♫',
       special: true,
     },
@@ -42,8 +42,8 @@ export default async function AdminDashboardPage() {
     })),
     {
       route: 'settings',
-      label: 'Configuración',
-      labelSingular: 'Configuración',
+      label: 'Settings',
+      labelSingular: 'Settings',
       emoji: '⚙',
       special: true,
     },
@@ -60,7 +60,7 @@ export default async function AdminDashboardPage() {
           letterSpacing: '0.05em',
         }}
       >
-        Panel de administración
+        Admin dashboard
       </h1>
       <p
         style={{
@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
           textTransform: 'uppercase',
         }}
       >
-        Gestiona el contenido del sitio
+        Manage site content
       </p>
 
       <div
@@ -112,7 +112,7 @@ export default async function AdminDashboardPage() {
                 textTransform: 'uppercase',
               }}
             >
-              Ver listado →
+              View list →
             </span>
           </Link>
         ))}

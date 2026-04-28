@@ -40,7 +40,7 @@ export default async function SettingsPage() {
           textTransform: 'uppercase',
         }}
       >
-        ← Volver al panel
+        ← Back to dashboard
       </Link>
       <h1
         style={{
@@ -51,7 +51,7 @@ export default async function SettingsPage() {
           letterSpacing: '0.05em',
         }}
       >
-        Configuración del sitio
+        Site settings
       </h1>
       <SettingsForm initial={initial} />
     </main>

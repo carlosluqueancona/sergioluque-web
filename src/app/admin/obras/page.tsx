@@ -13,9 +13,8 @@ const COOKIE_NAME = 'sl_admin_jwt'
 
 interface ObraRow {
   id: number
-  title_es: string
-  title_en: string
-  slug_es: string
+  title: string
+  slug: string
   year: number
   is_featured: number
   sort_order: number
@@ -26,7 +25,6 @@ export default async function AdminObrasPage() {
   const token = cookieStore.get(COOKIE_NAME)?.value
   if (!token) redirect('/admin/login')
 
-  // Fetch obras from Worker admin API
   let obras: ObraRow[] = []
   try {
     const res = await fetch(`${WORKER_BASE}/admin/obras`, {
@@ -44,10 +42,10 @@ export default async function AdminObrasPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '32px' }}>
         <h1 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '0.1em', margin: 0, textTransform: 'uppercase', color: 'var(--text-primary)' }}>
-          Obras ({obras.length})
+          Works ({obras.length})
         </h1>
         <Link
-          href="/admin/obras/nueva"
+          href="/admin/obras/new"
           style={{
             fontFamily: 'monospace',
             fontSize: '11px',
@@ -59,13 +57,13 @@ export default async function AdminObrasPage() {
             textTransform: 'uppercase',
           }}
         >
-          + Nueva Obra
+          + New work
         </Link>
       </div>
 
       {obras.length === 0 && (
         <p style={{ color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '13px' }}>
-          No hay obras todavía. Crea la primera con el botón de arriba.
+          No works yet. Create the first one with the button above.
         </p>
       )}
 
@@ -73,16 +71,16 @@ export default async function AdminObrasPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Título ES</th>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Año</th>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Destacada</th>
-              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Acciones</th>
+              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Title</th>
+              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Year</th>
+              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Featured</th>
+              <th style={{ textAlign: 'left', padding: '8px 0', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 400 }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {obras.map((obra) => (
               <tr key={obra.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '12px 0', color: 'var(--text-primary)' }}>{obra.title_es}</td>
+                <td style={{ padding: '12px 0', color: 'var(--text-primary)' }}>{obra.title}</td>
                 <td style={{ padding: '12px 0', color: 'var(--text-muted)' }}>{obra.year}</td>
                 <td style={{ padding: '12px 0', color: 'var(--text-muted)' }}>{obra.is_featured ? '★' : '—'}</td>
                 <td style={{ padding: '12px 0' }}>
@@ -90,7 +88,7 @@ export default async function AdminObrasPage() {
                     href={`/admin/obras/${obra.id}`}
                     style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--accent)', textDecoration: 'none', marginRight: '16px' }}
                   >
-                    Editar
+                    Edit
                   </Link>
                 </td>
               </tr>

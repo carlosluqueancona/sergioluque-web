@@ -66,7 +66,7 @@ export default async function EditEntityPage({
           textTransform: 'uppercase',
         }}
       >
-        ← Volver a {schema.label}
+        ← Back to {schema.label}
       </Link>
       <h1
         style={{
@@ -77,7 +77,7 @@ export default async function EditEntityPage({
           letterSpacing: '0.05em',
         }}
       >
-        Editar {schema.labelSingular.toLowerCase()}{' '}
+        Edit {schema.labelSingular.toLowerCase()}{' '}
         <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: 400 }}>
           #{id}
         </span>

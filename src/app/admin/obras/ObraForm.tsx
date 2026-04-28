@@ -25,17 +25,7 @@ interface ObraData {
 }
 
 interface ObraFormProps {
-  initialData?: Partial<ObraData> & {
-    // Legacy bilingual fields tolerated when loading existing rows pre-migration.
-    title_es?: string
-    title_en?: string
-    slug_es?: string
-    slug_en?: string
-    instrumentation_es?: string
-    instrumentation_en?: string
-    description_es?: string
-    description_en?: string
-  }
+  initialData?: Partial<ObraData>
 }
 
 const inputStyle: React.CSSProperties = {
@@ -61,29 +51,15 @@ const labelStyle: React.CSSProperties = {
 
 const fieldStyle: React.CSSProperties = { marginBottom: '16px' }
 
-const pickFlat = (
-  flat: string | undefined,
-  en: string | undefined,
-  es: string | undefined
-): string => flat ?? en ?? es ?? ''
-
 export function ObraForm({ initialData }: ObraFormProps) {
   const router = useRouter()
   const [form, setForm] = useState<ObraData>({
-    title: pickFlat(initialData?.title, initialData?.title_en, initialData?.title_es),
-    slug: pickFlat(initialData?.slug, initialData?.slug_en, initialData?.slug_es),
+    title: initialData?.title ?? '',
+    slug: initialData?.slug ?? '',
     year: initialData?.year ?? '',
-    instrumentation: pickFlat(
-      initialData?.instrumentation,
-      initialData?.instrumentation_en,
-      initialData?.instrumentation_es
-    ),
+    instrumentation: initialData?.instrumentation ?? '',
     duration: initialData?.duration ?? '',
-    description: pickFlat(
-      initialData?.description,
-      initialData?.description_en,
-      initialData?.description_es
-    ),
+    description: initialData?.description ?? '',
     audio_url: initialData?.audio_url ?? '',
     audio_duration: initialData?.audio_duration ?? '',
     image_url: initialData?.image_url ?? '',
