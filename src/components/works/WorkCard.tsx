@@ -95,9 +95,11 @@ export function WorkCard({ obra }: WorkCardProps) {
 
         {showAudio ? (
           <div style={{ position: 'relative', zIndex: 2 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-              {audioFormat && <AudioFormatTag format={audioFormat} />}
-            </div>
+            {audioFormat && (
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                <AudioFormatTag format={audioFormat} />
+              </div>
+            )}
             <AudioPlayerMini audioUrl={obra.audioUrl as string} title={title} />
           </div>
         ) : (
