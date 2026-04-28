@@ -243,6 +243,20 @@ export function HeroLissajous() {
         ctx.stroke()
         ctx.restore()
       }
+      // Counter the cumulative brightening that 'lighter' / 'screen'
+      // produce in heavily-visited regions: a 'multiply' pass with the
+      // page bg colour pulls bright pixels back towards bg without
+      // touching unvisited dark pixels (dark · dark ≈ dark). Only runs
+      // when the active blend mode is additive AND we're not already
+      // doing a hard clear (fadeAlpha=1).
+      const additiveActive = cfg.blend === 'lighter' || cfg.blend === 'screen'
+      if (additiveActive && fadeAlpha < 0.999) {
+        const [br, bg, bbg] = bgRGB
+        ctx.globalCompositeOperation = 'multiply'
+        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, 0.05)`
+        ctx.fillRect(0, 0, W, H)
+      }
+
       // Reset state outside the per-figure loop so subsequent draws on
       // this canvas (none today, but cheap insurance) start clean.
       ctx.shadowBlur = 0
