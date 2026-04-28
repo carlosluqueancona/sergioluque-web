@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, type DragEvent } from 'react'
 
 type Kind = 'image' | 'audio' | 'pdf'
 
@@ -16,6 +16,24 @@ const KIND_LABEL: Record<Kind, string> = {
   image: 'Images',
   audio: 'Audio',
   pdf: 'PDFs',
+}
+
+const KIND_ACCEPT: Record<Kind, string> = {
+  image: 'image/*',
+  audio: 'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/m4a,audio/aac,.mp3,.m4a,.mp4,.aac',
+  pdf: 'application/pdf',
+}
+
+const KIND_HINT: Record<Kind, string> = {
+  image: 'JPG · PNG · WebP — drag, click, or browse',
+  audio: 'MP3 · M4A · MP4 · AAC — drag, click, or browse',
+  pdf: 'PDF — drag, click, or browse',
+}
+
+const KIND_ICON: Record<Kind, string> = {
+  image: '▣',
+  audio: '♪',
+  pdf: '▤',
 }
 
 function fmtSize(bytes: number): string {
@@ -47,6 +65,11 @@ export function MediaManager() {
   const [error, setError] = useState('')
   const [filter, setFilter] = useState('')
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadError, setUploadError] = useState('')
+  const [dragOver, setDragOver] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   async function load(k: Kind) {
     setLoading(true)
@@ -66,6 +89,49 @@ export function MediaManager() {
   useEffect(() => {
     void load(kind)
   }, [kind])
+
+  async function handleUpload(file: File) {
+    setUploadError('')
+    setUploading(true)
+    setUploadProgress(20)
+    const tick = setInterval(() => {
+      setUploadProgress((p) => (p < 85 ? p + 5 : p))
+    }, 150)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
+      clearInterval(tick)
+      setUploadProgress(100)
+      if (!res.ok) {
+        const data = (await res.json()) as { error?: string }
+        setUploadError(data.error ?? 'Upload failed')
+      } else {
+        await load(kind)
+      }
+    } catch {
+      clearInterval(tick)
+      setUploadError('Upload failed (connection)')
+    } finally {
+      setTimeout(() => {
+        setUploading(false)
+        setUploadProgress(0)
+      }, 300)
+    }
+  }
+
+  function onPickFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (file) void handleUpload(file)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  function onDrop(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    setDragOver(false)
+    const file = e.dataTransfer.files?.[0]
+    if (file) void handleUpload(file)
+  }
 
   async function purge(item: MediaItem) {
     if (!confirm(`Delete ${item.key.split('/').pop()} from R2? This cannot be undone, and any entry still pointing to it will break.`))
@@ -100,6 +166,79 @@ export function MediaManager() {
           </button>
         ))}
       </div>
+
+      <div
+        onDragOver={(e) => {
+          e.preventDefault()
+          setDragOver(true)
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={onDrop}
+        onClick={() => !uploading && fileInputRef.current?.click()}
+        style={{
+          border: `1px dashed ${dragOver ? 'var(--accent)' : 'var(--border)'}`,
+          background: dragOver ? 'var(--surface-hover)' : 'var(--surface)',
+          padding: '20px',
+          textAlign: 'center',
+          cursor: uploading ? 'wait' : 'pointer',
+          transition: 'background 120ms ease, border-color 120ms ease',
+          position: 'relative',
+          overflow: 'hidden',
+          marginBottom: '16px',
+        }}
+      >
+        <div style={{ fontSize: '20px', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+          {KIND_ICON[kind]}
+        </div>
+        <div
+          style={{
+            fontFamily: 'monospace',
+            fontSize: '12px',
+            color: 'var(--text-primary)',
+            letterSpacing: '0.05em',
+            marginBottom: '4px',
+          }}
+        >
+          {uploading
+            ? `Uploading… ${uploadProgress}%`
+            : `Upload ${KIND_LABEL[kind].toLowerCase()}`}
+        </div>
+        <div
+          style={{
+            fontFamily: 'monospace',
+            fontSize: '10px',
+            color: 'var(--text-muted)',
+            letterSpacing: '0.1em',
+          }}
+        >
+          {KIND_HINT[kind]}
+        </div>
+        {uploading && (
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              bottom: 0,
+              height: '2px',
+              width: `${uploadProgress}%`,
+              background: 'var(--accent)',
+              transition: 'width 150ms ease',
+            }}
+          />
+        )}
+      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={KIND_ACCEPT[kind]}
+        onChange={onPickFile}
+        style={{ display: 'none' }}
+      />
+      {uploadError && (
+        <p style={{ color: 'var(--error)', fontSize: '11px', marginBottom: '12px', fontFamily: 'monospace' }}>
+          {uploadError}
+        </p>
+      )}
 
       <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px' }}>
         <input

@@ -47,7 +47,7 @@ export default async function MediaPage() {
           marginBottom: '32px',
         }}
       >
-        Files stored in R2 · UNLINK in form fields keeps the file · DELETE here purges it permanently
+        Upload, browse, and manage R2 files · UNLINK in form fields keeps the file · DELETE here purges it permanently
       </p>
       <MediaManager />
     </main>
