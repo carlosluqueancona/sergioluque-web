@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { AudioPlayerMini } from '@/components/audio'
+import { AudioPlayerMini, AudioFormatTag } from '@/components/audio'
 import { S } from '@/lib/strings'
+import { detectAudioFormat } from '@/lib/audio-format'
 import type { Obra } from '@/types'
 
 const isHttpUrl = (s: string | undefined): s is string =>
@@ -17,6 +18,7 @@ export function WorkCard({ obra }: WorkCardProps) {
   const slug = obra.slug
   const showImage = isHttpUrl(obra.imageUrl)
   const showAudio = isHttpUrl(obra.audioUrl)
+  const audioFormat = showAudio ? detectAudioFormat(obra.audioUrl) : null
   const href = `/works/${slug}`
 
   return (
@@ -93,11 +95,10 @@ export function WorkCard({ obra }: WorkCardProps) {
 
         {showAudio ? (
           <div style={{ position: 'relative', zIndex: 2 }}>
-            <AudioPlayerMini
-              audioUrl={obra.audioUrl as string}
-              title={title}
-              duration={obra.audioDuration}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+              {audioFormat && <AudioFormatTag format={audioFormat} />}
+            </div>
+            <AudioPlayerMini audioUrl={obra.audioUrl as string} title={title} />
           </div>
         ) : (
           <p className="t-caption">{S.works.noAudio}</p>

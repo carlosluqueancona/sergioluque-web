@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getObraBySlug } from '@/lib/db/queries'
-import { AudioPlayer } from '@/components/audio'
+import { AudioPlayer, AudioFormatTag } from '@/components/audio'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
+import { detectAudioFormat } from '@/lib/audio-format'
 import type { Metadata } from 'next'
 
 const isHttpUrl = (s: string | undefined): s is string =>
@@ -62,11 +63,15 @@ export default async function ObraPage({
 
           {isHttpUrl(obra.audioUrl) && (
             <div style={{ marginBottom: '48px' }}>
-              <AudioPlayer
-                audioUrl={obra.audioUrl}
-                title={title}
-                duration={obra.audioDuration}
-              />
+              {(() => {
+                const fmt = detectAudioFormat(obra.audioUrl)
+                return fmt ? (
+                  <div style={{ marginBottom: '10px' }}>
+                    <AudioFormatTag format={fmt} />
+                  </div>
+                ) : null
+              })()}
+              <AudioPlayer audioUrl={obra.audioUrl} title={title} />
             </div>
           )}
 
