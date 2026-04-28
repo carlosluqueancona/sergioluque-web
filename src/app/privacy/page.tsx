@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 const LAST_UPDATED = '28 April 2026'
-const CONTROLLER_EMAIL = 'contact@sergioluque.com'
+const CONTROLLER_EMAIL = 'mail@sergioluque.com'
 
 const h2: React.CSSProperties = {
   fontFamily: 'var(--font-space-mono)',

@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { CookieBanner } from '@/components/layout/CookieBanner'
 import { GoogleAnalytics } from '@/components/layout/GoogleAnalytics'
+import { PublicChrome } from '@/components/layout/PublicChrome'
 import { ExclusivePlayback } from '@/components/audio/ExclusivePlayback'
 import { getSettings } from '@/lib/db/queries'
 
@@ -82,10 +83,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className={`${spaceMono.variable} ${ibmPlexSans.variable} antialiased`}>
         <ExclusivePlayback />
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <CookieBanner />
+        <PublicChrome
+          header={<Header />}
+          footer={<Footer />}
+          cookieBanner={<CookieBanner />}
+        >
+          {children}
+        </PublicChrome>
         <GoogleAnalytics />
       </body>
     </html>
