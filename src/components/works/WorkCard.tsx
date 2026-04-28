@@ -121,7 +121,7 @@ export function WorkCard({ obra }: WorkCardProps) {
             justifyContent: 'space-between',
             alignItems: 'baseline',
             gap: '16px',
-            marginBottom: '4px',
+            marginBottom: '8px',
           }}
         >
           <h3 className="t-card-title">{title}</h3>
@@ -151,16 +151,16 @@ export function WorkCard({ obra }: WorkCardProps) {
 
         {/* Audio player */}
         {showAudio ? (
-          <div style={{ position: 'relative', zIndex: 2, marginBottom: hasMeta ? '16px' : 0 }}>
+          <div style={{ position: 'relative', zIndex: 2, marginBottom: hasMeta ? '24px' : 0 }}>
             {audioFormat && (
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
                 <AudioFormatTag format={audioFormat} />
               </div>
             )}
             <AudioPlayerMini audioUrl={obra.audioUrl as string} title={title} />
           </div>
         ) : (
-          <p className="t-caption" style={{ marginBottom: hasMeta ? '16px' : 0 }}>
+          <p className="t-caption" style={{ marginBottom: hasMeta ? '24px' : 0 }}>
             {S.works.noAudio}
           </p>
         )}
@@ -175,7 +175,7 @@ export function WorkCard({ obra }: WorkCardProps) {
               <p
                 className="t-meta"
                 style={{
-                  margin: '8px 0 0',
+                  margin: '12px 0 0',
                   color: 'var(--text-secondary)',
                   letterSpacing: 0,
                   fontFamily: 'var(--font-ibm-plex-sans), sans-serif',
