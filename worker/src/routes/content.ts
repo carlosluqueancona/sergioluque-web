@@ -142,17 +142,12 @@ content.get('/obras', async (c) => {
 });
 
 content.get('/obras/:slug', async (c) => {
-  const locale = c.req.query('locale') ?? 'es';
+  const locale = c.req.query('locale') ?? 'en';
   const { slug } = c.req.param();
   const cors = getCors(c);
 
   try {
-    // Try locale slug first, then fall back to the other locale
-    const row = await c.env.DB.prepare(
-      `SELECT * FROM obras WHERE slug_${locale === 'en' ? 'en' : 'es'} = ?1
-       OR slug_${locale === 'en' ? 'es' : 'en'} = ?1
-       LIMIT 1`
-    )
+    const row = await c.env.DB.prepare('SELECT * FROM obras WHERE slug = ?1 LIMIT 1')
       .bind(slug)
       .first<Record<string, unknown>>();
 
@@ -182,16 +177,13 @@ content.get('/posts', async (c) => {
 });
 
 content.get('/posts/:slug', async (c) => {
-  const locale = c.req.query('locale') ?? 'es';
+  const locale = c.req.query('locale') ?? 'en';
   const { slug } = c.req.param();
   const cors = getCors(c);
 
   try {
     const row = await c.env.DB.prepare(
-      `SELECT * FROM posts WHERE status = 'published' AND (
-         slug_${locale === 'en' ? 'en' : 'es'} = ?1
-         OR slug_${locale === 'en' ? 'es' : 'en'} = ?1
-       ) LIMIT 1`
+      "SELECT * FROM posts WHERE status = 'published' AND slug = ?1 LIMIT 1"
     )
       .bind(slug)
       .first<Record<string, unknown>>();
@@ -222,16 +214,12 @@ content.get('/proyectos', async (c) => {
 });
 
 content.get('/proyectos/:slug', async (c) => {
-  const locale = c.req.query('locale') ?? 'es';
+  const locale = c.req.query('locale') ?? 'en';
   const { slug } = c.req.param();
   const cors = getCors(c);
 
   try {
-    const row = await c.env.DB.prepare(
-      `SELECT * FROM proyectos WHERE slug_${locale === 'en' ? 'en' : 'es'} = ?1
-       OR slug_${locale === 'en' ? 'es' : 'en'} = ?1
-       LIMIT 1`
-    )
+    const row = await c.env.DB.prepare('SELECT * FROM proyectos WHERE slug = ?1 LIMIT 1')
       .bind(slug)
       .first<Record<string, unknown>>();
 
