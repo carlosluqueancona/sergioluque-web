@@ -372,7 +372,7 @@ html[data-cta="orange"][data-theme="light"] {
   transform-origin: left center;
   transition: transform 350ms cubic-bezier(0.65, 0, 0.35, 1);
 }
-.nav-link:hover { color: var(--text-primary); }
+.nav-link:hover { color: var(--accent); }
 .nav-link:hover::after { transform: scaleX(1); }
 
 /* Language switcher and small icon toggles: subtle press feedback */
@@ -412,7 +412,9 @@ html[data-cta="orange"][data-theme="light"] {
   50%      { transform: translateY(3px); opacity: 1; }
 }
 
-/* "Ghost" button — fills on hover (CV download, send, etc.) */
+/* "Ghost" button — fills on hover (CV download, send, etc.).
+   On hover the fill becomes --accent so the orange-CTA toggle shows up
+   on buttons too. Stays neutral border/text in the resting state. */
 .btn-ghost {
   background: transparent;
   border: 1px solid var(--border);
@@ -431,9 +433,9 @@ html[data-cta="orange"][data-theme="light"] {
               transform 200ms ease-out;
 }
 .btn-ghost:hover {
-  background: var(--text-primary);
+  background: var(--accent);
   color: var(--bg);
-  border-color: var(--text-primary);
+  border-color: var(--accent);
 }
 .btn-ghost:active { transform: translateY(1px); }
 
@@ -448,7 +450,7 @@ html[data-cta="orange"][data-theme="light"] {
   transition: color 200ms ease-out, transform 250ms cubic-bezier(0.2, 0.6, 0.2, 1);
 }
 .back-link:hover {
-  color: var(--text-primary);
+  color: var(--accent);
   transform: translateX(-3px);
 }
 

@@ -38,7 +38,7 @@ export default async function HomePage() {
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',
-                color: 'var(--text-muted)',
+                color: 'var(--accent)',
                 textDecoration: 'none',
                 letterSpacing: '0.1em',
               }}
@@ -74,7 +74,7 @@ export default async function HomePage() {
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',
-                color: 'var(--text-muted)',
+                color: 'var(--accent)',
                 textDecoration: 'none',
                 letterSpacing: '0.1em',
               }}
