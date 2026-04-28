@@ -6,6 +6,7 @@ import './globals.css'
 import { themeBootstrapScript } from '@/components/layout/ThemeToggle'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { ExclusivePlayback } from '@/components/audio/ExclusivePlayback'
 
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>
       <body className={`${spaceMono.variable} ${ibmPlexSans.variable} antialiased`}>
+        <ExclusivePlayback />
         <Header />
         <main>{children}</main>
         <Footer />

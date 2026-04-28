@@ -60,6 +60,12 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
     setCurrentTime(0)
   }, [])
 
+  // Keep React state in sync if the audio is paused externally — e.g. when
+  // ExclusivePlayback pauses this player because another player just started.
+  const handlePause = useCallback(() => {
+    setIsPlaying(false)
+  }, [])
+
   const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current
     if (!audio || audioDuration === 0) return
@@ -89,6 +95,7 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
+        onPause={handlePause}
       />
 
       <WaveformBars

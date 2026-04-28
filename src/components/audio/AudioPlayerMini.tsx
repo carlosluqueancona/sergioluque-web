@@ -55,6 +55,12 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
     setCurrentTime(0)
   }, [])
 
+  // Keep React state in sync if the audio is paused externally — e.g. when
+  // ExclusivePlayback pauses this player because another player just started.
+  const handlePause = useCallback(() => {
+    setIsPlaying(false)
+  }, [])
+
   const progress = audioDuration > 0 ? currentTime / audioDuration : 0
 
   const handleSeek = useCallback(
@@ -79,6 +85,7 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
+        onPause={handlePause}
       />
 
       <button
