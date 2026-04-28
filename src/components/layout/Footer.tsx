@@ -43,7 +43,22 @@ export function Footer() {
           >
             © {new Date().getFullYear()} Sergio Luque
           </p>
-          <CookiePreferencesLink />
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <Link
+              href="/privacy"
+              style={{
+                fontFamily: 'var(--font-space-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.1em',
+                color: 'var(--text-muted)',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+              }}
+            >
+              Privacy
+            </Link>
+            <CookiePreferencesLink />
+          </div>
         </div>
 
         <nav aria-label="Footer navigation">

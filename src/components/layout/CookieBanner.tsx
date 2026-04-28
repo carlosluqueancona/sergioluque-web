@@ -12,7 +12,8 @@ type Mode = 'hidden' | 'banner' | 'preferences'
 const COPY = {
   title: 'Cookies & privacy',
   body:
-    'This site uses cookies and local storage to remember your preferences (theme) and, if you allow it, to measure traffic. You can change your choice at any time from the footer.',
+    'This site uses cookies and local storage to remember your preferences (theme) and, if you allow it, to measure traffic via Google Analytics. You can change your choice at any time from the footer.',
+  privacyLink: 'Read the full privacy policy',
   acceptAll: 'Accept all',
   rejectOptional: 'Reject optional',
   customize: 'Customize',
@@ -26,7 +27,7 @@ const COPY = {
     'Theme preference, admin authentication when signed in. The site cannot function without these.',
   analyticsLabel: 'Analytics',
   analyticsDesc:
-    'Anonymous usage data to understand which works and pages get visited. No personal profile is built.',
+    'Anonymous usage data via Google Analytics 4 to understand which works and pages get visited. IP addresses are anonymised, no personal profile is built, no advertising is run.',
   marketingLabel: 'Marketing',
   marketingDesc:
     'Embeds from third parties (e.g. social sharing, ads). Currently unused — kept here so future additions respect your choice.',
@@ -255,7 +256,16 @@ export function CookieBanner() {
         <h2 id="cookie-banner-title" style={styles.title}>
           {COPY.title}
         </h2>
-        <p style={styles.body}>{COPY.body}</p>
+        <p style={styles.body}>
+          {COPY.body}{' '}
+          <a
+            href="/privacy"
+            style={{ color: 'var(--accent)', textDecoration: 'underline' }}
+          >
+            {COPY.privacyLink}
+          </a>
+          .
+        </p>
         <div style={styles.btnRow}>
           <button type="button" style={styles.btnGhost} onClick={() => setMode('preferences')}>
             {COPY.customize}
