@@ -14,6 +14,8 @@ const ALLOWED_MIME = new Set([
   'audio/x-m4a',
   'audio/m4a',
   'audio/aac',
+  'audio/flac',
+  'audio/x-flac',
 ]);
 
 // Magic byte signatures
@@ -68,6 +70,9 @@ function detectMime(bytes: Uint8Array): string | null {
   }
   // ADTS AAC: FF F1 / FF F9
   if (bytes[0] === 0xff && (bytes[1] === 0xf1 || bytes[1] === 0xf9)) return 'audio/aac';
+  // FLAC: 66 4C 61 43 ("fLaC")
+  if (bytes[0] === 0x66 && bytes[1] === 0x4c && bytes[2] === 0x61 && bytes[3] === 0x43)
+    return 'audio/flac';
   return null;
 }
 

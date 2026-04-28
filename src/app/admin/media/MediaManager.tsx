@@ -20,13 +20,14 @@ const KIND_LABEL: Record<Kind, string> = {
 
 const KIND_ACCEPT: Record<Kind, string> = {
   image: 'image/*',
-  audio: 'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/m4a,audio/aac,.mp3,.m4a,.mp4,.aac',
+  audio:
+    'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/m4a,audio/aac,audio/flac,audio/x-flac,.mp3,.m4a,.mp4,.aac,.flac',
   pdf: 'application/pdf',
 }
 
 const KIND_HINT: Record<Kind, string> = {
   image: 'JPG · PNG · WebP — drag, click, or browse',
-  audio: 'MP3 · M4A · MP4 · AAC — drag, click, or browse',
+  audio: 'MP3 · M4A · MP4 · AAC · FLAC — drag, click, or browse',
   pdf: 'PDF — drag, click, or browse',
 }
 
