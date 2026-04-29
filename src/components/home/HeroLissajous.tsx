@@ -242,24 +242,25 @@ export function HeroLissajous() {
         ctx.restore()
       }
       // Counter the cumulative brightening that 'lighter' / 'screen'
-      // produce in heavily-visited regions. Pure source-over fade can
-      // pull alpha back toward bg but can't fight the channel
-      // saturation-to-white that additive blending forces — that
-      // saturation reads as a soft grey haze around the figure on a
-      // dark background. A multiply pass with the bg colour each frame
-      // pulls bright pixels back toward bg without touching unvisited
-      // dark pixels (dark · dark ≈ dark).
+      // produce in heavily-visited regions. The previous attempt used
+      // 'multiply' with the bg colour, which pulled saturated pixels
+      // gradually all the way to pure black — so the canvas converged
+      // *below* the page bg and a visible seam appeared between the
+      // canvas area and the rest of the page.
       //
-      // Strength scales with how aggressive the trails are: very long
-      // trails (low fadeAlpha) accumulate brightness faster, so the
-      // multiply has to work harder. The (1 - fadeAlpha) factor caps
-      // automatically at fadeAlpha = 1 (no multiply needed since the
-      // hard clear already ran).
+      // 'darken' is the correct primitive: result = min(source, dest)
+      // per channel. With source = bg colour, pixels brighter than bg
+      // get pulled down toward bg, while pixels already at or below
+      // bg are untouched (min(bg, x) = x when x ≤ bg). The asymptote
+      // is exactly bg — same colour as the surrounding page, no seam,
+      // no haze.
+      //
+      // Strength scales with trails (low fadeAlpha → stronger counter).
       if (additiveActive && fadeAlpha < 0.999) {
         const [br, bg, bbg] = bgRGB
-        ctx.globalCompositeOperation = 'multiply'
-        const multAlpha = (1 - fadeAlpha) * 0.10
-        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${multAlpha.toFixed(3)})`
+        ctx.globalCompositeOperation = 'darken'
+        const darkenAlpha = (1 - fadeAlpha) * 0.06
+        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${darkenAlpha.toFixed(3)})`
         ctx.fillRect(0, 0, W, H)
       }
 
