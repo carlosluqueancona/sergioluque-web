@@ -43,6 +43,8 @@ export interface Post {
   excerpt?: string;
   tags?: string[];
   publishedAt?: string;
+  imageUrl?: string;
+  isFeatured: boolean;
 }
 
 export interface Proyecto {

@@ -40,6 +40,10 @@ CREATE TABLE IF NOT EXISTS obras (
 );
 
 -- Blog posts
+-- `is_featured` drives the "Selected writing" section on the home page.
+-- Migration for existing databases:
+--   wrangler d1 execute sergioluque-db --remote \
+--     --command "ALTER TABLE posts ADD COLUMN is_featured INTEGER DEFAULT 0"
 CREATE TABLE IF NOT EXISTS posts (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   title        TEXT NOT NULL DEFAULT '',
@@ -49,6 +53,7 @@ CREATE TABLE IF NOT EXISTS posts (
   image_url    TEXT DEFAULT '',
   tags         TEXT DEFAULT '',
   status       TEXT DEFAULT 'draft',
+  is_featured  INTEGER DEFAULT 0,
   published_at TEXT DEFAULT NULL,
   created_at   TEXT DEFAULT (datetime('now')),
   updated_at   TEXT DEFAULT (datetime('now'))

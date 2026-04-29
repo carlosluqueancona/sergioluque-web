@@ -193,6 +193,7 @@ registerCrud(admin, 'posts', [
   'title', 'slug',
   'body', 'excerpt',
   'tags', 'status', 'published_at', 'image_url',
+  'is_featured',
 ]);
 
 registerCrud(admin, 'proyectos', [

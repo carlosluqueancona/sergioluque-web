@@ -40,6 +40,7 @@ export const SCHEMAS: Record<string, EntitySchema> = {
     listColumns: [
       { key: 'title', label: 'Title' },
       { key: 'status', label: 'Status' },
+      { key: 'is_featured', label: 'Featured' },
       { key: 'published_at', label: 'Published' },
     ],
     fields: [
@@ -50,6 +51,7 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       { key: 'image_url', label: 'Cover image', type: 'image-upload' },
       { key: 'tags', label: 'Tags (comma-separated)', type: 'text' },
       { key: 'status', label: 'Status (draft / published)', type: 'text' },
+      { key: 'is_featured', label: 'Featured? (shown on home)', type: 'boolean' },
       { key: 'published_at', label: 'Publish date', type: 'date' },
     ],
   },

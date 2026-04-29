@@ -56,6 +56,7 @@ function mapPost(row: Record<string, unknown>, _locale: string): Post {
     tags,
     publishedAt: (row['published_at'] as string) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
+    isFeatured: Boolean(row['is_featured']),
   };
 }
 
@@ -162,12 +163,21 @@ content.get('/obras/:slug', async (c) => {
 
 content.get('/posts', async (c) => {
   const locale = c.req.query('locale') ?? 'es';
+  const featured = c.req.query('featured');
   const cors = getCors(c);
 
   try {
-    const { results } = await c.env.DB.prepare(
-      "SELECT * FROM posts WHERE status = 'published' ORDER BY published_at DESC"
-    ).all<Record<string, unknown>>();
+    let stmt: D1PreparedStatement;
+    if (featured === '1') {
+      stmt = c.env.DB.prepare(
+        "SELECT * FROM posts WHERE status = 'published' AND is_featured = 1 ORDER BY published_at DESC"
+      );
+    } else {
+      stmt = c.env.DB.prepare(
+        "SELECT * FROM posts WHERE status = 'published' ORDER BY published_at DESC"
+      );
+    }
+    const { results } = await stmt.all<Record<string, unknown>>();
     return json((results ?? []).map((r) => mapPost(r, locale)), 200, cors);
   } catch (err) {
     console.error('posts list error', err);

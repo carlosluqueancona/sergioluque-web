@@ -21,6 +21,10 @@ export async function getPosts(): Promise<Post[]> {
   return (await apiFetch<Post[]>(`/content/posts?locale=${L}`)) ?? []
 }
 
+export async function getPostsDestacados(): Promise<Post[]> {
+  return (await apiFetch<Post[]>(`/content/posts?locale=${L}&featured=1`)) ?? []
+}
+
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   return apiFetch<Post>(`/content/posts/${slug}?locale=${L}`)
 }

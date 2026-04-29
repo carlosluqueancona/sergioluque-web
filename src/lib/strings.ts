@@ -29,6 +29,7 @@ export const S = {
   home: {
     role: 'Composer and researcher',
     featuredWorks: 'Selected works',
+    featuredPosts: 'Selected writing',
     upcomingConcerts: 'Upcoming concerts',
     viewAll: 'View all',
     noUpcomingConcerts: 'No concerts scheduled in the near future',
