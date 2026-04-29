@@ -48,8 +48,8 @@ export function CatalogueTable({ entries }: CatalogueTableProps) {
           marginBottom: '32px',
         }}
       >
-        <h2 className="t-h2" style={{ margin: 0 }}>
-          {S.catalogue.title}
+        <h2 className="t-label" style={{ margin: 0 }}>
+          {S.catalogue.sectionLabel}
         </h2>
         <ul
           role="tablist"

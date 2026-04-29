@@ -64,6 +64,7 @@ export const S = {
   catalogue: {
     title: 'Catalogue',
     subtitle: 'A comprehensive index of compositions across vocal, instrumental, mixed, and electroacoustic media.',
+    sectionLabel: 'List of works',
     featuredLabel: 'Featured work',
     filterAll: 'All',
     filterMixed: 'Vocal · Instrumental · Mixed',
