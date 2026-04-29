@@ -103,21 +103,21 @@ export function CatalogueTable({ entries }: CatalogueTableProps) {
         </ul>
       </div>
 
-      {/* Column headers */}
+      {/* Column headers — hidden on mobile via .catalogue-header media rule. */}
       <div
+        className="catalogue-header catalogue-grid"
         style={{
-          display: 'grid',
-          gridTemplateColumns: '80px 1fr 1.4fr 130px',
-          gap: '24px',
           padding: '16px 0',
           borderBottom: '1px solid var(--border)',
         }}
       >
-        <span style={labelStyle}>{S.catalogue.columnYear}</span>
         <span style={labelStyle}>{S.catalogue.columnTitle}</span>
         <span style={labelStyle}>{S.catalogue.columnInstrumentation}</span>
         <span style={{ ...labelStyle, textAlign: 'right' }}>
           {S.catalogue.columnReference}
+        </span>
+        <span style={{ ...labelStyle, textAlign: 'right' }}>
+          {S.catalogue.columnYear}
         </span>
       </div>
 
@@ -140,26 +140,12 @@ export function CatalogueTable({ entries }: CatalogueTableProps) {
 function CatalogueRow({ entry }: { entry: CatalogueEntry }) {
   return (
     <li
-      className="catalogue-row"
+      className="catalogue-row catalogue-grid"
       style={{
-        display: 'grid',
-        gridTemplateColumns: '80px 1fr 1.4fr 130px',
-        gap: '24px',
-        alignItems: 'baseline',
         padding: '20px 0',
         borderBottom: '1px solid var(--border)',
       }}
     >
-      <span
-        style={{
-          fontFamily: 'var(--font-space-mono)',
-          fontSize: '12px',
-          color: 'var(--text-muted)',
-          letterSpacing: '0.05em',
-        }}
-      >
-        {entry.yearText ?? (entry.yearSort ? String(entry.yearSort) : '')}
-      </span>
       <h3
         className="catalogue-row-title"
         style={{
@@ -175,7 +161,7 @@ function CatalogueRow({ entry }: { entry: CatalogueEntry }) {
         {entry.title}
       </h3>
       <p
-        className="t-meta"
+        className="t-meta catalogue-row-instrumentation"
         style={{
           margin: 0,
           color: 'var(--text-secondary)',
@@ -185,6 +171,18 @@ function CatalogueRow({ entry }: { entry: CatalogueEntry }) {
         {entry.instrumentation ?? ''}
       </p>
       <ResourceIcons entry={entry} />
+      <span
+        className="catalogue-row-year"
+        style={{
+          fontFamily: 'var(--font-space-mono)',
+          fontSize: '12px',
+          color: 'var(--text-muted)',
+          letterSpacing: '0.05em',
+          textAlign: 'right',
+        }}
+      >
+        {entry.yearText ?? (entry.yearSort ? String(entry.yearSort) : '')}
+      </span>
     </li>
   )
 }
@@ -211,11 +209,28 @@ function ResourceIcons({ entry }: { entry: CatalogueEntry }) {
   ].filter(<T,>(x: T | null): x is T => x !== null)
 
   if (items.length === 0) {
-    return <span aria-hidden style={{ display: 'block', textAlign: 'right', color: 'var(--text-muted)', fontFamily: 'monospace', fontSize: '11px' }}>—</span>
+    return (
+      <span
+        aria-hidden
+        className="catalogue-row-references"
+        style={{
+          display: 'block',
+          textAlign: 'right',
+          color: 'var(--text-muted)',
+          fontFamily: 'monospace',
+          fontSize: '11px',
+        }}
+      >
+        —
+      </span>
+    )
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
+    <div
+      className="catalogue-row-references"
+      style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}
+    >
       {items.map((it) => (
         <a
           key={it.url}

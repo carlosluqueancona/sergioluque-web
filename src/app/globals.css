@@ -614,6 +614,47 @@ button[aria-label="Pause"]:hover {
    aligns with the SERGIO LUQUE header above it. */
 .hero-indent { padding-left: 40px; }
 
+/* ─────────────────────────────────────────────────────────────────
+   Catalogue table — desktop is a 4-column grid (Year / Title /
+   Instrumentation / Reference); mobile collapses to a stacked
+   block per row so titles don't wrap one word per line.
+   ───────────────────────────────────────────────────────────────── */
+.catalogue-grid {
+  display: grid;
+  /* Title · Instrumentation · Reference · Year (year sits at the end). */
+  grid-template-columns: 1fr 1.4fr 130px 80px;
+  gap: 24px;
+  align-items: baseline;
+}
+
+@media (max-width: 768px) {
+  .catalogue-header {
+    display: none !important;
+  }
+  .catalogue-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  /* Stacked order on mobile mirrors the desktop column order:
+     title first, instrumentation, references, year last. */
+  .catalogue-row-title {
+    order: 1;
+  }
+  .catalogue-row-instrumentation {
+    order: 2;
+  }
+  .catalogue-row-references {
+    order: 3;
+    justify-content: flex-start !important;
+    margin-top: 6px;
+  }
+  .catalogue-row-year {
+    order: 4;
+    margin-top: 4px;
+  }
+}
+
 /* Social profile icons (footer + contact). Subtle accent colour shift
    and tiny lift on hover — same micro-interaction language as the
    icon-toggle, so the social strip feels familiar. */
