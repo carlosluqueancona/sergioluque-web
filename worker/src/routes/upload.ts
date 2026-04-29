@@ -17,6 +17,7 @@ const ALLOWED_MIME = new Set([
   'audio/aac',
   'audio/flac',
   'audio/x-flac',
+  'application/pdf',
 ]);
 
 // Magic byte signatures
@@ -74,6 +75,9 @@ function detectMime(bytes: Uint8Array): string | null {
   // FLAC: 66 4C 61 43 ("fLaC")
   if (bytes[0] === 0x66 && bytes[1] === 0x4c && bytes[2] === 0x61 && bytes[3] === 0x43)
     return 'audio/flac';
+  // PDF: 25 50 44 46 ("%PDF")
+  if (bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46)
+    return 'application/pdf';
   return null;
 }
 
