@@ -77,22 +77,13 @@ export function HeroLissajous() {
     }
 
     const readStrokeRGB = (): [number, number, number] => {
-      const theme = document.documentElement.getAttribute('data-theme')
-      // Custom mode (set programmatically by presets like Psicodélico)
-      // → pick the dark or light hex from settings depending on the
-      // active theme. The MutationObserver below already watches
-      // data-theme, so flipping themes re-runs this and the colour
-      // updates without a remount.
-      if (cfg.colorMode === 'custom') {
-        const hex = theme === 'light' ? cfg.colorLight : cfg.colorDark
-        return hexToRGB(hex) ?? [212, 212, 212]
-      }
-      // Default mode → follow --accent. That single CSS variable is the
-      // centralized colour: when the operator is on monochrome, it
-      // resolves to a soft grey per theme; when they've turned the
-      // custom accent toggle on, the inline <style> emitted by the
-      // root layout overrides it with the picked hex. Either way, the
-      // Lissajous curves stay in lock-step with the rest of the site.
+      // Always follow --accent — that single CSS variable is the
+      // centralized colour: monochrome by default per theme, overridden
+      // by the inline <style> from the root layout when the operator
+      // turns the custom-accent toggle on. The legacy lis_color_mode /
+      // lis_color_dark / lis_color_light fields still live in the DB
+      // (presets can pre-fill them), but at runtime they're ignored so
+      // changes to the centralized Appearance pickers always win.
       const raw = getComputedStyle(document.documentElement)
         .getPropertyValue('--accent')
         .trim()
