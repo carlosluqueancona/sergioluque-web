@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getObraBySlug } from '@/lib/db/queries'
+import { getObraBySlug, getSettings } from '@/lib/db/queries'
 import { AudioPlayer, AudioFormatTag } from '@/components/audio'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
@@ -38,12 +38,20 @@ export default async function ObraPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const obra = await getObraBySlug(slug)
+  // Pull obra + settings in parallel — settings carries the operator-
+  // picked fallback cover used when this obra has no image_url of its own.
+  const [obra, settings] = await Promise.all([getObraBySlug(slug), getSettings()])
   if (!obra) notFound()
 
   const title = obra.title
   const instrumentation = obra.instrumentation
   const description = obra.description
+
+  const heroImageSrc = isHttpUrl(obra.imageUrl)
+    ? obra.imageUrl
+    : isHttpUrl(settings?.worksFallbackCoverUrl)
+      ? settings.worksFallbackCoverUrl
+      : null
 
   const premiereInfo = [obra.premiereDate, obra.premiereVenue, obra.premiereCity]
     .filter(Boolean)
@@ -75,10 +83,10 @@ export default async function ObraPage({
             </div>
           )}
 
-          {isHttpUrl(obra.imageUrl) && (
+          {heroImageSrc && (
             <div style={{ marginBottom: '48px' }}>
               <Image
-                src={obra.imageUrl}
+                src={heroImageSrc}
                 alt={title}
                 width={1600}
                 height={900}
