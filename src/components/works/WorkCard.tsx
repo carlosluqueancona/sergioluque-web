@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+// import Link from 'next/link'  // re-enable together with the <Link> below
 import { AudioPlayerMini, AudioFormatTag } from '@/components/audio'
 import { S } from '@/lib/strings'
 import { detectAudioFormat } from '@/lib/audio-format'
@@ -100,12 +100,16 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
         alignItems: 'start',
       }}
     >
+      {/* Card-wide click target temporarily disabled per client direction.
+         Re-enable by uncommenting; href is still computed above so the
+         path stays in sync with the [slug] route.
       <Link
         href={href}
         aria-label={title}
         className="work-card-link"
         style={{ position: 'absolute', inset: 0, zIndex: 1 }}
       />
+      */}
 
       {imageSrc && (
         <span className="work-card-image">

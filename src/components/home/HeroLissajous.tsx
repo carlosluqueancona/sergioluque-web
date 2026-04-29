@@ -181,22 +181,13 @@ export function HeroLissajous() {
         // No trails: hard clear each frame.
         ctx.globalCompositeOperation = 'source-over'
         ctx.clearRect(0, 0, W, H)
-      } else if (additiveActive) {
-        // Additive blends (lighter/screen) keep adding pixels to bright
-        // regions; a source-over bg-colour fade can't subtract that
-        // accumulation, which is what produced the rectangular grey
-        // halo around the figure (visible on /works as well as the
-        // hero). destination-out fades alpha uniformly regardless of
-        // accumulated colour — bright regions decay back to fully
-        // transparent, revealing the page bg through the canvas.
-        ctx.globalCompositeOperation = 'destination-out'
-        ctx.fillStyle = `rgba(0, 0, 0, ${fadeAlpha})`
-        ctx.fillRect(0, 0, W, H)
       } else {
-        // Non-additive: paint the page bg over the previous frame at
-        // fadeAlpha. Convergence to bg colour gives the classic
-        // "trail towards bg" character with no halo because source-over
-        // is symmetric.
+        // Trails: paint the page bg over the previous frame at
+        // fadeAlpha. Source-over so the fade pulls every channel
+        // (including the R/G/B that 'lighter' would otherwise saturate
+        // toward white) back toward the actual bg colour. The
+        // additive-active branch below adds a multiply pass that does
+        // the heavy lifting against the saturation-to-white drift.
         ctx.globalCompositeOperation = 'source-over'
         const [br, bg, bbg] = bgRGB
         ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${fadeAlpha})`
@@ -250,8 +241,27 @@ export function HeroLissajous() {
         ctx.stroke()
         ctx.restore()
       }
-      // The destination-out fade above handles cumulative brightening
-      // for additive blends — no extra multiply-counter pass needed.
+      // Counter the cumulative brightening that 'lighter' / 'screen'
+      // produce in heavily-visited regions. Pure source-over fade can
+      // pull alpha back toward bg but can't fight the channel
+      // saturation-to-white that additive blending forces — that
+      // saturation reads as a soft grey haze around the figure on a
+      // dark background. A multiply pass with the bg colour each frame
+      // pulls bright pixels back toward bg without touching unvisited
+      // dark pixels (dark · dark ≈ dark).
+      //
+      // Strength scales with how aggressive the trails are: very long
+      // trails (low fadeAlpha) accumulate brightness faster, so the
+      // multiply has to work harder. The (1 - fadeAlpha) factor caps
+      // automatically at fadeAlpha = 1 (no multiply needed since the
+      // hard clear already ran).
+      if (additiveActive && fadeAlpha < 0.999) {
+        const [br, bg, bbg] = bgRGB
+        ctx.globalCompositeOperation = 'multiply'
+        const multAlpha = (1 - fadeAlpha) * 0.10
+        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${multAlpha.toFixed(3)})`
+        ctx.fillRect(0, 0, W, H)
+      }
 
       // Reset state outside the per-figure loop so subsequent draws on
       // this canvas (none today, but cheap insurance) start clean.
