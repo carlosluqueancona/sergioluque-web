@@ -337,6 +337,8 @@ content.get('/settings', async (c) => {
       socialFacebook: kvMap['social_facebook'],
       socialLinkedin: kvMap['social_linkedin'],
       ctaOrange: kvMap['cta_orange'] === '1',
+      accentColorDark: kvMap['accent_color_dark'],
+      accentColorLight: kvMap['accent_color_light'],
       lissajous: Object.keys(lissajous).length ? lissajous : undefined,
     };
     void locale;

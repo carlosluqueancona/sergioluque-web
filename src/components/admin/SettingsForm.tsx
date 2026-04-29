@@ -69,9 +69,21 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
     fields: [
       {
         key: 'cta_orange',
-        label: 'Orange call-to-action accent',
+        label: 'Custom accent colour (override the monochrome default)',
         type: 'switch',
-        hint: 'Replaces the monochrome accent with orange across links, buttons and audio progress.',
+        hint: 'When on, links, headings, buttons and audio progress use the two colours below — one for the dark theme, one for the light theme. When off, the site stays monochrome.',
+      },
+      {
+        key: 'accent_color_dark',
+        label: 'Accent — dark theme',
+        type: 'color',
+        hint: 'Default #FF6A1E (orange). Used when the dark theme is active.',
+      },
+      {
+        key: 'accent_color_light',
+        label: 'Accent — light theme',
+        type: 'color',
+        hint: 'Default #E55A00 (deeper orange). The dark accent washes out against a near-white background, so light theme picks a slightly grounded tone.',
       },
     ],
   },

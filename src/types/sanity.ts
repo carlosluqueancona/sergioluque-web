@@ -99,6 +99,14 @@ export interface Settings {
   socialLinkedin?: string
   ctaOrange?: boolean
   /**
+   * Custom accent colour applied when ctaOrange is on. Two values so the
+   * operator can fine-tune for light + dark themes (the bright-on-dark
+   * orange tends to wash out against a near-white bg). Empty values fall
+   * back to the static orange defaults baked into globals.css.
+   */
+  accentColorDark?: string
+  accentColorLight?: string
+  /**
    * Raw `lis_*` keys passed through verbatim from the settings table.
    * The Hero component parses this with parseLissajousConfig() so the
    * Worker doesn't need to know the canvas semantics.

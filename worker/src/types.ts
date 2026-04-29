@@ -98,6 +98,9 @@ export interface Settings {
   socialFacebook?: string;
   socialLinkedin?: string;
   ctaOrange?: boolean;
+  /** Operator-tunable accent applied when ctaOrange is on. */
+  accentColorDark?: string;
+  accentColorLight?: string;
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table so
    * the Hero canvas can parse them client-side. The Worker stays dumb

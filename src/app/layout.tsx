@@ -78,9 +78,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // component picks up — saves a second fetch on the home page.
   let ctaOrange = false
   let lissajousJson = '{}'
+  let accentDark: string | undefined
+  let accentLight: string | undefined
   try {
     const settings = await getSettings()
     ctaOrange = !!settings?.ctaOrange
+    accentDark = settings?.accentColorDark
+    accentLight = settings?.accentColorLight
     if (settings?.lissajous) {
       // Escape `<` so the inline JSON can't close the <script> tag.
       // All lis_* values are constrained (numbers, hex colours, enum
@@ -91,6 +95,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   } catch {
     /* ignore — keep default accent + default Lissajous look */
   }
+
+  // Build a per-theme accent override — only emitted when the toggle is
+  // on AND the operator picked a colour. Hex format guarded so we don't
+  // inject anything that could break out of the <style>.
+  const isHex = (v?: string) => !!v && /^#[0-9a-fA-F]{3,8}$/.test(v.trim())
+  const accentStyle =
+    ctaOrange && (isHex(accentDark) || isHex(accentLight))
+      ? [
+          isHex(accentDark)
+            ? `html[data-cta="orange"][data-theme="dark"], html[data-cta="orange"]:not([data-theme="light"]) { --accent: ${accentDark}; --heading: ${accentDark}; }`
+            : '',
+          isHex(accentLight)
+            ? `html[data-cta="orange"][data-theme="light"] { --accent: ${accentLight}; --heading: ${accentLight}; }`
+            : '',
+        ]
+          .filter(Boolean)
+          .join('\n')
+      : ''
 
   return (
     <html lang="en" data-cta={ctaOrange ? 'orange' : 'default'} suppressHydrationWarning>
@@ -107,6 +129,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             __html: `window.__LIS_CFG__ = ${lissajousJson};`,
           }}
         />
+        {accentStyle && (
+          <style dangerouslySetInnerHTML={{ __html: accentStyle }} />
+        )}
       </head>
       <body className={`${spaceMono.variable} ${ibmPlexSans.variable} antialiased`}>
         <ExclusivePlayback />
