@@ -57,7 +57,7 @@ export function CatalogueTable({ entries }: CatalogueTableProps) {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '24px',
+            gap: '8px',
             listStyle: 'none',
             margin: 0,
             padding: 0,
@@ -75,16 +75,24 @@ export function CatalogueTable({ entries }: CatalogueTableProps) {
                   className="catalogue-filter"
                   data-active={active}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
+                    // Pill: each option gets its own bounded box so the
+                    // multi-word label (Vocal · Instrumental · Mixed)
+                    // reads as one chip rather than three loose words.
+                    display: 'inline-flex',
+                    alignItems: 'center',
                     cursor: 'pointer',
                     fontFamily: 'var(--font-space-mono)',
                     fontSize: '10px',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
-                    color: active ? 'var(--text-primary)' : 'var(--text-muted)',
-                    transition: 'color 180ms ease',
+                    padding: '6px 12px',
+                    border: '1px solid',
+                    borderColor: active ? 'var(--text-primary)' : 'var(--border)',
+                    background: active ? 'var(--text-primary)' : 'transparent',
+                    color: active ? 'var(--bg)' : 'var(--text-muted)',
+                    transition:
+                      'color 180ms ease, background 180ms ease, border-color 180ms ease',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {f.label}
