@@ -55,6 +55,17 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [{ url: ogUrl, width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', images: [ogUrl] },
+    // src/app/favicon.ico is auto-detected by Next; the rest of the
+    // icon set lives in /public and is wired up explicitly here so
+    // browsers / iOS / Android pick the right asset for each surface.
+    icons: {
+      icon: [
+        { url: '/favicon.svg', type: 'image/svg+xml' },
+        { url: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+      ],
+      apple: '/apple-touch-icon.png',
+    },
+    manifest: '/site.webmanifest',
     metadataBase: new URL('https://sergioluque.com'),
   }
 }
