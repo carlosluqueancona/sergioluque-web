@@ -89,14 +89,15 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_static: '',
   },
 
-  // Psicodélico — restored to the 9:00 AM look the client said was perfect.
-  // Outer alpha 0.22 with the original 0.14 decay; combined with the 1.3×
-  // opacity multiplier in the preset this produces effective alphas of
-  // ~0.29, 0.24, 0.20, 0.15, 0.10 across the 5-figure stack.
+  // Psicodélico — orange burst on dark, calmer charcoal stroke on light
+  // (a brighter orange washes out the white background of the light theme).
+  // Bumped alpha_base to 0.4 after dialling in the canvas live; combined
+  // with the 1.3× opacity multiplier this gives the outer figure ~0.52
+  // effective alpha and tapers down to ~0.34 on the inner one.
   psicodelico: {
     lis_color_mode: 'custom',
     lis_color_dark: '#FF6A1E',
-    lis_color_light: '#E55A00',
+    lis_color_light: '#404040',
     lis_count: '5',
     lis_ratios: '5:4,7:5,φ,3:2,4:3',
     lis_segments: '1600',
@@ -114,7 +115,7 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_center_y: '0.5',
     lis_opacity: '1.3',
     lis_glow: '12',
-    lis_alpha_base: '0.22',
+    lis_alpha_base: '0.4',
     lis_alpha_decay: '0.14',
     lis_static: '',
   },
