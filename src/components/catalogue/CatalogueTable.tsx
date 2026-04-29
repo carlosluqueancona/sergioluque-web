@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { S } from '@/lib/strings'
 import type { CatalogueEntry, CatalogueCategory } from '@/types'
 
+
 interface CatalogueTableProps {
   entries: CatalogueEntry[]
 }
@@ -114,9 +115,6 @@ export function CatalogueTable({ entries }: CatalogueTableProps) {
         <span style={labelStyle}>{S.catalogue.columnTitle}</span>
         <span style={labelStyle}>{S.catalogue.columnInstrumentation}</span>
         <span style={{ ...labelStyle, textAlign: 'right' }}>
-          {S.catalogue.columnReference}
-        </span>
-        <span style={{ ...labelStyle, textAlign: 'right' }}>
           {S.catalogue.columnYear}
         </span>
       </div>
@@ -170,7 +168,6 @@ function CatalogueRow({ entry }: { entry: CatalogueEntry }) {
       >
         {entry.instrumentation ?? ''}
       </p>
-      <ResourceIcons entry={entry} />
       <span
         className="catalogue-row-year"
         style={{
@@ -187,115 +184,3 @@ function CatalogueRow({ entry }: { entry: CatalogueEntry }) {
   )
 }
 
-// ── Resource icons (right-aligned in the row) ───────────────────────────
-
-function ResourceIcons({ entry }: { entry: CatalogueEntry }) {
-  const items = [
-    entry.listenUrl
-      ? { url: entry.listenUrl, label: S.catalogue.listen, icon: <ListenIcon /> }
-      : null,
-    entry.scoreUrl
-      ? { url: entry.scoreUrl, label: S.catalogue.viewScore, icon: <ScoreIcon /> }
-      : null,
-    entry.patchUrl
-      ? { url: entry.patchUrl, label: S.catalogue.viewPatch, icon: <PatchIcon /> }
-      : null,
-    entry.videoUrl
-      ? { url: entry.videoUrl, label: S.catalogue.watchVideo, icon: <VideoIcon /> }
-      : null,
-    entry.losslessUrl
-      ? { url: entry.losslessUrl, label: S.catalogue.downloadLossless, icon: <LosslessIcon /> }
-      : null,
-  ].filter(<T,>(x: T | null): x is T => x !== null)
-
-  if (items.length === 0) {
-    return (
-      <span
-        aria-hidden
-        className="catalogue-row-references"
-        style={{
-          display: 'block',
-          textAlign: 'right',
-          color: 'var(--text-muted)',
-          fontFamily: 'monospace',
-          fontSize: '11px',
-        }}
-      >
-        —
-      </span>
-    )
-  }
-
-  return (
-    <div
-      className="catalogue-row-references"
-      style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}
-    >
-      {items.map((it) => (
-        <a
-          key={it.url}
-          href={it.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={it.label}
-          title={it.label}
-          className="catalogue-ref-link"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--text-muted)',
-            transition: 'color 180ms ease, transform 180ms ease',
-          }}
-        >
-          {it.icon}
-        </a>
-      ))}
-    </div>
-  )
-}
-
-// 14×14 monoline glyphs, currentColor stroke/fill so they pick up theme.
-function ListenIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M5 4 L5 10 L9.5 7 Z" fill="currentColor" stroke="none" />
-      <circle cx="7" cy="7" r="6" />
-    </svg>
-  )
-}
-function ScoreIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3 1.5 H8.5 L11 4 V12.5 H3 Z" />
-      <path d="M8.5 1.5 V4 H11" />
-      <line x1="5" y1="6.5" x2="9" y2="6.5" />
-      <line x1="5" y1="9" x2="9" y2="9" />
-    </svg>
-  )
-}
-function PatchIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <polyline points="5,4 2,7 5,10" />
-      <polyline points="9,4 12,7 9,10" />
-    </svg>
-  )
-}
-function VideoIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="1.5" y="3" width="8" height="8" />
-      <polygon points="9.5,5 12.5,3.5 12.5,10.5 9.5,9" fill="currentColor" stroke="none" />
-    </svg>
-  )
-}
-function LosslessIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3 6 V8 a1 1 0 0 0 1 1 H5 V5 H4 a1 1 0 0 0 -1 1 Z" fill="currentColor" stroke="none" />
-      <path d="M9 6 V8 a1 1 0 0 0 1 1 H11 V5 H10 a1 1 0 0 0 -1 1 Z" fill="currentColor" stroke="none" />
-      <path d="M5 7 a2 2 0 0 1 4 0" />
-    </svg>
-  )
-}

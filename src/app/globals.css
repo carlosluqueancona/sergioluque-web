@@ -615,14 +615,14 @@ button[aria-label="Pause"]:hover {
 .hero-indent { padding-left: 40px; }
 
 /* ─────────────────────────────────────────────────────────────────
-   Catalogue table — desktop is a 4-column grid (Year / Title /
-   Instrumentation / Reference); mobile collapses to a stacked
+   Catalogue table — desktop is a 3-column grid (Title /
+   Instrumentation / Year); mobile collapses to a stacked
    block per row so titles don't wrap one word per line.
    ───────────────────────────────────────────────────────────────── */
 .catalogue-grid {
   display: grid;
-  /* Title · Instrumentation · Reference · Year (year sits at the end). */
-  grid-template-columns: 1fr 1.4fr 130px 80px;
+  /* Title · Instrumentation · Year (year sits at the end). */
+  grid-template-columns: 1fr 1.4fr 80px;
   gap: 24px;
   align-items: baseline;
 }
@@ -637,20 +637,15 @@ button[aria-label="Pause"]:hover {
     align-items: flex-start;
   }
   /* Stacked order on mobile mirrors the desktop column order:
-     title first, instrumentation, references, year last. */
+     title first, instrumentation, year last. */
   .catalogue-row-title {
     order: 1;
   }
   .catalogue-row-instrumentation {
     order: 2;
   }
-  .catalogue-row-references {
-    order: 3;
-    justify-content: flex-start !important;
-    margin-top: 6px;
-  }
   .catalogue-row-year {
-    order: 4;
+    order: 3;
     margin-top: 4px;
   }
 }
