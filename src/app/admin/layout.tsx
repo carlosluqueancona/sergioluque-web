@@ -39,10 +39,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           SL / ADMIN
         </a>
         <a href="/admin/obras" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Works</a>
+        <a href="/admin/catalogue" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Catalogue</a>
         <a href="/admin/posts" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Blog</a>
         <a href="/admin/proyectos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Projects</a>
-        <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Concerts</a>
-        <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Publications</a>
+        <a href="/admin/eventos" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>News</a>
+        <a href="/admin/publicaciones" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Stochastics</a>
         <a href="/admin/media" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Media</a>
         <a href="/admin/settings" style={{ fontSize: '12px', color: 'var(--text-secondary)', textDecoration: 'none' }}>Settings</a>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>

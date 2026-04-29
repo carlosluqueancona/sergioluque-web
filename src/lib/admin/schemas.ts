@@ -84,8 +84,8 @@ export const SCHEMAS: Record<string, EntitySchema> = {
   eventos: {
     name: 'eventos',
     route: 'eventos',
-    label: 'Concerts',
-    labelSingular: 'Concert',
+    label: 'News',
+    labelSingular: 'News item',
     emoji: '♪',
     listColumns: [
       { key: 'title', label: 'Title' },
@@ -107,8 +107,8 @@ export const SCHEMAS: Record<string, EntitySchema> = {
   publicaciones: {
     name: 'publicaciones',
     route: 'publicaciones',
-    label: 'Publications',
-    labelSingular: 'Publication',
+    label: 'Stochastics',
+    labelSingular: 'Stochastics entry',
     emoji: '◇',
     listColumns: [
       { key: 'title', label: 'Title' },
