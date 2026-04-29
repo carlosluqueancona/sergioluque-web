@@ -182,15 +182,12 @@ export function HeroLissajous() {
         ctx.globalCompositeOperation = 'source-over'
         ctx.clearRect(0, 0, W, H)
       } else {
-        // Trails: paint the page bg over the previous frame at
-        // fadeAlpha. Source-over so the fade pulls every channel
-        // (including the R/G/B that 'lighter' would otherwise saturate
-        // toward white) back toward the actual bg colour. The
-        // additive-active branch below adds a multiply pass that does
-        // the heavy lifting against the saturation-to-white drift.
-        ctx.globalCompositeOperation = 'source-over'
-        const [br, bg, bbg] = bgRGB
-        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${fadeAlpha})`
+        // Trails: destination-out fades drawn pixels' alpha uniformly.
+        // As alpha decays the canvas's CSS background-color (set to
+        // var(--bg)) shows through — empty / faded regions match the
+        // surrounding page exactly with zero blend-mode drift.
+        ctx.globalCompositeOperation = 'destination-out'
+        ctx.fillStyle = `rgba(0, 0, 0, ${fadeAlpha})`
         ctx.fillRect(0, 0, W, H)
       }
 
@@ -241,28 +238,9 @@ export function HeroLissajous() {
         ctx.stroke()
         ctx.restore()
       }
-      // Counter the cumulative brightening that 'lighter' / 'screen'
-      // produce in heavily-visited regions. The previous attempt used
-      // 'multiply' with the bg colour, which pulled saturated pixels
-      // gradually all the way to pure black — so the canvas converged
-      // *below* the page bg and a visible seam appeared between the
-      // canvas area and the rest of the page.
-      //
-      // 'darken' is the correct primitive: result = min(source, dest)
-      // per channel. With source = bg colour, pixels brighter than bg
-      // get pulled down toward bg, while pixels already at or below
-      // bg are untouched (min(bg, x) = x when x ≤ bg). The asymptote
-      // is exactly bg — same colour as the surrounding page, no seam,
-      // no haze.
-      //
-      // Strength scales with trails (low fadeAlpha → stronger counter).
-      if (additiveActive && fadeAlpha < 0.999) {
-        const [br, bg, bbg] = bgRGB
-        ctx.globalCompositeOperation = 'darken'
-        const darkenAlpha = (1 - fadeAlpha) * 0.06
-        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${darkenAlpha.toFixed(3)})`
-        ctx.fillRect(0, 0, W, H)
-      }
+      // No counter pass — destination-out + the canvas CSS background
+      // handle bg-matching cleanly. Anything that would have caused a
+      // seam (multiply, darken) is gone.
 
       // Reset state outside the per-figure loop so subsequent draws on
       // this canvas (none today, but cheap insurance) start clean.
@@ -295,6 +273,12 @@ export function HeroLissajous() {
         height: '100%',
         pointerEvents: 'none',
         zIndex: 0,
+        // Canvas owns the page bg colour as its CSS background. The
+        // drawing surface stays transparent except where strokes hit;
+        // any faded / unvisited pixel reveals this CSS bg, so the canvas
+        // and the rest of the page are guaranteed to share the exact
+        // same colour with no possible blend-mode drift.
+        backgroundColor: 'var(--bg)',
       }}
     />
   )
