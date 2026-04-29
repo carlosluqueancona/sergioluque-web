@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getObrasDestacadas, getEventosProximos } from '@/lib/db/queries'
+import { getObrasDestacadas, getEventosProximos, getSettings } from '@/lib/db/queries'
 import { WorkCard } from '@/components/works'
 import { ConcertItem } from '@/components/concerts'
 import { Hero } from '@/components/home/Hero'
@@ -8,10 +8,14 @@ import { S } from '@/lib/strings'
 export const revalidate = 3600
 
 export default async function HomePage() {
-  const [obras, eventos] = await Promise.all([
+  // Settings carries the operator-picked Works fallback cover used on
+  // any featured obra without an image of its own.
+  const [obras, eventos, settings] = await Promise.all([
     getObrasDestacadas(),
     getEventosProximos(),
+    getSettings(),
   ])
+  const fallbackCoverUrl = settings?.worksFallbackCoverUrl
 
   return (
     <>
@@ -48,7 +52,7 @@ export default async function HomePage() {
           </div>
 
           {obras.map((obra) => (
-            <WorkCard key={obra.id} obra={obra} />
+            <WorkCard key={obra.id} obra={obra} fallbackCoverUrl={fallbackCoverUrl} />
           ))}
         </section>
       )}
