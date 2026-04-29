@@ -85,6 +85,57 @@ export default async function PublicacionesPage() {
           </article>
         )
       })}
+
+      {/* Stochastic Synthesis SoundCloud playlist — same embed the
+          legacy /stochastics page used. Playlist ID 1918903. The
+          player colour is forced to the brand accent #C24100 so it
+          reads in lock-step with the rest of the site. The iframe
+          fills its container width up to 640 px and keeps the 475 px
+          height SoundCloud expects for the playlist layout. */}
+      <section
+        aria-labelledby="stochastics-audio-heading"
+        style={{ marginTop: '64px', paddingTop: '48px', borderTop: '1px solid var(--border)' }}
+      >
+        <h2
+          id="stochastics-audio-heading"
+          className="t-label"
+          style={{ marginBottom: '16px' }}
+        >
+          Audio
+        </h2>
+        <p
+          style={{
+            fontFamily: 'var(--font-ibm-plex-sans)',
+            fontSize: '15px',
+            lineHeight: 1.6,
+            color: 'var(--text-secondary)',
+            margin: '0 0 24px',
+            maxWidth: '52ch',
+          }}
+        >
+          Selected stochastic-synthesis recordings, hosted on SoundCloud.
+        </p>
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: '640px',
+            border: '1px solid var(--border)',
+          }}
+        >
+          <iframe
+            title="Stochastic Synthesis — Sergio Luque on SoundCloud"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1918903&color=%23C24100&auto_play=false&hide_related=true&show_artwork=false&show_user=true&show_playcount=true"
+            width="100%"
+            height="475"
+            frameBorder="0"
+            scrolling="no"
+            allow="autoplay; encrypted-media"
+            loading="lazy"
+            style={{ display: 'block', width: '100%', height: '475px', border: 0 }}
+          />
+        </div>
+      </section>
     </div>
   )
 }

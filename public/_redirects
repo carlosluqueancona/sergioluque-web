@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects.
+# Preserves SEO and any external link still pointing at the old URLs
+# after the rename Concerts → News, Publications → Stochastics.
+# 308 = permanent + preserves the request method.
+
+/concerts        /news          308
+/publications    /stochastics   308

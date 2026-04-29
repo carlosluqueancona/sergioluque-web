@@ -16,8 +16,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     PUBLIC_SECTIONS.projects ? '/projects' : null,
     PUBLIC_SECTIONS.blog ? '/blog' : null,
     '/bio',
-    '/publications',
-    '/concerts',
+    '/stochastics',
+    '/news',
     '/contact',
   ].filter((p): p is string => p !== null)
 

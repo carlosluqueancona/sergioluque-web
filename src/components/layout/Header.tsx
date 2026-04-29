@@ -16,8 +16,8 @@ export function Header() {
       : []),
     ...(PUBLIC_SECTIONS.blog ? [{ href: '/blog', label: S.nav.blog }] : []),
     { href: '/bio', label: S.nav.bio },
-    { href: '/publications', label: S.nav.publications },
-    { href: '/concerts', label: S.nav.concerts },
+    { href: '/stochastics', label: S.nav.publications },
+    { href: '/news', label: S.nav.concerts },
     { href: '/contact', label: S.nav.contact },
   ]
 
