@@ -329,6 +329,13 @@ content.get('/settings', async (c) => {
       profileImageUrl: kvMap['profile_image_url'],
       worksFallbackCoverUrl: kvMap['works_fallback_cover_url'],
       socialShareImageUrl: kvMap['social_share_image_url'],
+      socialTwitter: kvMap['social_twitter'],
+      socialInstagram: kvMap['social_instagram'],
+      socialYoutube: kvMap['social_youtube'],
+      socialSoundcloud: kvMap['social_soundcloud'],
+      socialBandcamp: kvMap['social_bandcamp'],
+      socialFacebook: kvMap['social_facebook'],
+      socialLinkedin: kvMap['social_linkedin'],
       ctaOrange: kvMap['cta_orange'] === '1',
       lissajous: Object.keys(lissajous).length ? lissajous : undefined,
     };

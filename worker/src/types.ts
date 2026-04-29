@@ -89,6 +89,14 @@ export interface Settings {
   worksFallbackCoverUrl?: string;
   /** Open Graph image for the site when shared on WhatsApp / social. */
   socialShareImageUrl?: string;
+  /** Public social profiles. Empty / unset entries are filtered out. */
+  socialTwitter?: string;
+  socialInstagram?: string;
+  socialYoutube?: string;
+  socialSoundcloud?: string;
+  socialBandcamp?: string;
+  socialFacebook?: string;
+  socialLinkedin?: string;
   ctaOrange?: boolean;
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table so

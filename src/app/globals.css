@@ -610,6 +610,27 @@ button[aria-label="Pause"]:hover {
    aligns with the SERGIO LUQUE header above it. */
 .hero-indent { padding-left: 40px; }
 
+/* Social profile icons (footer + contact). Subtle accent colour shift
+   and tiny lift on hover — same micro-interaction language as the
+   icon-toggle, so the social strip feels familiar. */
+.social-link {
+  text-decoration: none;
+}
+.social-link:hover,
+.social-link:focus-visible {
+  color: var(--accent) !important;
+  transform: translateY(-1px);
+}
+.social-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-link {
+    transition: none !important;
+  }
+}
+
 /* Hero responsive tweaks: pull padding in on mobile */
 @media (max-width: 768px) {
   .hero-section {

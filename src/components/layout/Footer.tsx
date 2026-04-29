@@ -1,8 +1,13 @@
 import Link from 'next/link'
 import { S } from '@/lib/strings'
+import { getSettings } from '@/lib/db/queries'
 import { CookiePreferencesLink } from './CookiePreferencesLink'
+import { SocialLinks } from './SocialLinks'
 
-export function Footer() {
+// Async server component — fetches settings to surface the operator's
+// social profile URLs. Tolerant of Worker outages: if the fetch
+// throws, the social strip just renders empty.
+export async function Footer() {
   const navLinks = [
     { href: '/works', label: S.nav.works },
     { href: '/projects', label: S.nav.projects },
@@ -12,6 +17,12 @@ export function Footer() {
     { href: '/concerts', label: S.nav.concerts },
     { href: '/contact', label: S.nav.contact },
   ]
+  let settings = null
+  try {
+    settings = await getSettings()
+  } catch {
+    /* keep settings null — SocialLinks renders nothing without URLs */
+  }
 
   return (
     <footer
@@ -37,9 +48,10 @@ export function Footer() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: '6px',
+            gap: '12px',
           }}
         >
+          <SocialLinks settings={settings} variant="footer" />
           <p
             style={{
               fontFamily: 'var(--font-space-mono)',

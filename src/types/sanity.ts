@@ -86,6 +86,17 @@ export interface Settings {
    * any other page falls back to this site-wide value.
    */
   socialShareImageUrl?: string
+  /**
+   * Public social profiles surfaced in the footer + contact page when a
+   * URL is set. Empty / unset entries are skipped.
+   */
+  socialTwitter?: string
+  socialInstagram?: string
+  socialYoutube?: string
+  socialSoundcloud?: string
+  socialBandcamp?: string
+  socialFacebook?: string
+  socialLinkedin?: string
   ctaOrange?: boolean
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table.

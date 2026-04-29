@@ -1,16 +1,37 @@
 import { ContactForm } from '@/components/contact/ContactForm'
+import { SocialLinks } from '@/components/layout/SocialLinks'
+import { getSettings } from '@/lib/db/queries'
 import { S } from '@/lib/strings'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: S.contact.title }
 
-export default function ContactoPage() {
+export default async function ContactoPage() {
+  let settings = null
+  try {
+    settings = await getSettings()
+  } catch {
+    /* tolerate worker outage — page still renders without socials */
+  }
+
   return (
     <div className="page-shell">
       <h1 className="t-h1" style={{ marginBottom: '48px' }}>
         {S.contact.title}
       </h1>
       <ContactForm />
+      <div
+        style={{
+          marginTop: '64px',
+          paddingTop: '32px',
+          borderTop: '1px solid var(--border)',
+        }}
+      >
+        <p className="t-label" style={{ marginBottom: '16px' }}>
+          Find me online
+        </p>
+        <SocialLinks settings={settings} variant="contact" />
+      </div>
     </div>
   )
 }
