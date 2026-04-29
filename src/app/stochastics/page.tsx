@@ -13,11 +13,14 @@ const isHttpUrl = (s: string | undefined): s is string =>
 export default async function PublicacionesPage() {
   const publicaciones = await getPublicaciones()
 
+  const countLabel =
+    publicaciones.length === 1 ? '1 entry' : `${publicaciones.length} entries`
   return (
     <div className="page-shell">
-      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
-        {S.publications.title}
-      </h1>
+      <h1 className="t-h1">{S.publications.title}</h1>
+      <p className="t-label" style={{ marginBottom: '48px' }}>
+        {countLabel}
+      </p>
 
       {publicaciones.map((pub) => {
         const showImage = isHttpUrl(pub.imageUrl)
