@@ -78,23 +78,21 @@ export function HeroLissajous() {
 
     const readStrokeRGB = (): [number, number, number] => {
       const theme = document.documentElement.getAttribute('data-theme')
-      // Custom mode → pick the dark or light hex from settings depending
-      // on the active theme. The MutationObserver below already watches
+      // Custom mode (set programmatically by presets like Psicodélico)
+      // → pick the dark or light hex from settings depending on the
+      // active theme. The MutationObserver below already watches
       // data-theme, so flipping themes re-runs this and the colour
       // updates without a remount.
       if (cfg.colorMode === 'custom') {
         const hex = theme === 'light' ? cfg.colorLight : cfg.colorDark
         return hexToRGB(hex) ?? [212, 212, 212]
       }
-      // Theme-default mode → fixed monochrome greys per theme,
-      // independent of the orange-CTA toggle. Matches the original
-      // pre-orange-toggle look — the operator gets monochrome curves
-      // even while the rest of the site is on a custom accent.
-      if (cfg.colorMode === 'theme-default') {
-        return theme === 'light' ? [26, 26, 26] : [212, 212, 212]
-      }
-      // Accent mode → follow --accent (which itself flips with the
-      // orange CTA toggle and the light/dark theme).
+      // Default mode → follow --accent. That single CSS variable is the
+      // centralized colour: when the operator is on monochrome, it
+      // resolves to a soft grey per theme; when they've turned the
+      // custom accent toggle on, the inline <style> emitted by the
+      // root layout overrides it with the picked hex. Either way, the
+      // Lissajous curves stay in lock-step with the rest of the site.
       const raw = getComputedStyle(document.documentElement)
         .getPropertyValue('--accent')
         .trim()

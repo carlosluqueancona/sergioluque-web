@@ -69,49 +69,35 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
     fields: [
       {
         key: 'cta_orange',
-        label: 'Custom accent colour (override the monochrome default)',
+        label: 'Custom accent colours (apply to everything)',
         type: 'switch',
-        hint: 'When on, links, headings, buttons and audio progress use the two colours below — one for the dark theme, one for the light theme. When off, the site stays monochrome.',
+        hint: 'Single switch — when ON the two colours below drive the whole site (links, headings, buttons, audio progress, AND the Lissajous curves on the home). When OFF, the site stays monochrome by default.',
       },
       {
         key: 'accent_color_dark',
         label: 'Accent — dark theme',
         type: 'color',
-        hint: 'Default #FF6A1E (orange). Used when the dark theme is active.',
+        hint: 'Default #FF6A1E. Used when the dark theme is active. Drives both site CTAs and Hero curves.',
       },
       {
         key: 'accent_color_light',
         label: 'Accent — light theme',
         type: 'color',
-        hint: 'Default #E55A00 (deeper orange). The dark accent washes out against a near-white background, so light theme picks a slightly grounded tone.',
+        hint: 'Default #E55A00 (deeper orange — the brighter dark-theme tone washes out against near-white). Drives both site CTAs and Hero curves on the light theme.',
       },
     ],
   },
   {
     title: 'Hero — Lissajous curves',
     fields: [
-      // Color
-      {
-        key: 'lis_color_mode',
-        label: 'Stroke colour mode',
-        type: 'select',
-        options: [
-          { value: 'accent', label: 'Match accent (follows the orange-CTA toggle)' },
-          { value: 'theme-default', label: 'Theme default monochrome (grey, ignores the orange toggle)' },
-          { value: 'custom', label: 'Custom hex (use the two pickers below)' },
-        ],
-        hint: 'Choose how the Lissajous strokes are coloured. "Theme default" keeps the curves monochrome (light grey on dark / dark grey on light) regardless of whether the rest of the site is on a custom accent.',
-      },
-      {
-        key: 'lis_color_dark',
-        label: 'Custom colour — dark theme (used when mode = custom)',
-        type: 'color',
-      },
-      {
-        key: 'lis_color_light',
-        label: 'Custom colour — light theme (used when mode = custom)',
-        type: 'color',
-      },
+      // Stroke colour is centralized — the curves automatically follow
+      // the Appearance → Accent colours (or the monochrome default when
+      // the toggle is off). The lis_color_mode / lis_color_dark /
+      // lis_color_light keys still exist in the database and the
+      // parser so presets (e.g. Psicodélico) can pin a specific palette
+      // when applied, but they're not surfaced as separate manual
+      // controls — the operator tunes one place: Appearance.
+
       // Geometry / count
       {
         key: 'lis_count',
