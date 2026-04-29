@@ -120,7 +120,7 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       { key: 'journal', label: 'Journal', type: 'text' },
       { key: 'year', label: 'Year', type: 'number' },
       { key: 'abstract', label: 'Abstract', type: 'textarea', rows: 6 },
-      { key: 'pdf_url', label: 'PDF URL', type: 'url' },
+      { key: 'pdf_url', label: 'PDF', type: 'pdf-upload' },
       { key: 'doi', label: 'DOI', type: 'text' },
       { key: 'image_url', label: 'Cover image', type: 'image-upload' },
     ],
