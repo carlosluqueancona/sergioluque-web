@@ -30,9 +30,9 @@ export const S = {
     role: 'Composer and researcher',
     featuredWorks: 'Selected works',
     featuredPosts: 'Selected writing',
-    upcomingConcerts: 'Upcoming news',
+    upcomingConcerts: 'Latest news',
     viewAll: 'View all',
-    noUpcomingConcerts: 'No news scheduled in the near future',
+    noUpcomingConcerts: 'No recent news.',
   },
   contact: {
     title: 'Contact',
