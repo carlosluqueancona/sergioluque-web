@@ -232,6 +232,22 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         suffix: '×',
       },
       {
+        key: 'lis_alpha_base',
+        label: 'Alpha base (outer figure)',
+        type: 'range',
+        min: 0.05,
+        max: 1,
+        step: 0.01,
+      },
+      {
+        key: 'lis_alpha_decay',
+        label: 'Alpha decay (inner taper)',
+        type: 'range',
+        min: 0,
+        max: 0.6,
+        step: 0.01,
+      },
+      {
         key: 'lis_glow',
         label: 'Glow (shadow blur)',
         type: 'range',

@@ -32,6 +32,8 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_center_y: '0.5',
     lis_opacity: '1',
     lis_glow: '0',
+    lis_alpha_base: '0.42',
+    lis_alpha_decay: '0.22',
     lis_static: '',
   },
 
@@ -56,6 +58,8 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_center_y: '0.5',
     lis_opacity: '0.7',
     lis_glow: '0',
+    lis_alpha_base: '0.36',
+    lis_alpha_decay: '0.20',
     lis_static: '',
   },
 
@@ -80,9 +84,15 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_center_y: '0.5',
     lis_opacity: '1.5',
     lis_glow: '0',
+    lis_alpha_base: '0.45',
+    lis_alpha_decay: '0',
     lis_static: '',
   },
 
+  // Psicodélico — restored to the 9:00 AM look the client said was perfect.
+  // Outer alpha 0.22 with the original 0.14 decay; combined with the 1.3×
+  // opacity multiplier in the preset this produces effective alphas of
+  // ~0.29, 0.24, 0.20, 0.15, 0.10 across the 5-figure stack.
   psicodelico: {
     lis_color_mode: 'custom',
     lis_color_dark: '#FF6A1E',
@@ -104,6 +114,8 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_center_y: '0.5',
     lis_opacity: '1.3',
     lis_glow: '12',
+    lis_alpha_base: '0.22',
+    lis_alpha_decay: '0.14',
     lis_static: '',
   },
 }

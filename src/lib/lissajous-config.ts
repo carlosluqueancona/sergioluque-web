@@ -41,6 +41,14 @@ export interface LissajousConfig {
   centerY: number
   opacity: number
   glow: number
+  /**
+   * Outer-figure base alpha (i = 0). Each subsequent inner figure decays
+   * by `alphaDecay / (count − 1)` until it reaches `alphaBase − alphaDecay`.
+   * The classic "academico" feel sat around (0.22, 0.14); the brighter
+   * default lives at (0.42, 0.22).
+   */
+  alphaBase: number
+  alphaDecay: number
   static: boolean
 }
 
@@ -128,6 +136,8 @@ export function parseLissajousConfig(
     centerY: clamp(num(k['lis_center_y'], 0.5), 0, 1),
     opacity: clamp(num(k['lis_opacity'], 1), 0.1, 4),
     glow: clamp(num(k['lis_glow'], 0), 0, 60),
+    alphaBase: clamp(num(k['lis_alpha_base'], 0.42), 0.05, 1),
+    alphaDecay: clamp(num(k['lis_alpha_decay'], 0.22), 0, 0.6),
     static: (k['lis_static'] ?? '') === '1',
   }
 }
