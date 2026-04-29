@@ -48,6 +48,7 @@ export function Hero() {
 
       {/* Main wordmark */}
       <div
+        className="hero-wordmark-col"
         style={{
           flex: 1,
           display: 'flex',

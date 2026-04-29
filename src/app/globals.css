@@ -673,10 +673,16 @@ button[aria-label="Pause"]:hover {
   }
 }
 
-/* Hero responsive tweaks: pull padding in on mobile */
+/* Hero responsive tweaks: pull padding in on mobile so the Lissajous
+   figure (centered inside the canvas) doesn't sit pushed too far down
+   the viewport. Section gets tighter outer pad; inner wordmark column
+   loses its 64px vertical breathing room → drops to 24px. */
 @media (max-width: 768px) {
   .hero-section {
     padding: 16px 20px 0 !important;
+  }
+  .hero-wordmark-col {
+    padding: 24px 0 !important;
   }
   .hero-indent { padding-left: 0; }
   .hero-meta-grid {
