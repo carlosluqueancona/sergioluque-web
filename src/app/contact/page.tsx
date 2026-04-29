@@ -16,9 +16,10 @@ export default async function ContactoPage() {
 
   return (
     <div className="page-shell">
-      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
-        {S.contact.title}
-      </h1>
+      <h1 className="t-h1">{S.contact.title}</h1>
+      <p className="t-label" style={{ marginBottom: '48px' }}>
+        {S.contact.subtitle}
+      </p>
       <ContactForm />
       <div
         style={{

@@ -37,6 +37,7 @@ export const S = {
   },
   contact: {
     title: 'Contact',
+    subtitle: 'Get in touch',
     name: 'Name',
     email: 'Email',
     subject: 'Subject',
@@ -60,6 +61,7 @@ export const S = {
   },
   bio: {
     title: 'Biography',
+    subtitle: 'Composer and researcher',
   },
   catalogue: {
     title: 'Catalogue',

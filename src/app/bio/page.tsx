@@ -17,9 +17,10 @@ export default async function BioPage() {
 
   return (
     <div className="page-shell">
-      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
-        {S.bio.title}
-      </h1>
+      <h1 className="t-h1">{S.bio.title}</h1>
+      <p className="t-label" style={{ marginBottom: '48px' }}>
+        {S.bio.subtitle}
+      </p>
 
       <div className="aside-grid">
         <div>
