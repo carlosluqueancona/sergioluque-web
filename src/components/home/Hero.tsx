@@ -20,7 +20,11 @@ export function Hero() {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: '1400px',
+        // Hero shares the 1200 px shell used by the header and the rest
+        // of the site so the wordmark column lines up with the SERGIO
+        // LUQUE wordmark above it (was 1400 — drifted off-grid on
+        // wider viewports).
+        maxWidth: '1200px',
         margin: '0 auto',
         padding: '24px 48px 0',
         isolation: 'isolate',
@@ -83,12 +87,17 @@ export function Hero() {
           className="hero-wordmark hero-indent"
           style={{
             fontFamily: 'var(--font-space-mono)',
-            fontSize: 'clamp(36px, 8vw, 120px)',
+            // Was clamp(36, 8vw, 120) — "Electroacoustic." (16 chars
+            // monospace) overran the section padding on tablet / large
+            // mobile viewports. 7vw + 96px max keeps the longest word
+            // inside the 1200 px shell with breathing room, and the
+            // tighter letter-spacing claws back a few extra pixels.
+            fontSize: 'clamp(34px, 7vw, 96px)',
             fontWeight: 700,
             color: 'var(--text-primary)',
             margin: 0,
             lineHeight: 0.96,
-            letterSpacing: '-0.035em',
+            letterSpacing: '-0.04em',
           }}
         >
           {t.headingWords.map((word) => (
