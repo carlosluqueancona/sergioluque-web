@@ -297,6 +297,12 @@ content.get('/eventos', async (c) => {
       stmt = c.env.DB.prepare(
         "SELECT * FROM eventos WHERE event_date < ?1 ORDER BY event_date DESC"
       ).bind(today);
+    } else if (filter === 'latest') {
+      // No date filter — most recent news first regardless of whether the
+      // event is past or future. Used by the home page "Latest news" rail.
+      stmt = c.env.DB.prepare(
+        "SELECT * FROM eventos ORDER BY event_date DESC"
+      );
     } else {
       // upcoming (default)
       stmt = c.env.DB.prepare(

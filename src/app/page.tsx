@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import {
   getObrasDestacadas,
-  getEventosProximos,
+  getEventosLatest,
   getPostsDestacados,
   getSettings,
 } from '@/lib/db/queries'
@@ -19,7 +19,7 @@ export default async function HomePage() {
   // any featured obra without an image of its own.
   const [obras, eventos, posts, settings] = await Promise.all([
     getObrasDestacadas(),
-    getEventosProximos(),
+    getEventosLatest(),
     getPostsDestacados(),
     getSettings(),
   ])
@@ -82,7 +82,7 @@ export default async function HomePage() {
               {S.home.upcomingConcerts}
             </h2>
             <Link
-              href="/concerts"
+              href="/news"
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',

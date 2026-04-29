@@ -54,6 +54,15 @@ export async function getEventosPasados(): Promise<Evento[]> {
   return (await apiFetch<Evento[]>(`/content/eventos?locale=${L}&filter=past`)) ?? []
 }
 
+/**
+ * Most-recent-first listing across both past and future entries. Used by
+ * the home page "Latest news" rail so the freshest news always rises to
+ * the top regardless of whether the event date has elapsed.
+ */
+export async function getEventosLatest(): Promise<Evento[]> {
+  return (await apiFetch<Evento[]>(`/content/eventos?locale=${L}&filter=latest`)) ?? []
+}
+
 export async function getPublicaciones(): Promise<Publicacion[]> {
   return (await apiFetch<Publicacion[]>(`/content/publicaciones?locale=${L}`)) ?? []
 }
