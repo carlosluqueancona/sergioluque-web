@@ -96,10 +96,11 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         label: 'Stroke colour mode',
         type: 'select',
         options: [
-          { value: 'accent', label: 'Match accent (auto-orange)' },
-          { value: 'custom', label: 'Custom hex' },
+          { value: 'accent', label: 'Match accent (follows the orange-CTA toggle)' },
+          { value: 'theme-default', label: 'Theme default monochrome (grey, ignores the orange toggle)' },
+          { value: 'custom', label: 'Custom hex (use the two pickers below)' },
         ],
-        hint: 'In "accent" the curves follow --accent and turn orange when the toggle above is on.',
+        hint: 'Choose how the Lissajous strokes are coloured. "Theme default" keeps the curves monochrome (light grey on dark / dark grey on light) regardless of whether the rest of the site is on a custom accent.',
       },
       {
         key: 'lis_color_dark',

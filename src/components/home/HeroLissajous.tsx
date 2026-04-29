@@ -77,14 +77,21 @@ export function HeroLissajous() {
     }
 
     const readStrokeRGB = (): [number, number, number] => {
+      const theme = document.documentElement.getAttribute('data-theme')
       // Custom mode → pick the dark or light hex from settings depending
       // on the active theme. The MutationObserver below already watches
       // data-theme, so flipping themes re-runs this and the colour
       // updates without a remount.
       if (cfg.colorMode === 'custom') {
-        const theme = document.documentElement.getAttribute('data-theme')
         const hex = theme === 'light' ? cfg.colorLight : cfg.colorDark
         return hexToRGB(hex) ?? [212, 212, 212]
+      }
+      // Theme-default mode → fixed monochrome greys per theme,
+      // independent of the orange-CTA toggle. Matches the original
+      // pre-orange-toggle look — the operator gets monochrome curves
+      // even while the rest of the site is on a custom accent.
+      if (cfg.colorMode === 'theme-default') {
+        return theme === 'light' ? [26, 26, 26] : [212, 212, 212]
       }
       // Accent mode → follow --accent (which itself flips with the
       // orange CTA toggle and the light/dark theme).
