@@ -673,26 +673,22 @@ button[aria-label="Pause"]:hover {
   }
 }
 
-/* Hero responsive tweaks: pull padding in on mobile so the Lissajous
-   figure (centered inside the canvas) doesn't sit pushed too far down
-   the viewport. Section gets tighter outer pad; inner wordmark column
-   loses its 64px vertical breathing room → drops to 24px.
-
-   Also caps section min-height to the visible viewport minus the
-   header so the section doesn't extend behind it. With 100vh the
-   section starts ~56 px below the viewport top (under the sticky
-   header) and runs 56 px past the bottom — that offset pushed the
-   figure's optical center 28 px below the visible mid-line. Capping
-   to (100svh - 56px) makes the section span exactly the visible
-   area, so the figure (centered at H/2) now sits at the visual
-   middle of the screen alongside the headline. */
+/* Hero responsive tweaks: pull padding in on mobile and bias the
+   wordmark column's vertical centering downward so the H1 lines up
+   with the visual center of the Lissajous figure. The figure's
+   center sits at H/2 of the section (canvas inset:0); the H1 sits
+   inside the wordmark column whose flex-center yields a slightly
+   higher position than H/2 (subtitle below H1 contributes to the
+   group height, which pulls the H1 up of group center). Asymmetric
+   padding (top heavier than bottom) shifts the centered group down
+   to compensate. Section keeps full 100vh so the bottom rail rests
+   just past the visible fold — visible only after a small scroll. */
 @media (max-width: 768px) {
   .hero-section {
     padding: 16px 20px 0 !important;
-    min-height: calc(100svh - 56px) !important;
   }
   .hero-wordmark-col {
-    padding: 24px 0 !important;
+    padding: 140px 0 24px !important;
   }
   .hero-indent { padding-left: 0; }
   .hero-meta-grid {
