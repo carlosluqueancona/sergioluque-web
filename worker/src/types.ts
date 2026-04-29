@@ -85,6 +85,8 @@ export interface Settings {
   profileImageUrl?: string;
   /** Default cover used on /works cards when an obra has no image. */
   worksFallbackCoverUrl?: string;
+  /** Open Graph image for the site when shared on WhatsApp / social. */
+  socialShareImageUrl?: string;
   ctaOrange?: boolean;
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table so

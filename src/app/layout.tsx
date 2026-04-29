@@ -27,20 +27,36 @@ const ibmPlexSans = IBM_Plex_Sans({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Sergio Luque',
-    template: '%s — Sergio Luque',
-  },
-  description: 'Composer and researcher. Works catalog, projects and publications.',
-  openGraph: {
-    type: 'website',
-    locale: 'en_GB',
-    siteName: 'Sergio Luque',
-    images: [{ url: '/og-default.jpg', width: 1200, height: 630 }],
-  },
-  twitter: { card: 'summary_large_image' },
-  metadataBase: new URL('https://sergioluque.com'),
+// Site-wide metadata, including the OG image used by WhatsApp / Twitter
+// / Facebook / iMessage previews. The image URL comes from admin →
+// Settings → "Social share image" so the operator can swap it without
+// a redeploy. Falls back to the static /og-default.jpg if no setting
+// is configured.
+export async function generateMetadata(): Promise<Metadata> {
+  let socialImage: string | undefined
+  try {
+    const settings = await getSettings()
+    socialImage = settings?.socialShareImageUrl
+  } catch {
+    /* tolerate worker outages — fall through to the static default */
+  }
+  const ogUrl = socialImage || '/og-default.jpg'
+  return {
+    title: {
+      default: 'Sergio Luque',
+      template: '%s — Sergio Luque',
+    },
+    description:
+      'Composer and researcher. Works catalog, projects and publications.',
+    openGraph: {
+      type: 'website',
+      locale: 'en_GB',
+      siteName: 'Sergio Luque',
+      images: [{ url: ogUrl, width: 1200, height: 630 }],
+    },
+    twitter: { card: 'summary_large_image', images: [ogUrl] },
+    metadataBase: new URL('https://sergioluque.com'),
+  }
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

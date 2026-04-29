@@ -78,6 +78,13 @@ export interface Settings {
    * Settings.
    */
   worksFallbackCoverUrl?: string
+  /**
+   * Open Graph image used by WhatsApp / Twitter / Facebook / iMessage
+   * etc. when the site URL is shared. Per-work pages override with
+   * their own image (or the works fallback cover) when available;
+   * any other page falls back to this site-wide value.
+   */
+  socialShareImageUrl?: string
   ctaOrange?: boolean
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table.

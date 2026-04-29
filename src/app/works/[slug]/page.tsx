@@ -24,11 +24,23 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const obra = await getObraBySlug(slug)
+  const [obra, settings] = await Promise.all([getObraBySlug(slug), getSettings()])
   if (!obra) return {}
+  // OG image priority for social shares (WhatsApp, Twitter, …):
+  // 1. the work's own image, 2. operator-picked works fallback cover,
+  // 3. site-wide social share image. None → inherit the layout default.
+  const ogImage =
+    (isHttpUrl(obra.imageUrl) && obra.imageUrl) ||
+    (isHttpUrl(settings?.worksFallbackCoverUrl) && settings.worksFallbackCoverUrl) ||
+    (isHttpUrl(settings?.socialShareImageUrl) && settings.socialShareImageUrl) ||
+    undefined
   return {
     title: obra.title,
     description: obra.instrumentation,
+    openGraph: ogImage
+      ? { images: [{ url: ogImage, width: 1200, height: 630 }] }
+      : undefined,
+    twitter: ogImage ? { images: [ogImage] } : undefined,
   }
 }
 

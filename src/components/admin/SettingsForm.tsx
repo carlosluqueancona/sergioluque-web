@@ -52,6 +52,12 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         type: 'image',
         hint: 'Shown on /works for any work whose entry has no image of its own. Pick from the media library or upload a new one.',
       },
+      {
+        key: 'social_share_image_url',
+        label: 'Social share image (WhatsApp, Twitter, Facebook…)',
+        type: 'image',
+        hint: 'Shown when the site URL is shared on social networks. Per-work pages override with their own cover when present. WhatsApp caches previews — replace + wait a few hours, or test in fresh chats.',
+      },
     ],
   },
   {

@@ -318,6 +318,7 @@ content.get('/settings', async (c) => {
       cvPdfUrl: kvMap['cv_pdf_url'],
       profileImageUrl: kvMap['profile_image_url'],
       worksFallbackCoverUrl: kvMap['works_fallback_cover_url'],
+      socialShareImageUrl: kvMap['social_share_image_url'],
       ctaOrange: kvMap['cta_orange'] === '1',
       lissajous: Object.keys(lissajous).length ? lissajous : undefined,
     };
