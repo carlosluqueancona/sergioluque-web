@@ -199,7 +199,12 @@ export function HeroLissajous() {
 
       const [r, g, bb] = strokeRGB
       const cx = W * cfg.centerX
-      const cy = H * cfg.centerY
+      // On narrow viewports the figure (centered at H/2) sits with a
+      // huge dead-band above it because the canvas is much taller than
+      // wide. Bias the y-center up to 0.42 so the gap between the
+      // header and the first stroke reads tighter on mobile portrait.
+      const isNarrow = W < 600
+      const cy = H * (isNarrow ? Math.min(cfg.centerY, 0.42) : cfg.centerY)
       const minDim = Math.min(W, H) * cfg.size
 
       for (const f of figures) {
