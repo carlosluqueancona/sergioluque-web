@@ -30,7 +30,10 @@ function descriptionExcerpt(raw: string | undefined, max = 220): string | null {
 
 const metaRowStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '110px 1fr',
+  // 92 px hits "COMMISSIONS" (the longest label at fontSize 10px Space
+  // Mono with 0.1em letter-spacing) with ~6 px breathing room — tighter
+  // than the original 110 px which left dead space on shorter labels.
+  gridTemplateColumns: '92px 1fr',
   gap: '12px',
   alignItems: 'baseline',
   margin: '0 0 4px',
