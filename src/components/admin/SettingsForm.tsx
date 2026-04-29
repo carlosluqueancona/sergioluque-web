@@ -46,6 +46,12 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
     fields: [
       { key: 'profile_image_url', label: 'Profile picture', type: 'image' },
       { key: 'cv_pdf_url', label: 'CV (PDF)', type: 'pdf' },
+      {
+        key: 'works_fallback_cover_url',
+        label: 'Works fallback cover',
+        type: 'image',
+        hint: 'Shown on /works for any work whose entry has no image of its own. Pick from the media library or upload a new one.',
+      },
     ],
   },
   {

@@ -10,6 +10,8 @@ const isHttpUrl = (s: string | undefined): s is string =>
 
 interface WorkCardProps {
   obra: Obra
+  /** Picked from admin → Settings → Works fallback cover. */
+  fallbackCoverUrl?: string
 }
 
 // Strip HTML tags + collapse whitespace, then trim to a card-sized excerpt.
@@ -53,10 +55,16 @@ function MetaRow({ label, value }: MetaRowProps) {
   )
 }
 
-export function WorkCard({ obra }: WorkCardProps) {
+export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
   const title = obra.title
   const slug = obra.slug
-  const showImage = isHttpUrl(obra.imageUrl)
+  // Per-obra image wins; otherwise fall back to the cover the operator
+  // picked in admin → Settings; otherwise hide the image cell entirely.
+  const imageSrc = isHttpUrl(obra.imageUrl)
+    ? obra.imageUrl
+    : isHttpUrl(fallbackCoverUrl)
+      ? fallbackCoverUrl
+      : null
   const showAudio = isHttpUrl(obra.audioUrl)
   const audioFormat = showAudio ? detectAudioFormat(obra.audioUrl) : null
   const href = `/works/${slug}`
@@ -84,7 +92,7 @@ export function WorkCard({ obra }: WorkCardProps) {
         padding: '24px 16px',
         marginInline: '-16px',
         display: 'grid',
-        gridTemplateColumns: showImage ? '120px 1fr' : '1fr',
+        gridTemplateColumns: imageSrc ? '120px 1fr' : '1fr',
         gap: '24px',
         alignItems: 'start',
       }}
@@ -96,10 +104,10 @@ export function WorkCard({ obra }: WorkCardProps) {
         style={{ position: 'absolute', inset: 0, zIndex: 1 }}
       />
 
-      {showImage && (
+      {imageSrc && (
         <span className="work-card-image">
           <Image
-            src={obra.imageUrl as string}
+            src={imageSrc}
             alt={title}
             width={120}
             height={120}

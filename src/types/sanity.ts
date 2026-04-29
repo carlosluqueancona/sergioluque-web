@@ -72,6 +72,12 @@ export interface Settings {
   email?: string
   cvPdfUrl?: string
   profileImageUrl?: string
+  /**
+   * Default cover image used on /works cards when an obra has no
+   * image_url of its own. Picked from the media library in admin →
+   * Settings.
+   */
+  worksFallbackCoverUrl?: string
   ctaOrange?: boolean
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table.

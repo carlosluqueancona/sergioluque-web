@@ -83,6 +83,8 @@ export interface Settings {
   email?: string;
   cvPdfUrl?: string;
   profileImageUrl?: string;
+  /** Default cover used on /works cards when an obra has no image. */
+  worksFallbackCoverUrl?: string;
   ctaOrange?: boolean;
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table so

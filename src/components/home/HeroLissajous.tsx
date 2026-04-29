@@ -169,37 +169,41 @@ export function HeroLissajous() {
     const fadeAlpha = cfg.trails
 
     const frame = () => {
-      ctx.globalCompositeOperation = 'source-over'
+      const isLight =
+        document.documentElement.getAttribute('data-theme') === 'light'
+      const additive = cfg.blend === 'lighter' || cfg.blend === 'screen'
+      // Additive blend modes auto-fall-back to source-over on the light
+      // theme — they're designed for dark bgs and would wash strokes out
+      // against a near-white background.
+      const additiveActive = additive && !isLight
+
       if (fadeAlpha >= 0.999) {
         // No trails: hard clear each frame.
+        ctx.globalCompositeOperation = 'source-over'
         ctx.clearRect(0, 0, W, H)
+      } else if (additiveActive) {
+        // Additive blends (lighter/screen) keep adding pixels to bright
+        // regions; a source-over bg-colour fade can't subtract that
+        // accumulation, which is what produced the rectangular grey
+        // halo around the figure (visible on /works as well as the
+        // hero). destination-out fades alpha uniformly regardless of
+        // accumulated colour — bright regions decay back to fully
+        // transparent, revealing the page bg through the canvas.
+        ctx.globalCompositeOperation = 'destination-out'
+        ctx.fillStyle = `rgba(0, 0, 0, ${fadeAlpha})`
+        ctx.fillRect(0, 0, W, H)
       } else {
-        // Trails: paint the page bg over the previous frame at fadeAlpha
-        // opacity. Two-fold benefit over destination-out:
-        //   1. heavily-trafficked regions (the centre, where Lissajous
-        //      curves concentrate) converge to bg colour — no halo of
-        //      residual stroke pixels.
-        //   2. The visual character matches what designers expect from
-        //      a "trail to the background" effect.
-        // The bg readback is theme-aware, so light/dark flips fade
-        // toward the appropriate colour automatically. With
-        // additive blends (lighter / screen) the bg fillRect still
-        // gets painted with source-over (set explicitly above), so the
-        // fade behaves the same regardless of the user's stroke blend.
+        // Non-additive: paint the page bg over the previous frame at
+        // fadeAlpha. Convergence to bg colour gives the classic
+        // "trail towards bg" character with no halo because source-over
+        // is symmetric.
+        ctx.globalCompositeOperation = 'source-over'
         const [br, bg, bbg] = bgRGB
         ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, ${fadeAlpha})`
         ctx.fillRect(0, 0, W, H)
       }
 
-      // Additive blend modes (lighter / screen) are designed for dark
-      // backgrounds — they push pixels towards white. On a light theme
-      // they wash dark strokes out to invisible from the first frame.
-      // Auto-fall-back to source-over so psicodélico-style presets keep
-      // working when Sergio toggles to light mode.
-      const isLight =
-        document.documentElement.getAttribute('data-theme') === 'light'
-      const additive = cfg.blend === 'lighter' || cfg.blend === 'screen'
-      ctx.globalCompositeOperation = isLight && additive ? 'source-over' : cfg.blend
+      ctx.globalCompositeOperation = additiveActive ? cfg.blend : 'source-over'
       ctx.lineCap = cfg.lineCap
 
       const [r, g, bb] = strokeRGB
@@ -246,19 +250,8 @@ export function HeroLissajous() {
         ctx.stroke()
         ctx.restore()
       }
-      // Counter the cumulative brightening that 'lighter' / 'screen'
-      // produce in heavily-visited regions: a 'multiply' pass with the
-      // page bg colour pulls bright pixels back towards bg without
-      // touching unvisited dark pixels (dark · dark ≈ dark). Only runs
-      // when the active blend mode is additive AND we're not already
-      // doing a hard clear (fadeAlpha=1).
-      const additiveActive = cfg.blend === 'lighter' || cfg.blend === 'screen'
-      if (additiveActive && fadeAlpha < 0.999) {
-        const [br, bg, bbg] = bgRGB
-        ctx.globalCompositeOperation = 'multiply'
-        ctx.fillStyle = `rgba(${br}, ${bg}, ${bbg}, 0.05)`
-        ctx.fillRect(0, 0, W, H)
-      }
+      // The destination-out fade above handles cumulative brightening
+      // for additive blends — no extra multiply-counter pass needed.
 
       // Reset state outside the per-figure loop so subsequent draws on
       // this canvas (none today, but cheap insurance) start clean.

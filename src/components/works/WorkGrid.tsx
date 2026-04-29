@@ -3,9 +3,11 @@ import type { Obra } from '@/types'
 
 interface WorkGridProps {
   obras: Obra[]
+  /** From settings.worksFallbackCoverUrl — used when an obra has none. */
+  fallbackCoverUrl?: string
 }
 
-export function WorkGrid({ obras }: WorkGridProps) {
+export function WorkGrid({ obras, fallbackCoverUrl }: WorkGridProps) {
   if (obras.length === 0) {
     return (
       <p
@@ -24,7 +26,7 @@ export function WorkGrid({ obras }: WorkGridProps) {
   return (
     <div>
       {obras.map((obra) => (
-        <WorkCard key={obra.id} obra={obra} />
+        <WorkCard key={obra.id} obra={obra} fallbackCoverUrl={fallbackCoverUrl} />
       ))}
     </div>
   )
