@@ -199,7 +199,11 @@ export function HeroLissajous() {
 
       const [r, g, bb] = strokeRGB
       const cx = W * cfg.centerX
-      const cy = H * cfg.centerY
+      // Lift the figure ~50 px on narrow viewports so it tracks the
+      // wordmark column's mobile padding bias (40 / 24 asymmetric).
+      // Desktop keeps the operator-configured centerY.
+      const isNarrow = W < 600
+      const cy = H * (isNarrow ? Math.min(cfg.centerY, 0.44) : cfg.centerY)
       const minDim = Math.min(W, H) * cfg.size
 
       for (const f of figures) {
