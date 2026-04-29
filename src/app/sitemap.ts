@@ -1,21 +1,24 @@
 export const runtime = 'edge'
 
 import { getObras, getPosts, getProyectos } from '@/lib/db/queries'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 import type { MetadataRoute } from 'next'
 
 const BASE_URL = 'https://sergioluque.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Hidden sections drop out of the sitemap entirely so search engines
+  // don't try to index pages that 404 behind the feature flag.
   const staticPaths = [
     '',
     '/works',
-    '/projects',
-    '/blog',
+    PUBLIC_SECTIONS.projects ? '/projects' : null,
+    PUBLIC_SECTIONS.blog ? '/blog' : null,
     '/bio',
     '/publications',
     '/concerts',
     '/contact',
-  ]
+  ].filter((p): p is string => p !== null)
 
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((path) => ({
     url: `${BASE_URL}${path}`,
@@ -45,7 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  if (postsR.status === 'fulfilled') {
+  if (PUBLIC_SECTIONS.blog && postsR.status === 'fulfilled') {
     for (const post of postsR.value) {
       if (post.slug) {
         dynamicEntries.push({
@@ -58,7 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  if (proyectosR.status === 'fulfilled') {
+  if (PUBLIC_SECTIONS.projects && proyectosR.status === 'fulfilled') {
     for (const proyecto of proyectosR.value) {
       if (proyecto.slug) {
         dynamicEntries.push({

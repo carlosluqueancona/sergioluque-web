@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getPostBySlug } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 import type { Metadata } from 'next'
 
 // Render on-demand. See works/[slug] for the rationale.
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!PUBLIC_SECTIONS.blog) notFound()
   const { slug } = await params
   const post = await getPostBySlug(slug)
   if (!post) notFound()

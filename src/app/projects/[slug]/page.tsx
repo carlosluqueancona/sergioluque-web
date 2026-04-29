@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getProyectoBySlug } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 import type { Metadata } from 'next'
 
 // Render on-demand. See works/[slug] for the rationale.
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ProyectoPage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!PUBLIC_SECTIONS.projects) notFound()
   const { slug } = await params
   const proyecto = await getProyectoBySlug(slug)
   if (!proyecto) notFound()

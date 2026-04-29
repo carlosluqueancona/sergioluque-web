@@ -10,6 +10,7 @@ import { PostCard } from '@/components/blog/PostCard'
 import { ConcertItem } from '@/components/concerts'
 import { Hero } from '@/components/home/Hero'
 import { S } from '@/lib/strings'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 
 export const revalidate = 3600
 
@@ -100,7 +101,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {posts.length > 0 && (
+      {PUBLIC_SECTIONS.blog && posts.length > 0 && (
         <section
           className="page-shell"
           style={{ borderTop: '1px solid var(--border)' }}

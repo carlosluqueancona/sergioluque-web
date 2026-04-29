@@ -1,6 +1,8 @@
+import { notFound } from 'next/navigation'
 import { getProyectos } from '@/lib/db/queries'
 import { ProjectCard } from '@/components/projects'
 import { S } from '@/lib/strings'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -8,6 +10,7 @@ export const revalidate = 3600
 export const metadata: Metadata = { title: S.projects.title }
 
 export default async function ProyectosPage() {
+  if (!PUBLIC_SECTIONS.projects) notFound()
   const proyectos = await getProyectos()
   return (
     <div className="page-shell">

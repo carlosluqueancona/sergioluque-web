@@ -3,12 +3,17 @@ import { NavLink } from './NavLink'
 import { ThemeToggle } from './ThemeToggle'
 import { MobileNav } from './MobileNav'
 import { S } from '@/lib/strings'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 
 export function Header() {
-  const navLinks = [
+  // Sections gated behind feature flags drop out of the public nav
+  // entirely — admin still has them, the data stays in the worker.
+  const navLinks: Array<{ href: string; label: string }> = [
     { href: '/works', label: S.nav.works },
-    { href: '/projects', label: S.nav.projects },
-    { href: '/blog', label: S.nav.blog },
+    ...(PUBLIC_SECTIONS.projects
+      ? [{ href: '/projects', label: S.nav.projects }]
+      : []),
+    ...(PUBLIC_SECTIONS.blog ? [{ href: '/blog', label: S.nav.blog }] : []),
     { href: '/bio', label: S.nav.bio },
     { href: '/publications', label: S.nav.publications },
     { href: '/concerts', label: S.nav.concerts },

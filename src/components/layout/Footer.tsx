@@ -3,15 +3,18 @@ import { S } from '@/lib/strings'
 import { getSettings } from '@/lib/db/queries'
 import { CookiePreferencesLink } from './CookiePreferencesLink'
 import { SocialLinks } from './SocialLinks'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 
 // Async server component — fetches settings to surface the operator's
 // social profile URLs. Tolerant of Worker outages: if the fetch
 // throws, the social strip just renders empty.
 export async function Footer() {
-  const navLinks = [
+  const navLinks: Array<{ href: string; label: string }> = [
     { href: '/works', label: S.nav.works },
-    { href: '/projects', label: S.nav.projects },
-    { href: '/blog', label: S.nav.blog },
+    ...(PUBLIC_SECTIONS.projects
+      ? [{ href: '/projects', label: S.nav.projects }]
+      : []),
+    ...(PUBLIC_SECTIONS.blog ? [{ href: '/blog', label: S.nav.blog }] : []),
     { href: '/bio', label: S.nav.bio },
     { href: '/publications', label: S.nav.publications },
     { href: '/concerts', label: S.nav.concerts },
