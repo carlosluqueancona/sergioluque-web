@@ -23,6 +23,18 @@ export async function Footer() {
   } catch {
     /* keep settings null — SocialLinks renders nothing without URLs */
   }
+  // Show the social row only when there's at least one URL configured —
+  // otherwise the divider would land on an empty row and look broken.
+  const hasSocials = !!(
+    settings &&
+    (settings.socialTwitter ||
+      settings.socialInstagram ||
+      settings.socialYoutube ||
+      settings.socialSoundcloud ||
+      settings.socialBandcamp ||
+      settings.socialFacebook ||
+      settings.socialLinkedin)
+  )
 
   return (
     <footer
@@ -37,85 +49,109 @@ export async function Footer() {
           margin: '0 auto',
           padding: 'clamp(24px, 4vw, 32px) clamp(20px, 5vw, 48px)',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          flexWrap: 'wrap',
+          flexDirection: 'column',
           gap: '24px',
         }}
       >
+        {/* Row 1 — brand / legal on the left, nav on the right (existing). */}
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
+            justifyContent: 'space-between',
             alignItems: 'flex-start',
-            gap: '12px',
+            flexWrap: 'wrap',
+            gap: '24px',
           }}
         >
-          <SocialLinks settings={settings} variant="footer" />
-          <p
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '11px',
-              color: 'var(--text-muted)',
-              margin: 0,
-            }}
-          >
-            © {new Date().getFullYear()} Sergio Luque
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Link
-              href="/privacy"
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '10px',
-                letterSpacing: '0.1em',
-                color: 'var(--text-muted)',
-                textDecoration: 'none',
-                textTransform: 'uppercase',
-              }}
-            >
-              Privacy
-            </Link>
-            <span
-              aria-hidden
-              style={{ color: 'var(--text-muted)', fontSize: '10px', opacity: 0.6 }}
-            >
-              ·
-            </span>
-            <CookiePreferencesLink />
-          </div>
-        </div>
-
-        <nav aria-label="Footer navigation">
-          <ul
+          <div
             style={{
               display: 'flex',
-              flexWrap: 'wrap',
-              gap: '16px 32px',
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '6px',
             }}
           >
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  style={{
-                    fontFamily: 'var(--font-space-mono)',
-                    fontSize: '10px',
-                    letterSpacing: '0.1em',
-                    color: 'var(--text-muted)',
-                    textDecoration: 'none',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+            <p
+              style={{
+                fontFamily: 'var(--font-space-mono)',
+                fontSize: '11px',
+                color: 'var(--text-muted)',
+                margin: 0,
+              }}
+            >
+              © {new Date().getFullYear()} Sergio Luque
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Link
+                href="/privacy"
+                style={{
+                  fontFamily: 'var(--font-space-mono)',
+                  fontSize: '10px',
+                  letterSpacing: '0.1em',
+                  color: 'var(--text-muted)',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Privacy
+              </Link>
+              <span
+                aria-hidden
+                style={{ color: 'var(--text-muted)', fontSize: '10px', opacity: 0.6 }}
+              >
+                ·
+              </span>
+              <CookiePreferencesLink />
+            </div>
+          </div>
+
+          <nav aria-label="Footer navigation">
+            <ul
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '16px 32px',
+                listStyle: 'none',
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    style={{
+                      fontFamily: 'var(--font-space-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.1em',
+                      color: 'var(--text-muted)',
+                      textDecoration: 'none',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        {/* Row 2 — socials, right-aligned to mirror the nav above. Only
+           rendered (with its divider) when at least one URL is set, so
+           empty configs don't leave a stray rule. */}
+        {hasSocials && (
+          <div
+            style={{
+              borderTop: '1px solid var(--border)',
+              paddingTop: '20px',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <SocialLinks settings={settings} variant="footer" />
+          </div>
+        )}
       </div>
     </footer>
   )
