@@ -22,6 +22,7 @@ export function ConcertItem({ evento }: ConcertItemProps) {
 
   return (
     <div
+      className="concert-item"
       style={{
         display: 'grid',
         gridTemplateColumns: showImage ? '80px 140px 1fr' : '140px 1fr',
@@ -53,7 +54,10 @@ export function ConcertItem({ evento }: ConcertItemProps) {
       </span>
 
       <div>
-        <p style={{ fontFamily: 'var(--font-space-mono)', fontSize: '13px', color: 'var(--text-primary)', margin: 0 }}>
+        <p
+          className="concert-item-title"
+          style={{ fontFamily: 'var(--font-space-mono)', fontSize: '13px', color: 'var(--text-primary)', margin: 0 }}
+        >
           {title}
         </p>
         {(evento.venue || evento.city) && (
