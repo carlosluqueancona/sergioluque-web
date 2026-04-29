@@ -268,8 +268,14 @@ export function HeroLissajous() {
       aria-hidden
       style={{
         position: 'absolute',
-        inset: 0,
-        width: '100%',
+        // Break out of the 1200 px hero shell so the canvas spans the
+        // full viewport width — the Lissajous figure should fill the
+        // browser, not get clipped to the page column. left: calc(50% -
+        // 50vw) snaps the left edge to the viewport edge regardless of
+        // the parent's max-width and centring.
+        top: 0,
+        left: 'calc(50% - 50vw)',
+        width: '100vw',
         height: '100%',
         pointerEvents: 'none',
         zIndex: 0,
