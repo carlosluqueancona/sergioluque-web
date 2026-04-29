@@ -80,11 +80,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let lissajousJson = '{}'
   let accentDark: string | undefined
   let accentLight: string | undefined
+  let headingsCustom = false
+  let headingDark: string | undefined
+  let headingLight: string | undefined
   try {
     const settings = await getSettings()
     ctaOrange = !!settings?.ctaOrange
     accentDark = settings?.accentColorDark
     accentLight = settings?.accentColorLight
+    headingsCustom = !!settings?.headingsCustomEnabled
+    headingDark = settings?.headingColorDark
+    headingLight = settings?.headingColorLight
     if (settings?.lissajous) {
       // Escape `<` so the inline JSON can't close the <script> tag.
       // All lis_* values are constrained (numbers, hex colours, enum
@@ -96,11 +102,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     /* ignore — keep default accent + default Lissajous look */
   }
 
-  // Build a per-theme accent override — only emitted when the toggle is
-  // on AND the operator picked a colour. Hex format guarded so we don't
-  // inject anything that could break out of the <style>.
+  // Build per-theme overrides for --accent and --heading. Hex format
+  // guarded with a regex so a malformed setting can't break out of
+  // <style>. The heading rules are emitted AFTER the accent rules so
+  // they take precedence within the same specificity layer when both
+  // overrides are active.
   const isHex = (v?: string) => !!v && /^#[0-9a-fA-F]{3,8}$/.test(v.trim())
-  const accentStyle =
+  const accentRules =
     ctaOrange && (isHex(accentDark) || isHex(accentLight))
       ? [
           isHex(accentDark)
@@ -113,9 +121,28 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           .filter(Boolean)
           .join('\n')
       : ''
+  const headingRules =
+    headingsCustom && (isHex(headingDark) || isHex(headingLight))
+      ? [
+          isHex(headingDark)
+            ? `html[data-headings="custom"][data-theme="dark"], html[data-headings="custom"]:not([data-theme="light"]) { --heading: ${headingDark}; }`
+            : '',
+          isHex(headingLight)
+            ? `html[data-headings="custom"][data-theme="light"] { --heading: ${headingLight}; }`
+            : '',
+        ]
+          .filter(Boolean)
+          .join('\n')
+      : ''
+  const accentStyle = [accentRules, headingRules].filter(Boolean).join('\n')
 
   return (
-    <html lang="en" data-cta={ctaOrange ? 'orange' : 'default'} suppressHydrationWarning>
+    <html
+      lang="en"
+      data-cta={ctaOrange ? 'orange' : 'default'}
+      data-headings={headingsCustom ? 'custom' : 'default'}
+      suppressHydrationWarning
+    >
       <head>
         {/* Runs before paint so the chosen theme is on <html> the first frame. */}
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />

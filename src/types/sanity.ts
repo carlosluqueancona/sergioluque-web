@@ -107,6 +107,15 @@ export interface Settings {
   accentColorDark?: string
   accentColorLight?: string
   /**
+   * Optional headings override — when enabled, h2 / h3 / card titles
+   * pick these colours instead of following --accent. Useful when the
+   * operator wants headings to read as a separate hierarchy layer
+   * (e.g. accent for links/buttons but neutral white for headings).
+   */
+  headingsCustomEnabled?: boolean
+  headingColorDark?: string
+  headingColorLight?: string
+  /**
    * Raw `lis_*` keys passed through verbatim from the settings table.
    * The Hero component parses this with parseLissajousConfig() so the
    * Worker doesn't need to know the canvas semantics.

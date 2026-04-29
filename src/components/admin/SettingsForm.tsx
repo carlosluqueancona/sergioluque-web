@@ -65,25 +65,45 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
     fields: [{ key: 'email', label: 'Contact email', type: 'email' }],
   },
   {
-    title: 'Appearance',
+    title: 'Colour palette',
     fields: [
+      // ── Accent (drives CTAs + Lissajous + headings by default) ──
       {
         key: 'cta_orange',
         label: 'Custom accent colours (apply to everything)',
         type: 'switch',
-        hint: 'Single switch — when ON the two colours below drive the whole site (links, headings, buttons, audio progress, AND the Lissajous curves on the home). When OFF, the site stays monochrome by default.',
+        hint: 'When ON, the two pickers below drive the whole site — links, buttons, audio progress, headings, AND the Lissajous curves on the home. When OFF, the site stays monochrome.',
       },
       {
         key: 'accent_color_dark',
         label: 'Accent — dark theme',
         type: 'color',
-        hint: 'Default #FF6A1E. Used when the dark theme is active. Drives both site CTAs and Hero curves.',
+        hint: 'Default #FF6A1E.',
       },
       {
         key: 'accent_color_light',
         label: 'Accent — light theme',
         type: 'color',
-        hint: 'Default #E55A00 (deeper orange — the brighter dark-theme tone washes out against near-white). Drives both site CTAs and Hero curves on the light theme.',
+        hint: 'Default #E55A00 (deeper orange — the brighter dark tone washes out against near-white).',
+      },
+      // ── Optional headings override ─────────────────────────────
+      {
+        key: 'headings_custom_enabled',
+        label: 'Headings use a different colour from the accent',
+        type: 'switch',
+        hint: 'OFF (default): h2 / h3 follow the accent above — links and headings share a colour. ON: pick a separate colour pair for headings only (CTAs and Lissajous still follow the accent). Use sparingly — most coherent designs keep them in lock-step.',
+      },
+      {
+        key: 'heading_color_dark',
+        label: 'Headings — dark theme',
+        type: 'color',
+        hint: 'Active only when the headings override above is ON. Defaults to the accent dark colour when blank.',
+      },
+      {
+        key: 'heading_color_light',
+        label: 'Headings — light theme',
+        type: 'color',
+        hint: 'Active only when the headings override above is ON. Defaults to the accent light colour when blank.',
       },
     ],
   },

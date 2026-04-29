@@ -339,6 +339,9 @@ content.get('/settings', async (c) => {
       ctaOrange: kvMap['cta_orange'] === '1',
       accentColorDark: kvMap['accent_color_dark'],
       accentColorLight: kvMap['accent_color_light'],
+      headingsCustomEnabled: kvMap['headings_custom_enabled'] === '1',
+      headingColorDark: kvMap['heading_color_dark'],
+      headingColorLight: kvMap['heading_color_light'],
       lissajous: Object.keys(lissajous).length ? lissajous : undefined,
     };
     void locale;

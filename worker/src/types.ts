@@ -101,6 +101,10 @@ export interface Settings {
   /** Operator-tunable accent applied when ctaOrange is on. */
   accentColorDark?: string;
   accentColorLight?: string;
+  /** Optional headings override — separate from the accent. */
+  headingsCustomEnabled?: boolean;
+  headingColorDark?: string;
+  headingColorLight?: string;
   /**
    * Raw `lis_*` keys passed through verbatim from the settings table so
    * the Hero canvas can parse them client-side. The Worker stays dumb
