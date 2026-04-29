@@ -79,6 +79,25 @@ export interface Publicacion {
   doi?: string;
 }
 
+export interface CatalogueEntry {
+  id: number;
+  category: 'vocal_instrumental_mixed' | 'electroacoustic';
+  title: string;
+  yearText?: string;
+  yearSort?: number;
+  instrumentation?: string;
+  notes?: string;
+  description?: string;
+  imageUrl?: string;
+  scoreUrl?: string;
+  listenUrl?: string;
+  patchUrl?: string;
+  videoUrl?: string;
+  losslessUrl?: string;
+  isFeatured: boolean;
+  sortOrder: number;
+}
+
 export interface Settings {
   bio?: string;
   bioShort?: string;

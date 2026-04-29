@@ -10,6 +10,7 @@ export type FieldType =
   | 'pdf-upload'
   | 'image-list'
   | 'link-list'
+  | 'select'
 
 export interface FieldDef {
   key: string
@@ -18,6 +19,8 @@ export interface FieldDef {
   required?: boolean
   placeholder?: string
   rows?: number // for textarea
+  /** For 'select' type — list of allowed values + display labels. */
+  options?: { value: string; label: string }[]
 }
 
 export interface EntitySchema {
@@ -120,6 +123,81 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       { key: 'pdf_url', label: 'PDF URL', type: 'url' },
       { key: 'doi', label: 'DOI', type: 'text' },
       { key: 'image_url', label: 'Cover image', type: 'image-upload' },
+    ],
+  },
+
+  catalogue: {
+    name: 'catalogue',
+    route: 'catalogue',
+    label: 'Catalogue',
+    labelSingular: 'Catalogue entry',
+    emoji: '⌗',
+    listColumns: [
+      { key: 'title', label: 'Title' },
+      { key: 'category', label: 'Category' },
+      { key: 'year_text', label: 'Year' },
+    ],
+    fields: [
+      { key: 'title', label: 'Title', type: 'text', required: true },
+      {
+        key: 'category',
+        label: 'Category',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'vocal_instrumental_mixed', label: 'Vocal, Instrumental and Mixed Works' },
+          { value: 'electroacoustic', label: 'Electroacoustic Works' },
+        ],
+      },
+      {
+        key: 'year_text',
+        label: 'Year (display)',
+        type: 'text',
+        placeholder: 'e.g. 2022, or 2020 – 2021, or 2014, rev. 2019',
+      },
+      {
+        key: 'year_sort',
+        label: 'Year (numeric, for sorting)',
+        type: 'number',
+        placeholder: 'End year of the composition (used to order the list)',
+      },
+      {
+        key: 'instrumentation',
+        label: 'Instrumentation',
+        type: 'textarea',
+        rows: 3,
+        placeholder: 'e.g. Piano, violin, viola and cello',
+      },
+      {
+        key: 'notes',
+        label: 'Notes (commissions, prizes, movement list)',
+        type: 'textarea',
+        rows: 3,
+        placeholder: 'Multi-line OK. Used for "Commissioned by …", "Composed with the support of …", etc.',
+      },
+      {
+        key: 'description',
+        label: 'Description (featured-work block body)',
+        type: 'textarea',
+        rows: 4,
+        placeholder: 'Used only when this entry is the Featured one — appears next to the cover image at the top of /catalogue.',
+      },
+      {
+        key: 'image_url',
+        label: 'Cover image (used by the featured-work block)',
+        type: 'image-upload',
+      },
+      { key: 'score_url', label: 'Score URL', type: 'url' },
+      { key: 'listen_url', label: 'Listen URL', type: 'url' },
+      { key: 'patch_url', label: 'Patch URL (Pure Data / SuperCollider)', type: 'url' },
+      { key: 'video_url', label: 'Video URL', type: 'url' },
+      { key: 'lossless_url', label: 'Lossless audio URL', type: 'url' },
+      {
+        key: 'is_featured',
+        label: 'Featured (show in the hero block at top of /catalogue)',
+        type: 'boolean',
+      },
+      { key: 'sort_order', label: 'Sort order (within same year)', type: 'number' },
     ],
   },
 }

@@ -12,6 +12,7 @@ export const S = {
     publications: 'Stochastics',
     concerts: 'News',
     contact: 'Contact',
+    catalogue: 'Catalogue',
   },
   works: {
     title: 'Works',
@@ -59,6 +60,24 @@ export const S = {
   },
   bio: {
     title: 'Biography',
+  },
+  catalogue: {
+    title: 'Catalogue',
+    subtitle: 'A comprehensive index of compositions across vocal, instrumental, mixed, and electroacoustic media.',
+    featuredLabel: 'Featured work',
+    filterAll: 'All',
+    filterMixed: 'Vocal · Instrumental · Mixed',
+    filterElectro: 'Electroacoustic',
+    columnYear: 'Year',
+    columnTitle: 'Title',
+    columnInstrumentation: 'Instrumentation',
+    columnReference: 'Reference',
+    listen: 'Listen',
+    viewScore: 'View score',
+    viewPatch: 'View patch',
+    watchVideo: 'Watch video',
+    downloadLossless: 'Download lossless',
+    empty: 'No entries in this category yet.',
   },
   concerts: {
     title: 'News',

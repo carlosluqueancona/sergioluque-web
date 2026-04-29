@@ -1,5 +1,14 @@
 import { apiFetch } from './client'
-import type { Obra, Proyecto, Post, Evento, Publicacion, Settings } from '@/types'
+import type {
+  Obra,
+  Proyecto,
+  Post,
+  Evento,
+  Publicacion,
+  Settings,
+  CatalogueEntry,
+  CatalogueCategory,
+} from '@/types'
 
 // Worker still supports a locale query param for legacy / admin use; site is
 // English-only so every public query hardcodes locale=en.
@@ -51,4 +60,11 @@ export async function getPublicaciones(): Promise<Publicacion[]> {
 
 export async function getSettings(): Promise<Settings> {
   return (await apiFetch<Settings>(`/content/settings?locale=${L}`)) ?? {}
+}
+
+export async function getCatalogue(
+  category?: CatalogueCategory
+): Promise<CatalogueEntry[]> {
+  const qs = category ? `?category=${category}` : ''
+  return (await apiFetch<CatalogueEntry[]>(`/content/catalogue${qs}`)) ?? []
 }

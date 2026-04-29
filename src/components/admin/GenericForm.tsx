@@ -329,6 +329,30 @@ function FieldRenderer({ field, value, onChange, uploadFile, deleteFile }: Field
     )
   }
 
+  if (field.type === 'select') {
+    return (
+      <div style={fieldStyle}>
+        <label style={labelStyle}>
+          {field.label}
+          {field.required ? ' *' : ''}
+        </label>
+        <select
+          value={String(value ?? '')}
+          onChange={(e) => onChange(e.target.value)}
+          required={field.required}
+          style={inputStyle}
+        >
+          {!field.required && <option value="">—</option>}
+          {(field.options ?? []).map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    )
+  }
+
   return (
     <div style={fieldStyle}>
       <label style={labelStyle}>

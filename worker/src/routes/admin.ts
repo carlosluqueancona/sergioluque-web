@@ -196,6 +196,14 @@ registerCrud(admin, 'posts', [
   'is_featured',
 ]);
 
+registerCrud(admin, 'catalogue', [
+  'category', 'title', 'year_text', 'year_sort',
+  'instrumentation', 'notes',
+  'description', 'image_url',
+  'score_url', 'listen_url', 'patch_url', 'video_url', 'lossless_url',
+  'is_featured', 'sort_order',
+]);
+
 registerCrud(admin, 'proyectos', [
   'title', 'slug', 'year',
   'description', 'images', 'links', 'is_featured',

@@ -102,6 +102,37 @@ CREATE TABLE IF NOT EXISTS publicaciones (
   updated_at  TEXT DEFAULT (datetime('now'))
 );
 
+-- Catalogue — flat list of works (separate from `obras` which carries
+-- richer per-work pages). Two categories: 'vocal_instrumental_mixed'
+-- and 'electroacoustic'. year_text keeps the operator's original
+-- string ("2020 – 2021", "2014, rev. 2019"); year_sort holds the
+-- numeric end-year used for ordering.
+-- Migration for existing databases:
+--   wrangler d1 execute sergioluque-db --remote --file schema.sql
+-- (or copy just the CREATE TABLE block for catalogue.)
+CREATE TABLE IF NOT EXISTS catalogue (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  category        TEXT NOT NULL DEFAULT 'vocal_instrumental_mixed',
+  title           TEXT NOT NULL DEFAULT '',
+  year_text       TEXT DEFAULT '',
+  year_sort       INTEGER DEFAULT 0,
+  instrumentation TEXT DEFAULT '',
+  notes           TEXT DEFAULT '',
+  description     TEXT DEFAULT '',
+  image_url       TEXT DEFAULT '',
+  score_url       TEXT DEFAULT '',
+  listen_url      TEXT DEFAULT '',
+  patch_url       TEXT DEFAULT '',
+  video_url       TEXT DEFAULT '',
+  lossless_url    TEXT DEFAULT '',
+  is_featured     INTEGER DEFAULT 0,
+  sort_order      INTEGER DEFAULT 0,
+  created_at      TEXT DEFAULT (datetime('now')),
+  updated_at      TEXT DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_catalogue_category ON catalogue(category, year_sort DESC);
+CREATE INDEX IF NOT EXISTS idx_catalogue_featured ON catalogue(is_featured);
+
 -- Admin users
 CREATE TABLE IF NOT EXISTS admin_users (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,

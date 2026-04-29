@@ -67,6 +67,35 @@ export interface Publicacion {
   imageUrl?: string
 }
 
+export type CatalogueCategory = 'vocal_instrumental_mixed' | 'electroacoustic'
+
+export interface CatalogueEntry {
+  id: number
+  category: CatalogueCategory
+  title: string
+  /** Operator-authored year string ("2020 – 2021", "2014, rev. 2019"). */
+  yearText?: string
+  /** Numeric end-year used for ordering. */
+  yearSort?: number
+  instrumentation?: string
+  /** Commissions, prizes, multi-movement notes — anything below the
+   *  instrumentation line in the catalogue source. */
+  notes?: string
+  /** Body text shown in the featured-work block above the catalogue list. */
+  description?: string
+  /** Cover image used in the featured-work block. */
+  imageUrl?: string
+  scoreUrl?: string
+  listenUrl?: string
+  patchUrl?: string
+  videoUrl?: string
+  losslessUrl?: string
+  /** When true, this entry is highlighted in the featured-work block at
+   *  the top of /catalogue. Only the most-recent featured one wins. */
+  isFeatured: boolean
+  sortOrder: number
+}
+
 export interface Settings {
   bio?: string
   bioShort?: string

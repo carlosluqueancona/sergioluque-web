@@ -159,6 +159,48 @@ content.get('/obras/:slug', async (c) => {
   }
 });
 
+// ── Catalogue ─────────────────────────────────────────────────────────────
+
+content.get('/catalogue', async (c) => {
+  const cors = getCors(c);
+  const category = c.req.query('category');
+  try {
+    let stmt: D1PreparedStatement;
+    if (category === 'vocal_instrumental_mixed' || category === 'electroacoustic') {
+      stmt = c.env.DB.prepare(
+        'SELECT * FROM catalogue WHERE category = ?1 ORDER BY year_sort DESC, sort_order ASC, id ASC'
+      ).bind(category);
+    } else {
+      stmt = c.env.DB.prepare(
+        'SELECT * FROM catalogue ORDER BY year_sort DESC, sort_order ASC, id ASC'
+      );
+    }
+    const { results } = await stmt.all<Record<string, unknown>>();
+    const entries = (results ?? []).map((r) => ({
+      id: r['id'] as number,
+      category: (r['category'] as string) || 'vocal_instrumental_mixed',
+      title: (r['title'] as string) || '',
+      yearText: (r['year_text'] as string) || undefined,
+      yearSort: (r['year_sort'] as number) || undefined,
+      instrumentation: (r['instrumentation'] as string) || undefined,
+      notes: (r['notes'] as string) || undefined,
+      description: (r['description'] as string) || undefined,
+      imageUrl: (r['image_url'] as string) || undefined,
+      scoreUrl: (r['score_url'] as string) || undefined,
+      listenUrl: (r['listen_url'] as string) || undefined,
+      patchUrl: (r['patch_url'] as string) || undefined,
+      videoUrl: (r['video_url'] as string) || undefined,
+      losslessUrl: (r['lossless_url'] as string) || undefined,
+      isFeatured: Boolean(r['is_featured']),
+      sortOrder: (r['sort_order'] as number) ?? 0,
+    }));
+    return json(entries, 200, cors);
+  } catch (err) {
+    console.error('catalogue list error', err);
+    return jsonError('Internal server error', 500, cors);
+  }
+});
+
 // ── Posts ─────────────────────────────────────────────────────────────────
 
 content.get('/posts', async (c) => {
