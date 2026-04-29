@@ -14,7 +14,7 @@
 export type DashKey = 'solid' | 'dotted' | 'dash-short' | 'dash-long' | 'dash-irregular'
 export type BlendKey = 'source-over' | 'lighter' | 'screen'
 export type LineCapKey = 'butt' | 'round'
-export type ColorModeKey = 'accent' | 'custom'
+export type ColorModeKey = 'accent' | 'custom' | 'multicolor'
 
 export interface LissajousConfig {
   colorMode: ColorModeKey
@@ -101,7 +101,12 @@ export function parseLissajousConfig(
 ): LissajousConfig {
   const k = kv ?? {}
   const colorModeRaw = (k['lis_color_mode'] ?? '').trim()
-  const colorMode: ColorModeKey = colorModeRaw === 'custom' ? 'custom' : 'accent'
+  const colorMode: ColorModeKey =
+    colorModeRaw === 'custom'
+      ? 'custom'
+      : colorModeRaw === 'multicolor'
+        ? 'multicolor'
+        : 'accent'
   const dashRaw = (k['lis_dash'] ?? 'solid') as DashKey
   const blendRaw = (k['lis_blend'] ?? 'source-over') as BlendKey
   const lineCapRaw = (k['lis_line_cap'] ?? 'butt') as LineCapKey

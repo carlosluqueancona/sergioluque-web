@@ -119,6 +119,39 @@ export const LISSAJOUS_PRESETS: Record<string, Record<string, string>> = {
     lis_alpha_decay: '0.14',
     lis_static: '',
   },
+
+  // Elisiña — multicolour Psicodélico. Same dotted curves, same trails,
+  // but each figure picks a different slice of the colour wheel via the
+  // 'multicolor' colour mode. Hue distribution + 90% saturation / 58%
+  // lightness gives a vibrant rainbow that reads on both light and dark
+  // themes. lis_color_dark / lis_color_light are kept for safety in case
+  // the runtime ever falls back to the per-theme hex (e.g. on an unknown
+  // colour mode), but the canvas ignores them under 'multicolor'.
+  elisina: {
+    lis_color_mode: 'multicolor',
+    lis_color_dark: '#FF6A1E',
+    lis_color_light: '#404040',
+    lis_count: '5',
+    lis_ratios: '5:4,7:5,φ,3:2,4:3',
+    lis_segments: '1600',
+    lis_line_width: '0.4',
+    lis_dash: 'dotted',
+    lis_line_cap: 'round',
+    lis_drift: '1.1',
+    lis_phase: '60',
+    lis_speed: '2',
+    lis_rotation: '0.0025',
+    lis_trails: '0.05',
+    lis_blend: 'lighter',
+    lis_size: '1.2',
+    lis_center_x: '0.5',
+    lis_center_y: '0.5',
+    lis_opacity: '1.3',
+    lis_glow: '12',
+    lis_alpha_base: '0.4',
+    lis_alpha_decay: '0.14',
+    lis_static: '',
+  },
 }
 
 /** The default config (also = `academico` preset). */

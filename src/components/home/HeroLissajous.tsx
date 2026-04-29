@@ -55,6 +55,10 @@ export function HeroLissajous() {
       // as a hierarchy (outer biggest/most visible).
       alphaScale: number
       radiusScale: number
+      // Pre-computed hue used only when colorMode === 'multicolor' —
+      // each figure gets a different slice of the colour wheel so the
+      // stack reads as a rainbow without runtime calc per frame.
+      hue: number
     }
 
     let W = 0
@@ -145,6 +149,9 @@ export function HeroLissajous() {
           phase0: i * 0.7,
           alphaScale,
           radiusScale,
+          // Distribute hues evenly across the wheel; offset by 15° so
+          // figure 0 lands on a warm pink/magenta instead of pure red.
+          hue: ((i / Math.max(1, N)) * 360 + 15) % 360,
         })
       }
     }
@@ -211,9 +218,21 @@ export function HeroLissajous() {
         ctx.translate(cx, cy)
         ctx.rotate(f.rot + wobble + continuous)
 
+        const alpha = Math.max(0, Math.min(1, f.alphaScale * cfg.opacity))
+        // Multicolor mode → each figure picks a different hue from the
+        // wheel (precomputed in setupFigures). Saturation 90% / lightness
+        // 58% reads vibrant on dark and still legible on light.
+        const isMulti = cfg.colorMode === 'multicolor'
+        const figStrokeStyle = isMulti
+          ? `hsla(${f.hue}, 90%, 58%, ${alpha.toFixed(3)})`
+          : `rgba(${r},${g},${bb},${alpha.toFixed(3)})`
+        const figShadowStyle = isMulti
+          ? `hsla(${f.hue}, 90%, 58%, ${(f.alphaScale * cfg.opacity).toFixed(3)})`
+          : `rgba(${r},${g},${bb},${(f.alphaScale * cfg.opacity).toFixed(3)})`
+
         if (cfg.glow > 0) {
           ctx.shadowBlur = cfg.glow
-          ctx.shadowColor = `rgba(${r},${g},${bb},${(f.alphaScale * cfg.opacity).toFixed(3)})`
+          ctx.shadowColor = figShadowStyle
         } else {
           ctx.shadowBlur = 0
         }
@@ -228,8 +247,7 @@ export function HeroLissajous() {
           if (i === 0) ctx.moveTo(x, y)
           else ctx.lineTo(x, y)
         }
-        const alpha = Math.max(0, Math.min(1, f.alphaScale * cfg.opacity))
-        ctx.strokeStyle = `rgba(${r},${g},${bb},${alpha.toFixed(3)})`
+        ctx.strokeStyle = figStrokeStyle
         ctx.lineWidth = cfg.lineWidth
         ctx.stroke()
         ctx.restore()
