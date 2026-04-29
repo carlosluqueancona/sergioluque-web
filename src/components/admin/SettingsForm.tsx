@@ -31,7 +31,21 @@ interface FieldConfig {
   options?: { value: string; label: string }[]
   /** Suffix shown after the slider value (e.g. 'px', '×') */
   suffix?: string
+  /**
+   * For 'color' fields: the official default hex. When provided, the
+   * color picker grows a "Use default" toggle on the right; flipping
+   * it on stores an empty string (so the layout falls through to the
+   * static globals.css default), keeping the official colour visible
+   * to the operator without baking it into the saved value.
+   */
+  defaultValue?: string
 }
+
+// Brand-approved official accent. Single source of truth referenced
+// by the Colour palette field defs (so the "Use default" toggle shows
+// the right swatch) and by globals.css (so an empty saved value falls
+// through to this colour).
+const OFFICIAL_ACCENT = '#C24100'
 
 const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
   {
@@ -78,13 +92,15 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         key: 'accent_color_dark',
         label: 'Accent — dark theme',
         type: 'color',
-        hint: 'Default #FF6A1E.',
+        defaultValue: OFFICIAL_ACCENT,
+        hint: `Brand default ${OFFICIAL_ACCENT}. Toggle on the right to lock to the default; turn it off to pick a custom hex for this theme.`,
       },
       {
         key: 'accent_color_light',
         label: 'Accent — light theme',
         type: 'color',
-        hint: 'Default #E55A00 (deeper orange — the brighter dark tone washes out against near-white).',
+        defaultValue: OFFICIAL_ACCENT,
+        hint: `Brand default ${OFFICIAL_ACCENT}. Toggle on the right to lock to the default; turn it off to pick a custom hex for this theme.`,
       },
       // ── Optional headings override ─────────────────────────────
       {
@@ -603,13 +619,22 @@ function SettingField({
   }
 
   if (field.type === 'color') {
+    // Empty saved value means "fall through to the static default in
+    // globals.css", so we treat that state as "Use default = ON" in the
+    // UI and surface the official colour swatch read-only. Picking a
+    // custom hex flips the toggle off and writes the chosen value.
+    const defaultColor = field.defaultValue
+    const useDefault = !value
+    const displayedHex = useDefault ? defaultColor ?? '#D4D4D4' : value
+
     return (
       <div style={{ marginBottom: '20px' }}>
         <label style={labelStyle}>{field.label}</label>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
           <input
             type="color"
-            value={value || '#D4D4D4'}
+            value={displayedHex || '#D4D4D4'}
+            disabled={useDefault}
             onChange={(e) => onChange(e.target.value)}
             style={{
               width: '48px',
@@ -617,16 +642,60 @@ function SettingField({
               border: '1px solid var(--border)',
               background: 'var(--surface)',
               padding: 0,
-              cursor: 'pointer',
+              cursor: useDefault ? 'not-allowed' : 'pointer',
+              opacity: useDefault ? 0.55 : 1,
             }}
           />
           <input
             type="text"
-            value={value}
-            placeholder="#D4D4D4"
+            value={displayedHex}
+            placeholder={defaultColor ?? '#D4D4D4'}
+            disabled={useDefault}
             onChange={(e) => onChange(e.target.value)}
-            style={{ ...inputStyle, width: '120px' }}
+            style={{
+              ...inputStyle,
+              width: '120px',
+              opacity: useDefault ? 0.55 : 1,
+            }}
           />
+          {defaultColor && (
+            <label
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontFamily: 'monospace',
+                fontSize: '11px',
+                color: 'var(--text-secondary)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                marginLeft: 'auto',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={useDefault}
+                onChange={(e) =>
+                  onChange(e.target.checked ? '' : defaultColor)
+                }
+                style={{ accentColor: 'var(--accent)' }}
+              />
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Use default
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: '14px',
+                    height: '14px',
+                    background: defaultColor,
+                    border: '1px solid var(--border)',
+                  }}
+                />
+                <code style={{ color: 'var(--text-muted)' }}>{defaultColor}</code>
+              </span>
+            </label>
+          )}
         </div>
       </div>
     )

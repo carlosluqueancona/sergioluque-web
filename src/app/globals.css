@@ -87,14 +87,18 @@
    above so it wins regardless of light/dark mode.
    Two slightly different oranges so the colour reads well on each theme:
    a punchier tone on dark, a more grounded one on light. */
+/* Official accent default. Operators can override per theme via the
+   admin Colour palette pickers; with the picker empty the styling
+   falls through to this rule. The single hex (#C24100) is the brand-
+   approved orange and applies the same in light and dark themes. */
 html[data-cta="orange"][data-theme="dark"],
 html[data-cta="orange"]:not([data-theme="light"]) {
-  --accent: #FF6A1E;
-  --heading: #FF6A1E;
+  --accent: #C24100;
+  --heading: #C24100;
 }
 html[data-cta="orange"][data-theme="light"] {
-  --accent: #E55A00;
-  --heading: #E55A00;
+  --accent: #C24100;
+  --heading: #C24100;
 }
 
 :root {
