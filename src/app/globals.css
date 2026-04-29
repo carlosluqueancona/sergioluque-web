@@ -621,8 +621,10 @@ button[aria-label="Pause"]:hover {
    ───────────────────────────────────────────────────────────────── */
 .catalogue-grid {
   display: grid;
-  /* Title · Instrumentation · Year (year sits at the end). */
-  grid-template-columns: 1fr 1.4fr 80px;
+  /* Title · Instrumentation · Year. The year column needs room for
+     date-range strings ("2019 - 2020, rev. 2021"); too narrow and
+     they fragment word-by-word. */
+  grid-template-columns: 1fr 1.4fr 160px;
   gap: 24px;
   align-items: baseline;
 }

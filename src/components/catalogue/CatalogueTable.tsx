@@ -176,6 +176,7 @@ function CatalogueRow({ entry }: { entry: CatalogueEntry }) {
           color: 'var(--text-muted)',
           letterSpacing: '0.05em',
           textAlign: 'right',
+          whiteSpace: 'nowrap',
         }}
       >
         {entry.yearText ?? (entry.yearSort ? String(entry.yearSort) : '')}
