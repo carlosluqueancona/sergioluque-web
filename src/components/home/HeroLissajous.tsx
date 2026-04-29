@@ -5,6 +5,7 @@ import {
   parseLissajousConfig,
   type LissajousConfig,
 } from '@/lib/lissajous-config'
+import { LISSAJOUS_PRESETS } from '@/lib/lissajous-presets'
 
 /**
  * Slowly evolving Lissajous figures, drawn on canvas 2D.
@@ -41,8 +42,18 @@ export function HeroLissajous() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const cfg: LissajousConfig = parseLissajousConfig(
+    // Dev fallback: when running locally without the worker, the
+    // server-injected window.__LIS_CFG__ is `{}`. Default to the
+    // `elisina` preset so the canvas renders something visual instead
+    // of a blank page during local development. Production untouched —
+    // the operator-picked preset always populates window.__LIS_CFG__.
+    const injected =
       typeof window !== 'undefined' ? window.__LIS_CFG__ : undefined
+    const isEmpty = !injected || Object.keys(injected).length === 0
+    const cfg: LissajousConfig = parseLissajousConfig(
+      isEmpty && process.env.NODE_ENV === 'development'
+        ? LISSAJOUS_PRESETS.elisina
+        : injected
     )
 
     type Fig = {
