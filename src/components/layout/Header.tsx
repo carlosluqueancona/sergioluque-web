@@ -11,7 +11,7 @@ export function Header() {
   // public nav entirely; when re-enabled they sit between Stochastics
   // and Contact. Admin still has them, the data stays in the worker.
   const navLinks: Array<{ href: string; label: string }> = [
-    { href: '/works', label: S.nav.works },
+    { href: '/listen', label: S.nav.works },
     { href: '/news', label: S.nav.concerts },
     { href: '/bio', label: S.nav.bio },
     { href: '/catalogue', label: S.nav.catalogue },

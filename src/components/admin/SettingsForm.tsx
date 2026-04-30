@@ -64,7 +64,7 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
         key: 'works_fallback_cover_url',
         label: 'Works fallback cover',
         type: 'image',
-        hint: 'Shown on /works for any work whose entry has no image of its own. Pick from the media library or upload a new one.',
+        hint: 'Shown on /listen for any work whose entry has no image of its own. Pick from the media library or upload a new one.',
       },
       {
         key: 'social_share_image_url',

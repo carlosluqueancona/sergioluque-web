@@ -104,7 +104,7 @@ export interface Settings {
   email?: string;
   cvPdfUrl?: string;
   profileImageUrl?: string;
-  /** Default cover used on /works cards when an obra has no image. */
+  /** Default cover used on /listen cards when an obra has no image. */
   worksFallbackCoverUrl?: string;
   /** Open Graph image for the site when shared on WhatsApp / social. */
   socialShareImageUrl?: string;

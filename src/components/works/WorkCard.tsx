@@ -70,7 +70,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
       : null
   const showAudio = isHttpUrl(obra.audioUrl)
   const audioFormat = showAudio ? detectAudioFormat(obra.audioUrl) : null
-  const href = `/works/${slug}`
+  const href = `/listen/${slug}`
 
   const premiereInfo = [obra.premiereDate, obra.premiereVenue, obra.premiereCity]
     .filter(Boolean)
