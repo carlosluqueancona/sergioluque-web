@@ -95,7 +95,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {eventos.slice(0, 3).map((evento) => (
+          {eventos.slice(0, 5).map((evento) => (
             <ConcertItem key={evento.id} evento={evento} />
           ))}
         </section>
