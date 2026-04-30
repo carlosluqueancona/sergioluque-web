@@ -60,9 +60,14 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages project create sergioluque-web --production-branch main
 
+      # Cloudflare's Pages API rejects commit messages containing certain
+      # non-ASCII characters (em-dashes, middle-dots, multiplication signs,
+      # smart quotes, etc.) with `Invalid commit message [code: 8000111]`.
+      # Override the auto-detected git message with the commit SHA so the
+      # API never sees Unicode the operator might write in a real message.
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .vercel/output/static --project-name sergioluque-web --branch main --commit-dirty=true
+          command: pages deploy .vercel/output/static --project-name sergioluque-web --branch main --commit-dirty=true --commit-hash=${{ github.sha }} --commit-message=${{ github.sha }}
