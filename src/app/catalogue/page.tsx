@@ -23,14 +23,11 @@ export default async function CataloguePage() {
   // backs the SQL order, so the first hit in `entries` is enough).
   const featured = entries.find((e) => e.isFeatured)
 
-  const countLabel =
-    entries.length === 1 ? '1 work' : `${entries.length} works`
   return (
     <div className="page-shell">
-      <h1 className="t-h1">{S.catalogue.title}</h1>
-      <p className="t-label" style={{ marginBottom: '48px' }}>
-        {countLabel}
-      </p>
+      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
+        {S.catalogue.title}
+      </h1>
 
       {featured && (
         <FeaturedWorkBlock
