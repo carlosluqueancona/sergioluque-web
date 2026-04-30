@@ -60,13 +60,14 @@ jobs:
         env:
           NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
 
-      - name: Create Pages project (if not exists)
-        continue-on-error: true
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create sergioluque-web --production-branch main
+      # The Pages project (sergioluque-web) was bootstrapped manually and
+      # exists in Cloudflare. The previous workflow had a `pages project
+      # create` step gated by `continue-on-error: true` so it'd no-op on
+      # subsequent runs — but `wrangler pages project create` exits 1 when
+      # the project already exists, which painted the step red on every
+      # green deploy and was easy to misread as a real failure. Removed.
+      # If the project ever needs to be re-bootstrapped, do it once via:
+      #   wrangler pages project create sergioluque-web --production-branch main
 
       # Cloudflare's Pages API rejects commit messages containing certain
       # non-ASCII characters (em-dashes, middle-dots, multiplication signs,
