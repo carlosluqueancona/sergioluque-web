@@ -82,33 +82,69 @@ jobs:
 
       # Production smoke test — fails fast if a deploy ships a broken SSR
       # (the original symptom: 103 Early Hints with no body, every dynamic
-      # page hangs at the edge). Pages CDN can take a few seconds to
-      # propagate the new deploy, so we retry with backoff before giving
-      # up. Keep the route list small and stable.
+      # page hangs at the edge). Pages CDN propagation is multi-region and
+      # not atomic — PR #18 deployed cleanly, smoke test passed at +10s with
+      # all routes 200, then production degraded ~2 min later as edges with
+      # an inconsistent worker/asset bundle started serving 103+hang. So
+      # this gate runs in two phases:
+      #   1. Initial 90s grace, then a first probe.
+      #   2. Two further probes at 30s intervals (so the test spans ~2.5min)
+      #      to catch the case where one edge reports 200 while another
+      #      reports 103 mid-propagation. Use a `?cb=<sha>-<i>` cache-buster
+      #      on every request so we measure the new deploy, not stale CDN.
+      # If ANY phase fails for ANY route, the workflow fails — and because
+      # the deploy itself already happened, the operator must roll back via
+      # a revert PR (the documented playbook).
       - name: Smoke test production
         run: |
           set -u
           BASE="https://sergioluque-web.pages.dev"
           ROUTES="/ /listen /news /bio /contact"
-          # Wait up to ~30s for the new deploy to start serving
-          sleep 10
-          fail=0
-          for path in $ROUTES; do
-            ok=0
-            for attempt in 1 2 3 4; do
-              status=$(curl -sS --max-time 10 -o /tmp/body.$$ \
-                -w "%{http_code}" "$BASE$path" || echo 000)
-              size=$(wc -c < /tmp/body.$$ 2>/dev/null || echo 0)
-              echo "attempt=$attempt path=$path status=$status size=$size"
-              if [ "$status" = "200" ] && [ "$size" -gt 1000 ]; then
-                ok=1; break
+          SHA="${{ github.sha }}"
+
+          probe() {
+            local phase="$1"
+            local total_fail=0
+            for path in $ROUTES; do
+              local cb="?cb=${SHA:0:7}-${phase}"
+              local url="$BASE$path$cb"
+              local ok=0
+              for attempt in 1 2 3; do
+                local status size
+                status=$(curl -sS --max-time 12 -o /tmp/body.$$ \
+                  -w "%{http_code}" "$url" || echo 000)
+                size=$(wc -c < /tmp/body.$$ 2>/dev/null || echo 0)
+                echo "phase=$phase attempt=$attempt path=$path status=$status size=$size"
+                if [ "$status" = "200" ] && [ "$size" -gt 1000 ]; then
+                  ok=1; break
+                fi
+                sleep 4
+              done
+              if [ "$ok" -ne 1 ]; then
+                echo "::error::Phase $phase: route $path failed"
+                total_fail=$((total_fail+1))
               fi
-              sleep 5
             done
-            if [ "$ok" -ne 1 ]; then
-              echo "::error::Route $path failed smoke test"
-              fail=1
-            fi
-          done
-          rm -f /tmp/body.$$
-          exit $fail
+            rm -f /tmp/body.$$
+            return $total_fail
+          }
+
+          # Phase 1: initial 90s grace, then probe.
+          echo "::group::Phase 1 (after 90s grace)"
+          sleep 90
+          probe 1 || exit 1
+          echo "::endgroup::"
+
+          # Phase 2: second wave at +30s.
+          echo "::group::Phase 2 (+30s)"
+          sleep 30
+          probe 2 || exit 1
+          echo "::endgroup::"
+
+          # Phase 3: third wave at +30s.
+          echo "::group::Phase 3 (+30s)"
+          sleep 30
+          probe 3 || exit 1
+          echo "::endgroup::"
+
+          echo "all 3 phases passed for all 5 routes"
