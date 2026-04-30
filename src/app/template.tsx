@@ -1,5 +1,12 @@
 import type { ReactNode } from 'react'
 
+// REQUIRED: Cloudflare Pages can only run edge-runtime code. Without
+// this export, @cloudflare/next-on-pages emits a Node.js render
+// function for the template, which the Pages worker cannot execute —
+// every dynamic page hangs (no HTTP response, requests time out at
+// the edge). Took the production site offline once already.
+export const runtime = 'edge'
+
 // Route-segment template — Next.js re-mounts this on every navigation
 // (unlike layout.tsx which persists). The `data-page-anim` attribute
 // triggers the CSS keyframes defined in globals.css so each new page
