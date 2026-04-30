@@ -4,9 +4,9 @@ const COPY = {
   practice: 'Composer',
   catalog: 'Works catalogue',
   scrollHint: 'Scroll for catalogue',
-  // Three-word manifesto: each word stands alone as a complete statement
+  // Two-word manifesto: each word stands alone as a complete statement
   // about the practice. Rendered one-per-line for giant-scale impact.
-  headingWords: ['Instrumental.', 'Electroacoustic.', 'Stochastic synthesis.'] as const,
+  headingWords: ['Instrumental.', 'Electroacoustic.'] as const,
 } as const
 
 export function Hero() {
