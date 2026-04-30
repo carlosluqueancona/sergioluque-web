@@ -12,7 +12,7 @@ export async function Footer() {
   // Same order as the header nav: Listen, News, Biography, Catalogue,
   // Stochastics, Contact (with Projects/Blog gated by feature flags).
   const navLinks: Array<{ href: string; label: string }> = [
-    { href: '/works', label: S.nav.works },
+    { href: '/listen', label: S.nav.works },
     { href: '/news', label: S.nav.concerts },
     { href: '/bio', label: S.nav.bio },
     { href: '/catalogue', label: S.nav.catalogue },

@@ -103,7 +103,7 @@ export interface Settings {
   cvPdfUrl?: string
   profileImageUrl?: string
   /**
-   * Default cover image used on /works cards when an obra has no
+   * Default cover image used on /listen cards when an obra has no
    * image_url of its own. Picked from the media library in admin →
    * Settings.
    */

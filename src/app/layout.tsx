@@ -47,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: '%s — Sergio Luque',
     },
     description:
-      'Composer and researcher. Works catalog, projects and publications.',
+      'Composer. Instrumental, electroacoustic, and stochastic synthesis works.',
     openGraph: {
       type: 'website',
       locale: 'en_GB',

@@ -46,7 +46,7 @@ export default async function HomePage() {
               {S.home.featuredWorks}
             </h2>
             <Link
-              href="/works"
+              href="/listen"
               style={{
                 fontFamily: 'var(--font-space-mono)',
                 fontSize: '11px',

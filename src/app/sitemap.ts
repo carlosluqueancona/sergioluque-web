@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // don't try to index pages that 404 behind the feature flag.
   const staticPaths = [
     '',
-    '/works',
+    '/listen',
     '/catalogue',
     PUBLIC_SECTIONS.projects ? '/projects' : null,
     PUBLIC_SECTIONS.blog ? '/blog' : null,
@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const obra of obrasR.value) {
       if (obra.slug) {
         dynamicEntries.push({
-          url: `${BASE_URL}/works/${obra.slug}`,
+          url: `${BASE_URL}/listen/${obra.slug}`,
           lastModified: new Date(),
           changeFrequency: 'monthly' as const,
           priority: 0.7,
