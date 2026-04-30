@@ -13,15 +13,11 @@ export default async function ConciertosPage() {
     getEventosPasados(),
   ])
 
-  const total = proximos.length + pasados.length
-  const countLabel =
-    total === 1 ? '1 entry' : `${total} entries`
   return (
     <div className="page-shell">
-      <h1 className="t-h1">{S.concerts.title}</h1>
-      <p className="t-label" style={{ marginBottom: '48px' }}>
-        {countLabel}
-      </p>
+      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
+        {S.concerts.title}
+      </h1>
 
       {proximos.length > 0 && (
         <section style={{ marginBottom: '64px' }}>
