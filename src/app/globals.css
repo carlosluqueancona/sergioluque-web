@@ -348,6 +348,236 @@ html[data-cta="orange"][data-theme="light"] {
 }
 
 /* ─────────────────────────────────────────────────────────────────
+   Bio page — editorial two-column hero (name + portrait) followed
+   by a 4/8 split with a sticky role heading on the left and the
+   biography body, CV CTA, and stage gallery on the right. Sharp
+   0px corners, hairline borders, mono labels — same vocabulary as
+   the rest of the site, just enlarged for an "about" moment.
+   ───────────────────────────────────────────────────────────────── */
+.bio-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+  margin-bottom: clamp(64px, 10vw, 128px);
+}
+@media (max-width: 900px) {
+  .bio-hero {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+/* Display H1 — bigger and tighter than .t-h1, used only on /bio. */
+.bio-display {
+  font-family: var(--font-space-mono), monospace;
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin: 24px 0 32px;
+  text-transform: uppercase;
+}
+
+/* Pill chip carrying a [LABEL] (mono accent) with hairline border. */
+.chip-bordered {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.bio-intro {
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 48ch;
+  margin: 0;
+}
+
+/* Hero portrait — the redesign's offset shadow card behind the photo. */
+.bio-portrait-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-width: 520px;
+  margin-left: auto;
+}
+@media (max-width: 900px) {
+  .bio-portrait-frame {
+    margin-left: 0;
+    margin-right: auto;
+  }
+}
+.bio-portrait-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translate(12px, 12px);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  z-index: 0;
+}
+.bio-portrait-frame img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+/* 4/8 detail grid: sticky role on left, body on right. */
+.bio-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: clamp(32px, 5vw, 64px);
+  border-top: 1px solid var(--border);
+  padding-top: clamp(40px, 6vw, 64px);
+  margin-bottom: clamp(64px, 10vw, 128px);
+}
+@media (max-width: 900px) {
+  .bio-detail {
+    grid-template-columns: 1fr;
+  }
+}
+.bio-role {
+  font-family: var(--font-space-mono), monospace;
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--heading);
+  margin: 0;
+  text-transform: uppercase;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+}
+@media (max-width: 900px) {
+  .bio-role { position: static; }
+}
+.bio-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.bio-block { margin: 0; }
+.bio-block .t-label { display: block; margin-bottom: 16px; }
+
+/* Education card — bordered container holding stacked degree rows. */
+.edu-card {
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: clamp(20px, 3vw, 32px);
+}
+.edu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.edu-list .divider-hairline { margin: 0; }
+.edu-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .edu-row {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+}
+.edu-degree {
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+.edu-institution {
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.edu-year {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  white-space: nowrap;
+  align-self: center;
+  justify-self: end;
+}
+@media (max-width: 600px) {
+  .edu-year { justify-self: start; }
+}
+
+.divider-hairline {
+  height: 1px;
+  width: 100%;
+  background: var(--border);
+  border: 0;
+  margin: 0;
+}
+
+/* Stage gallery — three-up grid of performance shots. */
+.bio-archive {
+  border-top: 1px solid var(--border);
+  padding-top: clamp(40px, 6vw, 64px);
+}
+.bio-archive .t-label {
+  display: block;
+  margin-bottom: 24px;
+}
+.stage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+@media (max-width: 700px) {
+  .stage-grid { grid-template-columns: 1fr; }
+}
+.stage-tile {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+}
+.stage-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 600ms cubic-bezier(0.2, 0.6, 0.2, 1),
+              filter 600ms ease;
+  filter: grayscale(40%);
+}
+.stage-tile:hover img {
+  transform: scale(1.02);
+  filter: grayscale(0%);
+}
+
+/* ─────────────────────────────────────────────────────────────────
    Lissajous playground (/lissajous) — full-bleed canvas card +
    curated control deck. Sharp edges, monochrome, Space Mono labels,
    IBM Plex body, in line with the rest of the site.
