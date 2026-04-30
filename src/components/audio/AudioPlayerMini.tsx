@@ -62,14 +62,65 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
   }, [])
 
   const progress = audioDuration > 0 ? currentTime / audioDuration : 0
+  const remaining = Math.max(0, audioDuration - currentTime)
 
-  const handleSeek = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+  // Pointer-event scrub on the waveform — mouse, touch and pen go through
+  // the same path with `setPointerCapture` so a drag started on the bar
+  // keeps tracking even if the cursor leaves it. Mirrors AudioPlayer.tsx.
+  const [isDragging, setIsDragging] = useState(false)
+
+  const seekFromPointer = useCallback(
+    (target: HTMLDivElement, clientX: number) => {
       const audio = audioRef.current
       if (!audio || audioDuration === 0) return
-      const rect = e.currentTarget.getBoundingClientRect()
-      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audioDuration
-      setCurrentTime(audio.currentTime)
+      const rect = target.getBoundingClientRect()
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left))
+      const ratio = rect.width > 0 ? x / rect.width : 0
+      const newTime = ratio * audioDuration
+      audio.currentTime = newTime
+      setCurrentTime(newTime)
+    },
+    [audioDuration]
+  )
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.currentTarget.setPointerCapture(e.pointerId)
+      setIsDragging(true)
+      seekFromPointer(e.currentTarget, e.clientX)
+    },
+    [seekFromPointer]
+  )
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging) return
+      seekFromPointer(e.currentTarget, e.clientX)
+    },
+    [isDragging, seekFromPointer]
+  )
+
+  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    }
+    setIsDragging(false)
+  }, [])
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const audio = audioRef.current
+      if (!audio || audioDuration === 0) return
+      let next: number | null = null
+      if (e.key === 'ArrowLeft') next = audio.currentTime - 5
+      else if (e.key === 'ArrowRight') next = audio.currentTime + 5
+      else if (e.key === 'Home') next = 0
+      else if (e.key === 'End') next = audioDuration
+      if (next === null) return
+      e.preventDefault()
+      next = Math.max(0, Math.min(audioDuration, next))
+      audio.currentTime = next
+      setCurrentTime(next)
     },
     [audioDuration]
   )
@@ -124,17 +175,24 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
       </button>
 
       <div
-        onClick={handleSeek}
         role="slider"
+        tabIndex={0}
         aria-label="Posición"
         aria-valuemin={0}
         aria-valuemax={Math.round(audioDuration)}
         aria-valuenow={Math.round(currentTime)}
+        aria-valuetext={`${formatTime(currentTime)} de ${formatTime(audioDuration)}`}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onKeyDown={handleKeyDown}
         style={{
           flex: 1,
           height: '24px',
-          cursor: 'pointer',
+          cursor: isDragging ? 'grabbing' : 'pointer',
           position: 'relative',
+          touchAction: 'none',
         }}
       >
         <WaveformBars
@@ -148,15 +206,21 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
         />
       </div>
 
+      {/* Apple-Music-style remaining counter — at 0:00 it reads as the
+          full duration (e.g. "−7:29"), then ticks down. Tabular numerals
+          so the digits don't jitter as the value changes. */}
       <div
         style={{
           fontFamily: 'var(--font-space-mono)',
           fontSize: '11px',
           color: 'var(--text-secondary)',
           flexShrink: 0,
+          fontVariantNumeric: 'tabular-nums',
+          minWidth: '40px',
+          textAlign: 'right',
         }}
       >
-        {formatTime(audioDuration)}
+        −{formatTime(remaining)}
       </div>
     </div>
   )
