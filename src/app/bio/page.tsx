@@ -18,9 +18,20 @@ const STAGE_PHOTOS = [
   { src: '/bio/stage-3.jpg', alt: S.bio.archiveAlt.stage3 },
 ] as const
 
+// Visually trim the hero intro to its first sentence. Operators tend to
+// paste a richer multi-sentence summary into the Short bio admin field
+// (good for SEO), but on the page that becomes a wall of text right next
+// to a body that re-narrates the same sentences. Showing only the lead
+// sentence in the hero lets the body open with fresh information.
+function firstSentence(s: string): string {
+  const trimmed = s.trim()
+  const match = trimmed.match(/^[^.!?]*[.!?]/)
+  return (match ? match[0] : trimmed).trim()
+}
+
 // Strip leading paragraphs of the long bio that are already covered by the
-// hero intro (`bioShort`). Operators copy/paste the full bio into the long
-// field starting with the same opening sentence the intro shows, which would
+// hero intro. Operators copy/paste the full bio into the long field
+// starting with the same opening sentence the intro shows, which would
 // otherwise render twice. Comparison is whitespace- and case-insensitive,
 // and only paragraphs FULLY contained in the intro are dropped — anything
 // with extra detail beyond the intro is kept.
@@ -49,7 +60,8 @@ export default async function BioPage() {
   const profileImageUrl = settings?.profileImageUrl ?? FALLBACK_PORTRAIT
   const cvPdfUrl = settings?.cvPdfUrl
 
-  const intro = bioShort?.trim() || S.bio.introFallback
+  const introRaw = bioShort?.trim() || S.bio.introFallback
+  const intro = firstSentence(introRaw)
   const rawBody = bio?.trim() || S.bio.bodyFallback
   const body = dedupeBody(rawBody, intro)
 
