@@ -101,7 +101,7 @@ Dual light/dark con custom toggle. Variables base (dark):
 1. TypeScript strict. Sin `any`. Sin `@ts-ignore` salvo con razón documentada.
 2. Server Components por defecto. `'use client'` solo cuando es estrictamente necesario.
 3. Toda query de datos en `src/lib/db/queries.ts`. Nunca fetch inline en un `page.tsx`.
-4. **`export const runtime = 'edge'` en TODA page y route handler.**
+4. **`export const runtime = 'edge'` en TODA page, layout y route handler.** **NUNCA** en `template.tsx`, `error.tsx`, `loading.tsx`, `not-found.tsx`, `default.tsx` ni `global-error.tsx` — Next.js no honra el segment config en esos archivos y `@cloudflare/next-on-pages` emite un render Node que cuelga el SSR (cada ruta dinámica responde `103 Early Hints` sin body). Hay un guard automático (`pnpm lint:runtime` → `scripts/check-runtime-misuse.mjs`) que corre en CI antes del build y falla el deploy si reaparece. Además, el workflow hace un smoke test post-deploy (`/`, `/listen`, `/news`, `/bio`, `/contact`) y aborta si alguna ruta no devuelve 200 con body.
 5. Un componente por archivo. Máximo 300 líneas; si crece, extraer sub-componentes.
 6. Siempre CSS variables del design system. Nada de hex hardcodeado en componentes.
 7. AudioPlayer debe funcionar en iOS Safari: nunca autoplay, siempre iniciar desde user interaction.
