@@ -28,6 +28,10 @@ export interface PlaygroundState {
   multicolor: boolean
   glow: number
   blend: BlendKey
+  /** Hex stroke colour (ignored when multicolor is on). */
+  lineColor: string
+  /** Hex canvas background. */
+  bgColor: string
 }
 
 interface PlaygroundControlsProps {
@@ -155,6 +159,19 @@ export function PlaygroundControls({
             />
             <span>{S.lissajous.multicolor}</span>
           </label>
+          <ColorField
+            label={S.lissajous.lineColor}
+            id="lis-line-color"
+            value={state.lineColor}
+            disabled={state.multicolor}
+            onChange={(v) => onChange({ lineColor: v })}
+          />
+          <ColorField
+            label={S.lissajous.bgColor}
+            id="lis-bg-color"
+            value={state.bgColor}
+            onChange={(v) => onChange({ bgColor: v })}
+          />
           <Slider
             label={S.lissajous.glow}
             min={0}
@@ -229,6 +246,33 @@ function Slider({ label, min, max, step, value, display, onChange }: SliderProps
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="lis-range"
+      />
+    </div>
+  )
+}
+
+interface ColorFieldProps {
+  label: string
+  id: string
+  value: string
+  onChange: (value: string) => void
+  disabled?: boolean
+}
+
+function ColorField({ label, id, value, onChange, disabled }: ColorFieldProps) {
+  return (
+    <div className="lis-field" data-disabled={disabled || undefined}>
+      <label htmlFor={id} className="lis-field-label">
+        <span>{label}</span>
+        <span className="lis-field-value">{value.toUpperCase()}</span>
+      </label>
+      <input
+        id={id}
+        type="color"
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.value)}
+        className="lis-color"
       />
     </div>
   )

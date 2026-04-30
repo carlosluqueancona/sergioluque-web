@@ -22,9 +22,16 @@ import type { LissajousConfig } from '@/lib/lissajous-config'
  */
 interface LissajousCanvasProps {
   config: LissajousConfig
+  /**
+   * Optional background colour override. When set, the canvas backdrop
+   * uses this hex instead of `var(--bg)`. Useful for the admin
+   * playground where the operator picks a custom canvas background
+   * decoupled from the site theme.
+   */
+  bgColor?: string
 }
 
-export function LissajousCanvas({ config }: LissajousCanvasProps) {
+export function LissajousCanvas({ config, bgColor }: LissajousCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const cfgRef = useRef(config)
 
@@ -67,12 +74,28 @@ export function LissajousCanvas({ config }: LissajousCanvasProps) {
     }
 
     const readStrokeRGB = (): [number, number, number] => {
+      // colorMode === 'custom' → honour the per-theme hex from the
+      // config (admin/playground picker). Falls through to --accent for
+      // the 'accent' (and 'multicolor', whose runtime hue is computed
+      // per-figure later) modes.
+      const cfg = cfgRef.current
+      if (cfg.colorMode === 'custom') {
+        const isLight =
+          document.documentElement.getAttribute('data-theme') === 'light'
+        const picked = isLight ? cfg.colorLight : cfg.colorDark
+        const parsed = hexToRGB(picked)
+        if (parsed) return parsed
+      }
       const raw = getComputedStyle(document.documentElement)
         .getPropertyValue('--accent')
         .trim()
       return hexToRGB(raw) ?? [212, 212, 212]
     }
 
+    // Re-read on every frame so admin colour-picker changes propagate
+    // immediately. readStrokeRGB() is cheap when colorMode === 'custom'
+    // (just a hex parse) and pays for one getComputedStyle in the
+    // 'accent' / 'multicolor' branches — still well under 1ms.
     strokeRGB = readStrokeRGB()
 
     const observer = new MutationObserver(() => {
@@ -128,6 +151,8 @@ export function LissajousCanvas({ config }: LissajousCanvasProps) {
         document.documentElement.getAttribute('data-theme') === 'light'
       const additive = cfg.blend === 'lighter' || cfg.blend === 'screen'
       const additiveActive = additive && !isLight
+      // Pick up colour-picker changes live without restarting the RAF.
+      strokeRGB = readStrokeRGB()
 
       const fadeAlpha = cfg.trails
       if (fadeAlpha >= 0.999) {
@@ -224,7 +249,7 @@ export function LissajousCanvas({ config }: LissajousCanvasProps) {
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        backgroundColor: 'var(--bg)',
+        backgroundColor: bgColor ?? 'var(--bg)',
       }}
     />
   )
