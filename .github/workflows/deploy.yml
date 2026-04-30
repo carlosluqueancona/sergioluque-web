@@ -24,6 +24,14 @@ jobs:
         run: npm ci
         working-directory: worker
 
+      # Catches `export const runtime` in template/error/loading/not-found/
+      # default/global-error — Next.js segment config doesn't apply there
+      # and putting it on template.tsx hung production for ~40 min. Run as
+      # its own script (not via `pnpm lint`) so we don't depend on the
+      # eslint flat-config currently being usable.
+      - name: Runtime-misuse guard
+        run: pnpm lint:runtime
+
       # Worker deploy is best-effort: it requires CLOUDFLARE_API_TOKEN to have
       # Workers Scripts:Edit + User Details:Read. If the token only has Pages
       # perms the step fails; Pages still ships. Deploy the worker manually
@@ -71,3 +79,36 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy .vercel/output/static --project-name sergioluque-web --branch main --commit-dirty=true --commit-hash=${{ github.sha }} --commit-message=${{ github.sha }}
+
+      # Production smoke test — fails fast if a deploy ships a broken SSR
+      # (the original symptom: 103 Early Hints with no body, every dynamic
+      # page hangs at the edge). Pages CDN can take a few seconds to
+      # propagate the new deploy, so we retry with backoff before giving
+      # up. Keep the route list small and stable.
+      - name: Smoke test production
+        run: |
+          set -u
+          BASE="https://sergioluque-web.pages.dev"
+          ROUTES="/ /listen /news /bio /contact"
+          # Wait up to ~30s for the new deploy to start serving
+          sleep 10
+          fail=0
+          for path in $ROUTES; do
+            ok=0
+            for attempt in 1 2 3 4; do
+              status=$(curl -sS --max-time 10 -o /tmp/body.$$ \
+                -w "%{http_code}" "$BASE$path" || echo 000)
+              size=$(wc -c < /tmp/body.$$ 2>/dev/null || echo 0)
+              echo "attempt=$attempt path=$path status=$status size=$size"
+              if [ "$status" = "200" ] && [ "$size" -gt 1000 ]; then
+                ok=1; break
+              fi
+              sleep 5
+            done
+            if [ "$ok" -ne 1 ]; then
+              echo "::error::Route $path failed smoke test"
+              fail=1
+            fi
+          done
+          rm -f /tmp/body.$$
+          exit $fail
