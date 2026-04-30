@@ -1,12 +1,8 @@
 # Cloudflare Pages redirects.
-# Preserves SEO and any external link still pointing at the old URLs
-# after the renames:
-#   Concerts      → News
-#   Publications  → Stochastics
-#   Works         → Listen
-# 308 = permanent + preserves the request method.
-
-/concerts        /news          308
-/publications    /stochastics   308
-/works           /listen        308
-/works/*         /listen/:splat 308
+#
+# NOTE: with @cloudflare/next-on-pages this file is NOT honored — the
+# generated _worker.js intercepts every route before Pages consults
+# _redirects. The actual redirect rules live in next.config.ts under
+# redirects(), which is baked into the worker bundle. This file is
+# kept so anyone reading the project remembers the rule already fired
+# in next.config.ts; do NOT add new rules here.
