@@ -19,63 +19,44 @@ function formatEventDate(dateStr: string): string {
 export function ConcertItem({ evento }: ConcertItemProps) {
   const title = evento.title
   const showImage = isHttpUrl(evento.imageUrl)
+  const venueLine = [evento.venue, evento.city, evento.country]
+    .filter(Boolean)
+    .join(', ')
+
+  // Layout class drives the responsive grid in globals.css. Inline
+  // grid styles can't be overridden by media queries, so the layout
+  // moved fully into CSS — desktop is 3 cols (image / date / content),
+  // mobile is 2 cols (image / [date stacked over content]).
+  const variant = showImage ? 'concert-item--with-image' : 'concert-item--no-image'
 
   return (
-    <div
-      className="concert-item"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: showImage ? '80px 140px 1fr' : '140px 1fr',
-        gap: '24px',
-        padding: '16px 0',
-        borderBottom: '1px solid var(--border)',
-        alignItems: 'start',
-      }}
-    >
+    <article className={`concert-item ${variant}`}>
       {showImage && (
         <Image
           src={evento.imageUrl as string}
           alt={title}
-          width={80}
-          height={80}
-          style={{ display: 'block', width: '80px', height: '80px', objectFit: 'cover' }}
+          width={160}
+          height={160}
+          className="concert-item__image"
         />
       )}
 
-      <span
-        style={{
-          fontFamily: 'var(--font-space-mono)',
-          fontSize: '11px',
-          color: 'var(--text-muted)',
-          letterSpacing: '0.05em',
-        }}
-      >
-        {formatEventDate(evento.eventDate)}
-      </span>
+      <span className="concert-item__date">{formatEventDate(evento.eventDate)}</span>
 
-      <div>
-        <p
-          className="concert-item-title"
-          style={{ fontFamily: 'var(--font-space-mono)', fontSize: '13px', color: 'var(--text-primary)', margin: 0 }}
-        >
-          {title}
-        </p>
-        {(evento.venue || evento.city) && (
-          <p style={{ fontFamily: 'var(--font-space-mono)', fontSize: '11px', color: 'var(--text-secondary)', margin: '4px 0 0', letterSpacing: '0.05em' }}>
-            {[evento.venue, evento.city, evento.country].filter(Boolean).join(', ')}
-          </p>
-        )}
+      <div className="concert-item__content">
+        <p className="concert-item-title concert-item__title">{title}</p>
+        {venueLine && <p className="concert-item__venue">{venueLine}</p>}
         {evento.externalLink && (
           <a
             href={evento.externalLink}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontFamily: 'var(--font-space-mono)', fontSize: '10px', color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}
+            className="concert-item__link"
           >
             →
           </a>
         )}
       </div>
-    </div>
+    </article>
   )
 }

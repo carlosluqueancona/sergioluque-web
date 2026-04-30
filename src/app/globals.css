@@ -280,21 +280,111 @@ html[data-cta="orange"][data-theme="light"] {
 .work-card:nth-of-type(8) { animation-delay: 490ms; }
 .work-card:nth-of-type(n+9) { animation-delay: 560ms; }
 
-/* Concert items — same hover language as work cards, lighter touch
-   (no accent bar — the date column already provides a strong left
-   anchor). */
+/* Concert / news rows.
+   Desktop: 3 columns — image (80px) · date (140px) · content (1fr).
+   Mobile (≤720px): the date no longer earns its own column; it stacks
+   above the title inside the content cell, and the image shrinks to
+   72px. Inline grid styles were a dead end because CSS media queries
+   can't override them — every layout rule lives here now.
+
+   Title hover gains the accent color, same hover language as
+   `.work-card`. The container hover repaints to --surface so the row
+   feels touchable at a glance, no accent bar (the left margin would
+   conflict with the image). */
 .concert-item {
-  position: relative;
+  display: grid;
+  gap: clamp(12px, 2vw, 24px);
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
   transition: background-color 220ms cubic-bezier(0.2, 0.6, 0.2, 1);
 }
 .concert-item:hover {
   background: var(--surface);
 }
+.concert-item--with-image {
+  grid-template-columns: 80px 140px 1fr;
+  grid-template-areas: 'image date content';
+}
+.concert-item--no-image {
+  grid-template-columns: 140px 1fr;
+  grid-template-areas: 'date content';
+}
+.concert-item__image {
+  grid-area: image;
+  display: block;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+.concert-item__date {
+  grid-area: date;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+.concert-item__content {
+  grid-area: content;
+  min-width: 0; /* allow long titles to wrap inside the column */
+}
+.concert-item__title,
 .concert-item .concert-item-title {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin: 0;
   transition: color 220ms ease;
 }
+.concert-item:hover .concert-item__title,
 .concert-item:hover .concert-item-title {
   color: var(--accent);
+}
+.concert-item__venue {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+  letter-spacing: 0.05em;
+}
+.concert-item__link {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* Mobile: image on the left, [date + title + venue] stacked on the
+   right. Date becomes a small meta line above the title. */
+@media (max-width: 720px) {
+  .concert-item--with-image {
+    grid-template-columns: 72px 1fr;
+    grid-template-areas:
+      'image date'
+      'image content';
+    grid-template-rows: auto 1fr;
+    column-gap: 12px;
+    row-gap: 4px;
+  }
+  .concert-item--no-image {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'date'
+      'content';
+    row-gap: 4px;
+  }
+  .concert-item__image {
+    width: 72px;
+    height: 72px;
+    align-self: start;
+  }
+  .concert-item__date {
+    align-self: end;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────

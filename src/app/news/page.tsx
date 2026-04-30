@@ -23,27 +23,23 @@ export default async function ConciertosPage() {
         {countLabel}
       </p>
 
-      <section style={{ marginBottom: '64px' }}>
-        <h2 className="t-label" style={{ marginBottom: '24px' }}>
-          {S.concerts.upcoming}
-        </h2>
-        {proximos.length > 0 ? (
+      {proximos.length > 0 && (
+        <section style={{ marginBottom: '64px' }}>
+          <h2 className="t-label" style={{ marginBottom: '24px' }}>
+            {S.concerts.upcoming}
+          </h2>
           <ConcertList eventos={proximos} />
-        ) : (
-          <p className="t-meta">{S.concerts.noUpcoming}</p>
-        )}
-      </section>
+        </section>
+      )}
 
-      <section>
-        <h2 className="t-label" style={{ marginBottom: '24px' }}>
-          {S.concerts.past}
-        </h2>
-        {pasados.length > 0 ? (
+      {pasados.length > 0 && (
+        <section>
+          <h2 className="t-label" style={{ marginBottom: '24px' }}>
+            {S.concerts.past}
+          </h2>
           <ConcertList eventos={pasados} />
-        ) : (
-          <p className="t-meta">{S.concerts.noPast}</p>
-        )}
-      </section>
+        </section>
+      )}
     </div>
   )
 }
