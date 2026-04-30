@@ -26,6 +26,8 @@ import {
 
 const DEFAULT_PRESET: PresetKey = 'elisina'
 
+const DEFAULT_BG = '#0A0A0A'
+
 function presetToState(preset: Record<string, string>): PlaygroundState {
   const cfg = parseLissajousConfig(preset)
   return {
@@ -38,6 +40,12 @@ function presetToState(preset: Record<string, string>): PlaygroundState {
     multicolor: cfg.colorMode === 'multicolor',
     glow: cfg.glow,
     blend: cfg.blend,
+    // The preset's stroke colour seeds the line picker. Falls back to
+    // the dark-theme default if the preset didn't pin one.
+    lineColor: cfg.colorDark || '#D4D4D4',
+    // Background isn't part of the preset — start from the site's
+    // dark-theme bg so the canvas matches the page on first paint.
+    bgColor: DEFAULT_BG,
   }
 }
 
@@ -49,6 +57,12 @@ function applyStateToConfig(
   // override the user-visible fields directly on the typed config so we
   // don't have to round-trip everything through the string KV layer.
   const cfg = parseLissajousConfig(baseKv)
+  // Multicolor wins over a custom line colour (mutually exclusive in
+  // the UI). Otherwise: any line-colour pick promotes the canvas into
+  // 'custom' mode so it stops following --accent.
+  const colorMode = state.multicolor
+    ? 'multicolor'
+    : 'custom'
   return {
     ...cfg,
     count: state.count,
@@ -57,7 +71,9 @@ function applyStateToConfig(
     drift: state.drift,
     rotation: state.rotation,
     trails: state.trails,
-    colorMode: state.multicolor ? 'multicolor' : cfg.colorMode === 'multicolor' ? 'accent' : cfg.colorMode,
+    colorMode,
+    colorDark: state.lineColor,
+    colorLight: state.lineColor,
     glow: state.glow,
     blend: state.blend,
   }
@@ -101,6 +117,10 @@ export function LissajousPlayground() {
   }
 
   const handleRandomize = () => {
+    const randHex = () => {
+      const c = Math.floor(Math.random() * 0xffffff).toString(16)
+      return '#' + c.padStart(6, '0')
+    }
     setState({
       count: Math.floor(Math.random() * 7) + 1,
       lineWidth: randInRange(0.3, 2.5, 0.1),
@@ -111,6 +131,14 @@ export function LissajousPlayground() {
       multicolor: Math.random() > 0.5,
       glow: Math.random() > 0.5 ? Math.floor(Math.random() * 30) : 0,
       blend: Math.random() > 0.5 ? 'lighter' : 'source-over',
+      lineColor: randHex(),
+      // Bias background toward dark hex (each component < 0x40) so the
+      // strokes still read.
+      bgColor:
+        '#' +
+        [0, 0, 0]
+          .map(() => Math.floor(Math.random() * 0x40).toString(16).padStart(2, '0'))
+          .join(''),
     })
     setActivePreset(null)
   }
@@ -121,8 +149,8 @@ export function LissajousPlayground() {
 
   return (
     <div className="lis-playground">
-      <div className="lis-canvas-frame">
-        <LissajousCanvas config={config} />
+      <div className="lis-canvas-frame" style={{ background: state.bgColor }}>
+        <LissajousCanvas config={config} bgColor={state.bgColor} />
       </div>
       {controlsVisible && (
         <PlaygroundControls

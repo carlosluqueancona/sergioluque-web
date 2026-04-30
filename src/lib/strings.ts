@@ -129,6 +129,8 @@ export const S = {
     rotation: 'Rotation',
     trails: 'Trails',
     multicolor: 'Multicolor',
+    lineColor: 'Line color',
+    bgColor: 'Background',
     glow: 'Glow',
     blend: 'Blend',
     randomize: 'Randomize',

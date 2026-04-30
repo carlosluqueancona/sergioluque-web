@@ -487,6 +487,28 @@ html[data-cta="orange"][data-theme="light"] {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+.lis-color {
+  width: 100%;
+  height: 36px;
+  padding: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.lis-color::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+.lis-color::-webkit-color-swatch {
+  border: 0;
+}
+.lis-color:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.lis-field[data-disabled='true'] {
+  opacity: 0.4;
+  pointer-events: none;
+}
 .lis-actions {
   display: flex;
   gap: 12px;
@@ -792,10 +814,13 @@ button[aria-label="Pause"]:hover {
    ───────────────────────────────────────────────────────────────── */
 .catalogue-grid {
   display: grid;
-  /* Title · Instrumentation · Year. The year column needs room for
-     date-range strings ("2019 - 2020, rev. 2021"); too narrow and
-     they fragment word-by-word. */
-  grid-template-columns: 1fr 1.4fr 160px;
+  /* Title · Instrumentation · Year. The year column must fit the
+     longest date-range string ("2019 - 2020, rev. 2021" ≈ 200 px in
+     Space Mono 12 px) — with white-space:nowrap on the year cell, a
+     too-narrow track causes the whole grid to overflow the page-shell
+     and the column visibly drifts past the right edge. 220 px gives
+     a few pixels of slack so revised ranges don't kiss the boundary. */
+  grid-template-columns: 1fr 1.4fr 220px;
   gap: 24px;
   align-items: baseline;
 }
