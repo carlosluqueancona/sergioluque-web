@@ -360,7 +360,10 @@ html[data-cta="orange"][data-theme="light"] {
 .lis-canvas-frame {
   position: relative;
   width: 100%;
-  height: clamp(360px, 60vh, 640px);
+  /* +30 % vs the original clamp(360px, 60vh, 640px) — gives the admin
+     playground more room to breathe so the figures don't feel cramped
+     against the controls. Floor and ceiling rounded for clean values. */
+  height: clamp(468px, 78vh, 832px);
   border: 1px solid var(--border);
   background: var(--bg);
   overflow: hidden;
