@@ -66,58 +66,17 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
     setIsPlaying(false)
   }, [])
 
-  // Pointer-event-based scrub. Used for both initial click and drag.
-  // Pointer events normalise mouse + touch + pen, and `setPointerCapture`
-  // means the drag keeps tracking even if the cursor leaves the bar.
-  const [isDragging, setIsDragging] = useState(false)
-
-  const seekFromPointer = useCallback((target: HTMLDivElement, clientX: number) => {
+  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current
     if (!audio || audioDuration === 0) return
-    const rect = target.getBoundingClientRect()
-    const x = Math.max(0, Math.min(rect.width, clientX - rect.left))
-    const ratio = rect.width > 0 ? x / rect.width : 0
-    const newTime = ratio * audioDuration
-    audio.currentTime = newTime
-    setCurrentTime(newTime)
-  }, [audioDuration])
-
-  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId)
-    setIsDragging(true)
-    seekFromPointer(e.currentTarget, e.clientX)
-  }, [seekFromPointer])
-
-  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging) return
-    seekFromPointer(e.currentTarget, e.clientX)
-  }, [isDragging, seekFromPointer])
-
-  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId)
-    }
-    setIsDragging(false)
-  }, [])
-
-  // Keyboard-driven scrubbing for accessibility (slider role).
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
-    const audio = audioRef.current
-    if (!audio || audioDuration === 0) return
-    let next: number | null = null
-    if (e.key === 'ArrowLeft') next = audio.currentTime - 5
-    else if (e.key === 'ArrowRight') next = audio.currentTime + 5
-    else if (e.key === 'Home') next = 0
-    else if (e.key === 'End') next = audioDuration
-    if (next === null) return
-    e.preventDefault()
-    next = Math.max(0, Math.min(audioDuration, next))
-    audio.currentTime = next
-    setCurrentTime(next)
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const ratio = x / rect.width
+    audio.currentTime = ratio * audioDuration
+    setCurrentTime(audio.currentTime)
   }, [audioDuration])
 
   const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0
-  const remaining = Math.max(0, audioDuration - currentTime)
 
   return (
     <div
@@ -184,72 +143,47 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
         </button>
 
         <div style={{ flex: 1 }}>
-          {/* 14px-tall hit area wraps the 4px visible bar, so the drag /
-              tap target is touch-friendly without the visual getting bulky. */}
           <div
             role="slider"
-            tabIndex={0}
             aria-label="Posición de reproducción"
             aria-valuemin={0}
             aria-valuemax={Math.round(audioDuration)}
             aria-valuenow={Math.round(currentTime)}
-            aria-valuetext={`${formatTime(currentTime)} de ${formatTime(audioDuration)}`}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            onKeyDown={handleKeyDown}
+            onClick={handleSeek}
             style={{
+              height: '4px',
+              background: 'var(--border)',
+              cursor: 'pointer',
               position: 'relative',
-              height: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              cursor: isDragging ? 'grabbing' : 'pointer',
-              touchAction: 'none',
-              outlineOffset: '2px',
+              borderRadius: '2px',
             }}
           >
             <div
               style={{
-                position: 'relative',
-                width: '100%',
-                height: '4px',
-                background: 'var(--border)',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                height: '100%',
+                width: `${progress}%`,
+                background: 'var(--accent)',
                 borderRadius: '2px',
+                transition: 'width 100ms linear',
               }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  height: '100%',
-                  width: `${progress}%`,
-                  background: 'var(--accent)',
-                  borderRadius: '2px',
-                  transition: isDragging ? 'none' : 'width 100ms linear',
-                }}
-              />
-            </div>
+            />
           </div>
+        </div>
 
-          {/* Time row — elapsed left, remaining right, mirrors the
-              Apple Music / iOS Now Playing layout. */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '6px',
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '11px',
-              color: 'var(--text-secondary)',
-              fontVariantNumeric: 'tabular-nums',
-              letterSpacing: '0.02em',
-            }}
-          >
-            <span>{formatTime(currentTime)}</span>
-            <span>−{formatTime(remaining)}</span>
-          </div>
+        <div
+          style={{
+            fontFamily: 'var(--font-space-mono)',
+            fontSize: '12px',
+            color: 'var(--text-secondary)',
+            flexShrink: 0,
+            minWidth: '90px',
+            textAlign: 'right',
+          }}
+        >
+          {formatTime(currentTime)} / {formatTime(audioDuration)}
         </div>
       </div>
 
