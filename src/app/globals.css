@@ -348,6 +348,177 @@ html[data-cta="orange"][data-theme="light"] {
 }
 
 /* ─────────────────────────────────────────────────────────────────
+   Lissajous playground (/lissajous) — full-bleed canvas card +
+   curated control deck. Sharp edges, monochrome, Space Mono labels,
+   IBM Plex body, in line with the rest of the site.
+   ───────────────────────────────────────────────────────────────── */
+.lis-playground {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.lis-canvas-frame {
+  position: relative;
+  width: 100%;
+  height: clamp(360px, 60vh, 640px);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  overflow: hidden;
+}
+.lis-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.lis-group-label {
+  margin: 0 0 12px;
+}
+.lis-preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lis-preset-btn,
+.lis-action-btn {
+  font-family: var(--font-space-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.lis-preset-btn:hover,
+.lis-action-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+.lis-preset-btn[data-active='true'] {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.lis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+@media (max-width: 900px) {
+  .lis-grid { grid-template-columns: 1fr; }
+}
+.lis-field {
+  margin-bottom: 16px;
+}
+.lis-field:last-child {
+  margin-bottom: 0;
+}
+.lis-field-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-space-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.lis-field-value {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.lis-range {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 2px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+}
+.lis-range:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.lis-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border: 0;
+  cursor: pointer;
+}
+.lis-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border: 0;
+  cursor: pointer;
+}
+.lis-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-space-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.lis-toggle input {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.lis-select {
+  width: 100%;
+  font-family: var(--font-space-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.lis-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.lis-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.lis-floating-toggle {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 40;
+  font-family: var(--font-space-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.lis-floating-toggle:hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+}
+.lis-floating-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────
    Header / nav — desktop horizontal; mobile collapses behind a
    menu toggle that the MobileNav client component drives.
    ───────────────────────────────────────────────────────────────── */
