@@ -54,7 +54,22 @@ export default async function AdminDashboardPage() {
       emoji: '⚙',
       special: true,
     },
-  ]
+    {
+      route: '/lissajous',
+      label: 'Lissajous',
+      labelSingular: 'Lissajous',
+      emoji: '∞',
+      special: true,
+      external: true,
+    },
+  ] as Array<{
+    route: string
+    label: string
+    labelSingular: string
+    emoji: string
+    special: boolean
+    external?: boolean
+  }>
 
   return (
     <main style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -89,40 +104,47 @@ export default async function AdminDashboardPage() {
           gap: '12px',
         }}
       >
-        {sections.map((s) => (
-          <Link key={s.route} href={`/admin/${s.route}`} style={cardStyle}>
-            <span
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '24px',
-                color: 'var(--text-secondary)',
-              }}
-            >
-              {s.emoji}
-            </span>
-            <span
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '15px',
-                fontWeight: 700,
-                letterSpacing: '0.05em',
-              }}
-            >
-              {s.label}
-            </span>
-            <span
-              style={{
-                fontFamily: 'monospace',
-                fontSize: '10px',
-                color: 'var(--text-muted)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-              }}
-            >
-              View list →
-            </span>
-          </Link>
-        ))}
+        {sections.map((s) => {
+          const href = s.external ? s.route : `/admin/${s.route}`
+          const linkProps = s.external
+            ? { target: '_blank', rel: 'noopener' as const }
+            : {}
+          const cta = s.external ? 'Open ↗' : 'View list →'
+          return (
+            <Link key={s.route} href={href} style={cardStyle} {...linkProps}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-space-mono)',
+                  fontSize: '24px',
+                  color: 'var(--text-secondary)',
+                }}
+              >
+                {s.emoji}
+              </span>
+              <span
+                style={{
+                  fontFamily: 'var(--font-space-mono)',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {s.label}
+              </span>
+              <span
+                style={{
+                  fontFamily: 'monospace',
+                  fontSize: '10px',
+                  color: 'var(--text-muted)',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {cta}
+              </span>
+            </Link>
+          )
+        })}
       </div>
     </main>
   )
