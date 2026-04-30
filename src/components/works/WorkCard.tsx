@@ -30,13 +30,19 @@ function descriptionExcerpt(raw: string | undefined, max = 220): string | null {
 
 const metaRowStyle: React.CSSProperties = {
   display: 'grid',
-  // 92 px hits "COMMISSIONS" (the longest label at fontSize 10px Space
-  // Mono with 0.1em letter-spacing) with ~6 px breathing room — tighter
-  // than the original 110 px which left dead space on shorter labels.
-  gridTemplateColumns: '92px 1fr',
+  // 132 px fits "COMMISSIONED BY" (15 chars) at Space Mono 10px with
+  // 0.1em letter-spacing without wrapping — the previous 92 px held
+  // the older "COMMISSIONS" label but broke the renamed one onto two
+  // lines. `nowrap` on the label is defense-in-depth in case the
+  // string ever changes again.
+  gridTemplateColumns: '132px 1fr',
   gap: '12px',
   alignItems: 'baseline',
   margin: '0 0 4px',
+}
+
+const metaLabelStyle: React.CSSProperties = {
+  whiteSpace: 'nowrap',
 }
 
 interface MetaRowProps {
@@ -47,7 +53,9 @@ interface MetaRowProps {
 function MetaRow({ label, value }: MetaRowProps) {
   return (
     <div style={metaRowStyle}>
-      <span className="t-label">{label}</span>
+      <span className="t-label" style={metaLabelStyle}>
+        {label}
+      </span>
       <span
         className="t-meta"
         style={{ color: 'var(--text-secondary)', margin: 0 }}
