@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import Image from 'next/image'
 import { getSettings } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
@@ -19,6 +18,30 @@ const STAGE_PHOTOS = [
   { src: '/bio/stage-3.jpg', alt: S.bio.archiveAlt.stage3 },
 ] as const
 
+// Strip leading paragraphs of the long bio that are already covered by the
+// hero intro (`bioShort`). Operators copy/paste the full bio into the long
+// field starting with the same opening sentence the intro shows, which would
+// otherwise render twice. Comparison is whitespace- and case-insensitive,
+// and only paragraphs FULLY contained in the intro are dropped — anything
+// with extra detail beyond the intro is kept.
+function dedupeBody(full: string, intro: string): string {
+  const norm = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase()
+  const introNorm = norm(intro)
+  if (!introNorm) return full
+
+  const paras = full.split(/\n{2,}/)
+  let i = 0
+  while (i < paras.length) {
+    const p = norm(paras[i])
+    if (p && introNorm.includes(p)) {
+      i++
+    } else {
+      break
+    }
+  }
+  return paras.slice(i).join('\n\n')
+}
+
 export default async function BioPage() {
   const settings = await getSettings()
   const bio = settings?.bio
@@ -27,7 +50,8 @@ export default async function BioPage() {
   const cvPdfUrl = settings?.cvPdfUrl
 
   const intro = bioShort?.trim() || S.bio.introFallback
-  const body = bio?.trim() || S.bio.bodyFallback
+  const rawBody = bio?.trim() || S.bio.bodyFallback
+  const body = dedupeBody(rawBody, intro)
 
   return (
     <div className="page-shell">
@@ -62,31 +86,6 @@ export default async function BioPage() {
             <span className="t-label">{S.bio.bodyLabel}</span>
             <PostBody value={body} />
           </div>
-
-          {S.bio.education.length > 0 && (
-            <>
-              <hr className="divider-hairline" />
-              <div className="bio-block">
-                <span className="t-label">{S.bio.educationLabel}</span>
-                <div className="edu-card">
-                  <ul className="edu-list">
-                    {S.bio.education.map((entry, i) => (
-                      <Fragment key={entry.degree}>
-                        {i > 0 && <li className="divider-hairline" aria-hidden="true" />}
-                        <li className="edu-row">
-                          <div>
-                            <h3 className="edu-degree">{entry.degree}</h3>
-                            <p className="edu-institution">{entry.institution}</p>
-                          </div>
-                          {entry.years && <span className="edu-year">{entry.years}</span>}
-                        </li>
-                      </Fragment>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </>
-          )}
 
           {cvPdfUrl && (
             <>
