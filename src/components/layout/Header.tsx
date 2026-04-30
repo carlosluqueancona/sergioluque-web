@@ -6,18 +6,20 @@ import { S } from '@/lib/strings'
 import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 
 export function Header() {
-  // Sections gated behind feature flags drop out of the public nav
-  // entirely — admin still has them, the data stays in the worker.
+  // Nav order — Listen, News, Biography, Catalogue, Stochastics, Contact.
+  // Sections gated behind feature flags (Projects, Blog) drop out of the
+  // public nav entirely; when re-enabled they sit between Stochastics
+  // and Contact. Admin still has them, the data stays in the worker.
   const navLinks: Array<{ href: string; label: string }> = [
     { href: '/works', label: S.nav.works },
+    { href: '/news', label: S.nav.concerts },
+    { href: '/bio', label: S.nav.bio },
     { href: '/catalogue', label: S.nav.catalogue },
+    { href: '/stochastics', label: S.nav.publications },
     ...(PUBLIC_SECTIONS.projects
       ? [{ href: '/projects', label: S.nav.projects }]
       : []),
     ...(PUBLIC_SECTIONS.blog ? [{ href: '/blog', label: S.nav.blog }] : []),
-    { href: '/bio', label: S.nav.bio },
-    { href: '/stochastics', label: S.nav.publications },
-    { href: '/news', label: S.nav.concerts },
     { href: '/contact', label: S.nav.contact },
   ]
 

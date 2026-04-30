@@ -9,16 +9,18 @@ import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 // social profile URLs. Tolerant of Worker outages: if the fetch
 // throws, the social strip just renders empty.
 export async function Footer() {
+  // Same order as the header nav: Listen, News, Biography, Catalogue,
+  // Stochastics, Contact (with Projects/Blog gated by feature flags).
   const navLinks: Array<{ href: string; label: string }> = [
     { href: '/works', label: S.nav.works },
+    { href: '/news', label: S.nav.concerts },
+    { href: '/bio', label: S.nav.bio },
     { href: '/catalogue', label: S.nav.catalogue },
+    { href: '/stochastics', label: S.nav.publications },
     ...(PUBLIC_SECTIONS.projects
       ? [{ href: '/projects', label: S.nav.projects }]
       : []),
     ...(PUBLIC_SECTIONS.blog ? [{ href: '/blog', label: S.nav.blog }] : []),
-    { href: '/bio', label: S.nav.bio },
-    { href: '/stochastics', label: S.nav.publications },
-    { href: '/news', label: S.nav.concerts },
     { href: '/contact', label: S.nav.contact },
   ]
   let settings = null
