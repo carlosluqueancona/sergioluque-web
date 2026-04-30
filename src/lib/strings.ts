@@ -62,6 +62,60 @@ export const S = {
   bio: {
     title: 'Biography',
     subtitle: 'Composer and researcher',
+    profileTag: '[ Profile ]',
+    displayName: 'Sergio\nLuque',
+    portraitAlt: 'Portrait of Sergio Luque',
+    introFallback:
+      'Sergio Luque (1976) is a composer of vocal, instrumental and electroacoustic music, and a researcher in computer music.',
+    // Body fallback — rendered when admin's settings.bio is empty. Markdown-
+    // like (paragraph-per-blank-line); admin override always wins.
+    bodyFallback: [
+      'He lives in Madrid, where he directs the Master in Electroacoustic Composition program at the Centro Superior Katarina Gurska and curates the new music festival VANG at the Cybele Palace. Additionally, he is a guest lecturer at the Royal Conservatoire in The Hague.',
+      'His music has been performed by the Schönberg Ensemble, the Nieuw Ensemble, Garth Knox, the Birmingham Contemporary Music Group and Les Jeunes Solistes, among others, and he has been a member of the National System of Art Creators of Mexico.',
+      "He has a PhD in Musical Composition from the University of Birmingham, where he studied with Jonty Harrison and Scott Wilson, and was a member of BEAST (Birmingham Electroacoustic Sound Theatre). During his PhD, he worked on the development of Iannis Xenakis's stochastic synthesis and of the BEASTmulch software (a tool for the presentation of electroacoustic music over multichannel systems).",
+      "In 2006, he received a Master's Degree with Distinction in Sonology, with specialization in Composition, from the Institute of Sonology at the Royal Conservatoire in The Hague, studying with Paul Berg and Kees Tazelaar. In 2004, he received a Master's Degree in Composition from the Conservatory of Rotterdam, studying with Klaas de Vries and René Uijlenhoet. In 2003, he studied with Klaus Huber at Centre Acanthes in France.",
+      'His compositions have been performed in the United Kingdom, the Netherlands, Germany, France, Switzerland, Austria, Spain, Andorra, Greece, the United States, Mexico, Cuba, El Salvador, Costa Rica, Colombia, Brazil, Chile, Argentina, Japan and Australia.',
+      'He has given lectures and workshops on algorithmic composition, sound synthesis, stochastic synthesis and SuperCollider in: Barcelona (Escola Superior de Música de Catalunya), Berlin (Technische Universität and Universität der Künste), Buenos Aires (Centro Cultural cheLA), Cologne (Universität Köln), The Hague (Royal Conservatory), London (Goldsmiths, University of London), Madrid (Medialab Prado and Museo Nacional Centro de Arte Reina Sofía), Mexico City (Centro Nacional de las Artes) and Morelia (Centro Mexicano para la Música y las Artes Sonoras).',
+      'He has received grants and prizes from the University of Birmingham (United Kingdom), the Fondo Nacional para la Cultura y las Artes (Mexico), the Schönberg Ensemble (Netherlands) and the Centre Acanthes (France).',
+    ].join('\n\n'),
+    role: 'Composer & Researcher',
+    bodyLabel: 'Biography',
+    educationLabel: 'Education',
+    cvLabel: 'Curriculum Vitae',
+    archiveTag: '[ Stage ]',
+    archiveAlt: {
+      stage1: 'Sergio Luque performing under a single light beam',
+      stage2: 'Sergio Luque on stage with projected textures',
+      stage3: 'Sergio Luque at the keyboard, low stage light',
+    },
+    // Education from the client's official bio. `years` is optional — the
+    // PhD completion date isn't published, so its row renders without a
+    // mono year tag.
+    education: [
+      {
+        degree: 'Ph.D. in Musical Composition',
+        institution: 'University of Birmingham, UK',
+      },
+      {
+        degree: "Master's in Sonology (Composition, with Distinction)",
+        institution: 'Institute of Sonology, Royal Conservatoire in The Hague',
+        years: '2006',
+      },
+      {
+        degree: "Master's in Composition",
+        institution: 'Conservatory of Rotterdam',
+        years: '2004',
+      },
+      {
+        degree: 'Studies with Klaus Huber',
+        institution: 'Centre Acanthes, France',
+        years: '2003',
+      },
+    ] as ReadonlyArray<{
+      readonly degree: string
+      readonly institution: string
+      readonly years?: string
+    }>,
   },
   catalogue: {
     title: 'Catalogue',
