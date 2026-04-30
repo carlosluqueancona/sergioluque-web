@@ -5,7 +5,7 @@
  */
 export const S = {
   nav: {
-    works: 'Works',
+    works: 'Listen',
     projects: 'Projects',
     blog: 'Blog',
     bio: 'Biography',
@@ -15,7 +15,7 @@ export const S = {
     catalogue: 'Catalogue',
   },
   works: {
-    title: 'Works',
+    title: 'Listen',
     catalog: 'Works catalog',
     instrumentation: 'Instrumentation',
     duration: 'Duration',

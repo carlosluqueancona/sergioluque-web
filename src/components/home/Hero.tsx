@@ -1,12 +1,12 @@
 import { HeroLissajous } from './HeroLissajous'
 
 const COPY = {
-  practice: 'Composer and researcher in electroacoustic music',
+  practice: 'Composer',
   catalog: 'Works catalogue',
   scrollHint: 'Scroll for catalogue',
   // Three-word manifesto: each word stands alone as a complete statement
   // about the practice. Rendered one-per-line for giant-scale impact.
-  headingWords: ['Electroacoustic.', 'Microtonal.', 'Formalised.'] as const,
+  headingWords: ['Instrumental.', 'Electroacoustic.', 'Stochastic synthesis.'] as const,
 } as const
 
 export function Hero() {
@@ -114,8 +114,11 @@ export function Hero() {
           style={{
             marginTop: '40px',
             fontFamily: 'var(--font-ibm-plex-sans)',
-            fontSize: '15px',
-            color: 'var(--text-secondary)',
+            fontSize: '17px',
+            // Lighter than --text-secondary, derived from --text-primary
+            // so it adapts to dark/light themes automatically.
+            color: 'var(--text-primary)',
+            opacity: 0.7,
             margin: '40px 0 0',
             maxWidth: '480px',
             lineHeight: 1.55,
