@@ -6,7 +6,7 @@ import { MobileNav } from '@/components/layout/MobileNav'
 // inline desktop list and the collapsible mobile panel so labels never
 // drift between the two.
 const ADMIN_LINKS = [
-  { href: '/admin/obras', label: 'Works' },
+  { href: '/admin/obras', label: 'Listen' },
   { href: '/admin/catalogue', label: 'Catalogue' },
   { href: '/admin/posts', label: 'Blog' },
   { href: '/admin/proyectos', label: 'Projects' },

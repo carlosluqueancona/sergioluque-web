@@ -20,9 +20,11 @@ interface ObraRow {
   sort_order: number
 }
 
-// Mirrors src/app/admin/[entity]/page.tsx so the Works list looks identical
-// to Posts / Projects / Concerts / Publications. Works keeps its own route
-// only because the edit form is custom (audio + image upload).
+// Mirrors src/app/admin/[entity]/page.tsx so the Listen list looks identical
+// to Posts / Projects / News / Stochastics. Listen keeps its own route
+// only because the edit form is custom (audio + image upload). The
+// underlying table is still 'obras' in the worker for backwards
+// compatibility — only the UI label changed.
 export default async function AdminObrasPage() {
   const cookieStore = await cookies()
   const token = cookieStore.get(COOKIE_NAME)?.value
@@ -66,7 +68,7 @@ export default async function AdminObrasPage() {
             letterSpacing: '0.05em',
           }}
         >
-          Works{' '}
+          Listen{' '}
           <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '14px' }}>
             ({rows.length})
           </span>

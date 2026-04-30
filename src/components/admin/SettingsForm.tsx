@@ -62,7 +62,7 @@ const SECTIONS: { title: string; fields: FieldConfig[] }[] = [
       { key: 'cv_pdf_url', label: 'CV (PDF)', type: 'pdf' },
       {
         key: 'works_fallback_cover_url',
-        label: 'Works fallback cover',
+        label: 'Listen fallback cover',
         type: 'image',
         hint: 'Shown on /listen for any work whose entry has no image of its own. Pick from the media library or upload a new one.',
       },

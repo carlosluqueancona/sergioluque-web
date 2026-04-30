@@ -348,6 +348,51 @@ html[data-cta="orange"][data-theme="light"] {
 }
 
 /* ─────────────────────────────────────────────────────────────────
+   Page transition — soft fade-up cascade on every navigation.
+   The route-segment template at src/app/template.tsx wraps each
+   new page in `<div data-page-anim>` and re-mounts on every nav,
+   which re-fires these animations. The wrapper gets a baseline
+   320ms fade; top-level <section>s inside cascade in 80ms apart
+   so the page composes itself one block at a time without feeling
+   busy. Pure CSS, no JS bundle cost. Honors prefers-reduced-motion.
+   ───────────────────────────────────────────────────────────────── */
+@keyframes page-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+[data-page-anim] {
+  animation: page-fade-up 320ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+[data-page-anim] section {
+  animation: page-fade-up 360ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+[data-page-anim] section:nth-of-type(1) {
+  animation-delay: 0ms;
+}
+[data-page-anim] section:nth-of-type(2) {
+  animation-delay: 80ms;
+}
+[data-page-anim] section:nth-of-type(3) {
+  animation-delay: 160ms;
+}
+[data-page-anim] section:nth-of-type(n + 4) {
+  animation-delay: 240ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-page-anim],
+  [data-page-anim] section {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
    Bio page — editorial two-column hero (name + portrait) followed
    by a 4/8 split with a sticky role heading on the left and the
    biography body, CV CTA, and stage gallery on the right. Sharp

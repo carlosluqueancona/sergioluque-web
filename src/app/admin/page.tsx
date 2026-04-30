@@ -28,7 +28,7 @@ export default async function AdminDashboardPage() {
   const sections = [
     {
       route: 'obras',
-      label: 'Works',
+      label: 'Listen',
       labelSingular: 'Work',
       emoji: '♫',
       special: true,
