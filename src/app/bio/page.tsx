@@ -67,10 +67,9 @@ export default async function BioPage() {
 
   return (
     <div className="page-shell">
-      {/* ── Hero: [PROFILE] chip + display name + intro · portrait with offset frame ── */}
+      {/* ── Hero: display name + intro · portrait (small, no offset frame) ── */}
       <section className="bio-hero" aria-labelledby="bio-display-name">
         <div>
-          <span className="chip-bordered">{S.bio.profileTag}</span>
           <h1 id="bio-display-name" className="bio-display" style={{ whiteSpace: 'pre-line' }}>
             {S.bio.displayName}
           </h1>
@@ -84,7 +83,7 @@ export default async function BioPage() {
             width={1200}
             height={1500}
             priority
-            sizes="(max-width: 900px) 90vw, 520px"
+            sizes="(max-width: 900px) 60vw, 280px"
           />
         </div>
       </section>

@@ -47,3 +47,8 @@ worker/.wrangler/
 worker/node_modules/
 worker/.wrangler/
 .claude/scheduled_tasks.lock
+.claude/worktrees/
+
+# Local-only WordPress export from the legacy site (database.sql + uploads).
+# Used as a one-shot import source; never tracked in git.
+sergioluque-com-*-plp*/
