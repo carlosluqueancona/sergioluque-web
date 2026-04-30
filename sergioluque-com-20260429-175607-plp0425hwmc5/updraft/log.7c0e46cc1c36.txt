@@ -1,0 +1,471 @@
+0000.002 (0) Opened log file at time: Tue, 26 Apr 2022 01:29:57 +0000 on http://carlosl132.sg-host.com
+0000.004 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 2.16.61.25 WP: 5.9.3 PHP: 7.4.29 (apache2handler, Linux giowm1120.siteground.biz 3.12.18-clouder0 #2 SMP PREEMPT Mon Mar 7 20:55:37 EET 2022 x86_64) MySQL: 5.7.32-35-log (max packet size=33554432) WPLANG: en_US Server: Apache safe_mode: 0 max_execution_time: 900 memory_limit: 768M (used: 43.2M | 52M) multisite: N openssl: OpenSSL 1.1.1n FIPS  18 Mar 2022 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.005 (0) Free space on disk containing Updraft's temporary directory: 1103639.4 MB
+0000.007 (0) Tasks: Backup files: 1 (schedule: daily) Backup DB:  (schedule: daily)
+0000.007 (0) Processed schedules. Combining jobs from identical schedules. Tasks now: Backup files: 1 Backup DB: 1
+0000.010 (0) Requesting semaphore lock (fd) (apparently via scheduler: last_scheduled_action_called_at=1650849797, seconds_ago=86800)
+0000.011 (0) Set semaphore last lock (fd) time to 2022-04-26 01:29:57
+0000.012 (0) Semaphore lock (fd) complete
+0000.014 (0) Backup run: resumption=0, nonce=7c0e46cc1c36, file_nonce=7c0e46cc1c36 begun at=1650936597 (0s ago), job type=backup
+0000.015 (0) Scheduling a resumption (1) after 300 seconds (1650936897) in case this run gets aborted
+0000.024 (0) Checking if we have a zip executable available
+0000.025 (0) Testing: /usr/bin/zip
+0000.029 (0) Output: zip warning: binziptest/test.zip not found or empty
+0000.030 (0) Output: adding: binziptest/subdir1/	(in=0) (out=0) (stored 0%)
+0000.031 (0) Output: adding: binziptest/subdir1/subdir2/	(in=0) (out=0) (stored 0%)
+0000.031 (0) Output: adding: binziptest/subdir1/subdir2/test.html	(in=131) (out=107) (deflated 18%)
+0000.032 (0) Output: total bytes=131, compressed=107 -> 18% savings
+0000.048 (0) Output: adding: binziptest/subdir1/subdir2/test2.html	(in=138) (out=113) (deflated 18%)
+0000.049 (0) Output: total bytes=269, compressed=220 -> 18% savings
+0000.054 (0) Working binary zip found: /usr/bin/zip
+0000.056 (0) Zip engine: found/will use a binary zip: /usr/bin/zip
+0000.057 (0) Creation of backups of directories: beginning
+0000.060 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0000.498 (0) Total entities for the zip file: 712 directories, 4503 files (0 skipped as non-modified), 41.7 MB
+0000.502 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 100 files added (on-disk size: 0 KB)
+0000.506 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 200 files added (on-disk size: 0 KB)
+0000.510 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 300 files added (on-disk size: 0 KB)
+0000.513 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 400 files added (on-disk size: 0 KB)
+0000.517 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 500 files added (on-disk size: 0 KB)
+0000.520 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 600 files added (on-disk size: 0 KB)
+0000.524 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 700 files added (on-disk size: 0 KB)
+0000.528 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 800 files added (on-disk size: 0 KB)
+0000.532 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 900 files added (on-disk size: 0 KB)
+0000.536 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1000 files added (on-disk size: 0 KB)
+0000.538 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (7.3 MB, 4503 files batched, 1001 (1001) added so far); re-opening (prior size: 0 KB)
+0001.293 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: size is now: 2.40 MB
+0001.297 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1100 files added (on-disk size: 2486.2 KB)
+0001.300 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1200 files added (on-disk size: 2486.2 KB)
+0001.304 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1300 files added (on-disk size: 2486.2 KB)
+0001.307 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1400 files added (on-disk size: 2486.2 KB)
+0001.310 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1500 files added (on-disk size: 2486.2 KB)
+0001.314 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1600 files added (on-disk size: 2486.2 KB)
+0001.318 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1700 files added (on-disk size: 2486.2 KB)
+0001.321 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1800 files added (on-disk size: 2486.2 KB)
+0001.325 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 1900 files added (on-disk size: 2486.2 KB)
+0001.328 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2000 files added (on-disk size: 2486.2 KB)
+0001.329 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (9.7 MB, 4503 files batched, 1001 (2002) added so far); re-opening (prior size: 2486.2 KB)
+0002.315 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: size is now: 5.40 MB
+0002.322 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2100 files added (on-disk size: 5558.3 KB)
+0002.328 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2200 files added (on-disk size: 5558.3 KB)
+0002.334 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2300 files added (on-disk size: 5558.3 KB)
+0002.340 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2400 files added (on-disk size: 5558.3 KB)
+0002.346 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2500 files added (on-disk size: 5558.3 KB)
+0002.351 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2600 files added (on-disk size: 5558.3 KB)
+0002.357 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2700 files added (on-disk size: 5558.3 KB)
+0002.363 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2800 files added (on-disk size: 5558.3 KB)
+0002.369 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 2900 files added (on-disk size: 5558.3 KB)
+0002.376 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3000 files added (on-disk size: 5558.3 KB)
+0002.377 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (10.3 MB, 4503 files batched, 1001 (3003) added so far); re-opening (prior size: 5558.3 KB)
+0003.255 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: size is now: 9.10 MB
+0003.262 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3100 files added (on-disk size: 9278 KB)
+0003.267 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3200 files added (on-disk size: 9278 KB)
+0003.272 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3300 files added (on-disk size: 9278 KB)
+0003.277 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3400 files added (on-disk size: 9278 KB)
+0003.281 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3500 files added (on-disk size: 9278 KB)
+0003.285 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3600 files added (on-disk size: 9278 KB)
+0003.289 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3700 files added (on-disk size: 9278 KB)
+0003.293 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3800 files added (on-disk size: 9278 KB)
+0003.296 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 3900 files added (on-disk size: 9278 KB)
+0003.300 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 4000 files added (on-disk size: 9278 KB)
+0003.301 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (5.8 MB, 4503 files batched, 1001 (4004) added so far); re-opening (prior size: 9278 KB)
+0004.260 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: size is now: 11.00 MB
+0004.268 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 4100 files added (on-disk size: 11217 KB)
+0004.272 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 4200 files added (on-disk size: 11217 KB)
+0004.276 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 4300 files added (on-disk size: 11217 KB)
+0004.280 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 4400 files added (on-disk size: 11217 KB)
+0004.285 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: 4500 files added (on-disk size: 11217 KB)
+0005.009 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip.tmp: size is now: 13.60 MB
+0005.151 (0) Created plugins zip (0) - 13947.5 KB in 5.1 s (2740.1 KB/s) (sha1: bf7f7b1590177421fed1a07d7946195f9beab6ca, sha256: 7d38f52eb0213a4d25ba4881d4d8c1d239fddde0fc21b96034a318365ef53345)
+0005.156 (0) Beginning creation of dump of themes (split every: 400 MB)
+0005.244 (0) Total entities for the zip file: 108 directories, 512 files (0 skipped as non-modified), 10.8 MB
+0005.249 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip.tmp: 100 files added (on-disk size: 0 KB)
+0005.253 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip.tmp: 200 files added (on-disk size: 0 KB)
+0005.257 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip.tmp: 300 files added (on-disk size: 0 KB)
+0005.262 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip.tmp: 400 files added (on-disk size: 0 KB)
+0005.267 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip.tmp: 500 files added (on-disk size: 0 KB)
+0005.894 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip.tmp: size is now: 8.10 MB
+0006.005 (0) Created themes zip (0) - 8247.8 KB in 0.8 s (9744.8 KB/s) (sha1: d02465234b5d9dcfba1e2d9ec313887a4e287f7e, sha256: 94045867235da905ca878e0b26952cda9e52e4fbcfa02a6667cd2945161a85ee)
+0006.008 (0) Exclusion option setting (uploads): backup*,*backups,backwpup*,wp-clone,snapshots
+0006.009 (0) Looking for candidates to backup in: /home/customer/www/carlosl132.sg-host.com/public_html/wp-content/uploads
+0006.010 (0) finding files: Telescope-Vazquez-Doval-300x300.jpeg: adding to list (1)
+0006.011 (0) finding files: VANG.jpg: adding to list (2)
+0006.011 (0) finding files: Museum-Tinguely-Basel.-The-Collection.jpg: adding to list (3)
+0006.012 (0) finding files: Liminar-150x150.jpg: adding to list (4)
+0006.012 (0) finding files: 2017-CEPROMUSIC-Dont-have-Anuncio-150x150.png: adding to list (5)
+0006.013 (0) finding files: Sonology-Workshop-624x468.jpg: adding to list (6)
+0006.013 (0) finding files: Concierto-en-México-y-Brasil-624x671.jpg: adding to list (7)
+0006.015 (0) finding files: 2019-Manzanilla-Dreaming-Santa-Fe-624x624.jpg: adding to list (8)
+0006.015 (0) finding files: CEPROMUSIC-Spine-624x1154.png: adding to list (9)
+0006.016 (0) finding files: 2017-CEPROMUSIC-Dont-have-Anuncio-571x1024.png: adding to list (10)
+0006.017 (0) finding files: IV-Jornadas-150x150.jpg: adding to list (11)
+0006.018 (0) finding files: 2018-Manzanilla-Dreaming-Colombia-194x300.jpg: adding to list (12)
+0006.018 (0) finding files: IV-Jornadas.jpg: adding to list (13)
+0006.019 (0) finding files: Museum-Tinguely-Basel.-The-Collection-150x150.jpg: adding to list (14)
+0006.020 (0) finding files: Festival_EMA-2019-150x150.jpg: adding to list (15)
+0006.020 (0) finding files: Feldman-For_Bunita_Marcus-300x300.jpg: adding to list (16)
+0006.021 (0) finding files: 2018-Manzanilla-Dreaming-Colombia.jpg: adding to list (17)
+0006.021 (0) finding files: Festival_EMA-2019-215x300.jpg: adding to list (18)
+0006.022 (0) finding files: 2017-CEPROMUSIC-Dont-have-Anuncio-624x1118.png: adding to list (19)
+0006.023 (0) finding files: Concierto-en-México-y-Brasil-768x826.jpg: adding to list (20)
+0006.023 (0) finding files: Boon-768x513.jpg: adding to list (21)
+0006.024 (0) finding files: Mostra-Sonora-2018-624x777.jpg: adding to list (22)
+0006.024 (0) finding files: 2018-Manzanilla-Dreaming-Colombia-150x150.jpg: adding to list (23)
+0006.025 (0) finding files: Visiones-Sonoras-XV-624x263.jpg: adding to list (24)
+0006.026 (0) finding files: 2014: adding to list (25)
+0006.026 (0) finding files: 2017-CEPROMUSIC-Dont-have-Anuncio-768x1376.png: adding to list (26)
+0006.027 (0) finding files: Visiones-Sonoras-XV.jpg: adding to list (27)
+0006.027 (0) finding files: 2019-Luque-Dreaming-232x300.jpg: adding to list (28)
+0006.027 (0) finding files: BIFEM2016.jpg: adding to list (29)
+0006.028 (0) finding files: Telescope-Vazquez-Doval-768x768.jpeg: adding to list (30)
+0006.028 (0) finding files: Festival_EMA-2019.jpg: adding to list (31)
+0006.029 (0) finding files: Mostra-Sonora-2018-150x150.jpg: adding to list (32)
+0006.029 (0) finding files: Telescope-Vazquez-Doval-624x624.jpeg: adding to list (33)
+0006.030 (0) finding files: MCE_VII_Jornadas-724x1024.jpg: adding to list (34)
+0006.030 (0) finding files: 2019-Luque-Dreaming-624x808.jpg: adding to list (35)
+0006.031 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM.jpg: adding to list (36)
+0006.031 (0) finding files: siteground-optimizer-assets: adding to list (37)
+0006.032 (0) finding files: Boon-624x416.jpg: adding to list (38)
+0006.032 (0) finding files: BEaST-FEAST-Real-Unreal-for-website-300x212.jpg: adding to list (39)
+0006.033 (0) finding files: CEPROMUSIC-Spine-150x150.png: adding to list (40)
+0006.034 (0) finding files: MCE_VI_Jornadas_Primer-150x150.jpg: adding to list (41)
+0006.035 (0) finding files: Feldman-For_Bunita_Marcus-150x150.jpg: adding to list (42)
+0006.035 (0) finding files: miniBEAST-green-624x440.jpg: adding to list (43)
+0006.036 (0) finding files: 13876337_ccrma-square_1365563794192x192r-1.jpg: adding to list (44)
+0006.036 (0) finding files: 2018-Sigma-Foro-768x768.jpeg: adding to list (45)
+0006.037 (0) finding files: CEPROMUSIC-Spine.png: adding to list (46)
+0006.037 (0) finding files: Telescope-II-Navarra-150x150.jpg: adding to list (47)
+0006.038 (0) finding files: MCE_VII_Jornadas.jpg: adding to list (48)
+0006.038 (0) finding files: miniBEAST-green-768x541.jpg: adding to list (49)
+0006.039 (0) finding files: 2019-Manzanilla-Dreaming-Santa-Fe-300x300.jpg: adding to list (50)
+0006.039 (0) finding files: Sonology-Workshop-1024x768.jpg: adding to list (51)
+0006.039 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano-768x1086.jpg: adding to list (52)
+0006.039 (0) finding files: miniBEAST-green.jpg: adding to list (53)
+0006.039 (0) finding files: BIFEM2016-300x128.jpg: adding to list (54)
+0006.039 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano-724x1024.jpg: adding to list (55)
+0006.039 (0) finding files: Raíces_Nomadas.jpg: adding to list (56)
+0006.039 (0) finding files: VANG-768x432.jpg: adding to list (57)
+0006.039 (0) finding files: BIFEM2016-150x150.jpg: adding to list (58)
+0006.039 (0) finding files: BEaST-FEAST-Real-Unreal-for-website-150x150.jpg: adding to list (59)
+0006.039 (0) finding files: 2018-Manzanilla-Dreaming-Colombia-663x1024.jpg: adding to list (60)
+0006.039 (0) finding files: Telescope-Vazquez-Doval-1536x1536.jpeg: adding to list (61)
+0006.039 (0) finding files: Telescope-Vazquez-Doval.jpeg: adding to list (62)
+0006.039 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM-213x300.jpg: adding to list (63)
+0006.039 (0) finding files: VANG-1024x576.jpg: adding to list (64)
+0006.039 (0) finding files: Sonology-Workshop-300x225.jpg: adding to list (65)
+0006.039 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM-1092x1536.jpg: adding to list (66)
+0006.039 (0) finding files: 2019-Luque-Dreaming-768x994.jpg: adding to list (67)
+0006.039 (0) finding files: Concierto-en-México-y-Brasil-150x150.jpg: adding to list (68)
+0006.039 (0) finding files: Mostra-Sonora-2018-241x300.jpg: adding to list (69)
+0006.039 (0) finding files: 2018-Manzanilla-Dreaming-Colombia-768x1187.jpg: adding to list (70)
+0006.039 (0) finding files: MCE_VII_Jornadas-768x1086.jpg: adding to list (71)
+0006.039 (0) finding files: BEaST-FEAST-Real-Unreal-for-website-624x441.jpg: adding to list (72)
+0006.039 (0) finding files: Museum-Tinguely-Basel.-The-Collection-262x300.jpg: adding to list (73)
+0006.039 (0) finding files: IV-Jornadas-212x300.jpg: adding to list (74)
+0006.039 (0) finding files: miniBEAST-green-150x150.jpg: adding to list (75)
+0006.039 (0) finding files: Sonology-Workshop-768x576.jpg: adding to list (76)
+0006.039 (0) finding files: Sonology-Workshop.jpg: adding to list (77)
+0006.039 (0) finding files: Telescope-II-Navarra-768x432.jpg: adding to list (78)
+0006.039 (0) finding files: BIFEM2016-624x267.jpg: adding to list (79)
+0006.039 (0) finding files: IV-Jornadas-624x883.jpg: adding to list (80)
+0006.039 (0) finding files: MCE_VII_Jornadas-212x300.jpg: adding to list (81)
+0006.039 (0) finding files: CEPROMUSIC-Spine-162x300.png: adding to list (82)
+0006.039 (0) finding files: 2018-Sigma-Foro-300x300.jpeg: adding to list (83)
+0006.040 (0) finding files: 2019-Manzanilla-Dreaming-Santa-Fe-768x768.jpg: adding to list (84)
+0006.040 (0) finding files: 2018-Sigma-Foro-1024x1024.jpeg: adding to list (85)
+0006.040 (0) finding files: 2019-Luque-Dreaming-791x1024.jpg: adding to list (86)
+0006.040 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano-624x883.jpg: adding to list (87)
+0006.040 (0) finding files: MCE_VI_Jornadas_Primer-724x1024.jpg: adding to list (88)
+0006.040 (0) finding files: MCE_VI_Jornadas_Primer-212x300.jpg: adding to list (89)
+0006.040 (0) finding files: Telescope-II-Navarra-1024x576.jpg: adding to list (90)
+0006.040 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM-728x1024.jpg: adding to list (91)
+0006.040 (0) finding files: Boon.jpg: adding to list (92)
+0006.040 (0) finding files: Mostra-Sonora-2018-768x956.jpg: adding to list (93)
+0006.040 (0) finding files: .htaccess: adding to list (94)
+0006.040 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano-212x300.jpg: adding to list (95)
+0006.040 (0) finding files: 2019-Manzanilla-Dreaming-Santa-Fe-150x150.jpg: adding to list (96)
+0006.040 (0) finding files: VANG-150x150.jpg: adding to list (97)
+0006.040 (0) finding files: MCE_VI_Jornadas_Primer.jpg: adding to list (98)
+0006.040 (0) finding files: 13876337_ccrma-square_1365563794192x192r-1-150x150.jpg: adding to list (99)
+0006.040 (0) finding files: VANG-624x351.jpg: adding to list (100)
+0006.040 (0) finding files: miniBEAST-green-300x211.jpg: adding to list (101)
+0006.040 (0) finding files: MCE_VI_Jornadas_Primer-624x883.jpg: adding to list (102)
+0006.040 (0) finding files: BIFEM2016-768x329.jpg: adding to list (103)
+0006.040 (0) finding files: Sonology-Workshop-150x150.jpg: adding to list (104)
+0006.040 (0) finding files: Visiones-Sonoras-XV-300x126.jpg: adding to list (105)
+0006.040 (0) finding files: Sonology-Workshop-1536x1152.jpg: adding to list (106)
+0006.040 (0) finding files: BEaST-FEAST-Real-Unreal-for-website.jpg: adding to list (107)
+0006.040 (0) finding files: 2018-Sigma-Foro-624x624.jpeg: adding to list (108)
+0006.040 (0) finding files: Telescope-Vazquez-Doval-1024x1024.jpeg: adding to list (109)
+0006.040 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM-150x150.jpg: adding to list (110)
+0006.040 (0) finding files: 2018-Manzanilla-Dreaming-Colombia-624x964.jpg: adding to list (111)
+0006.040 (0) finding files: MCE_VII_Jornadas-624x883.jpg: adding to list (112)
+0006.040 (0) finding files: Feldman-For_Bunita_Marcus.jpg: adding to list (113)
+0006.040 (0) finding files: Visiones-Sonoras-XV-150x150.jpg: adding to list (114)
+0006.040 (0) finding files: Telescope-II-Navarra-300x169.jpg: adding to list (115)
+0006.040 (0) finding files: VANG-300x169.jpg: adding to list (116)
+0006.040 (0) finding files: Raíces_Nomadas-150x150.jpg: adding to list (117)
+0006.040 (0) finding files: Mostra-Sonora-2018.jpg: adding to list (118)
+0006.040 (0) finding files: Raíces_Nomadas-300x225.jpg: adding to list (119)
+0006.040 (0) finding files: Telescope-Vazquez-Doval-150x150.jpeg: adding to list (120)
+0006.040 (0) finding files: Mostra-Sonora-2018-822x1024.jpg: adding to list (121)
+0006.040 (0) finding files: wpcf7_uploads: adding to list (122)
+0006.040 (0) finding files: 2018-Sigma-Foro-150x150.jpeg: adding to list (123)
+0006.041 (0) finding files: CEPROMUSIC-Spine-554x1024.png: adding to list (124)
+0006.041 (0) finding files: MCE_VI_Jornadas_Primer-768x1086.jpg: adding to list (125)
+0006.041 (0) finding files: Telescope-II-Navarra-624x351.jpg: adding to list (126)
+0006.041 (0) finding files: 2017-CEPROMUSIC-Dont-have-Anuncio.png: adding to list (127)
+0006.041 (0) finding files: CEPROMUSIC-Spine-768x1420.png: adding to list (128)
+0006.041 (0) finding files: BIFEM2016-1024x438.jpg: adding to list (129)
+0006.041 (0) finding files: MCE_VII_Jornadas-150x150.jpg: adding to list (130)
+0006.041 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano.jpg: adding to list (131)
+0006.041 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM-768x1080.jpg: adding to list (132)
+0006.041 (0) finding files: 2018-Sigma-Foro.jpeg: adding to list (133)
+0006.041 (0) finding files: Liminar.jpg: adding to list (134)
+0006.041 (0) finding files: Boon-150x150.jpg: adding to list (135)
+0006.041 (0) finding files: Telescope-II-Navarra.jpg: adding to list (136)
+0006.041 (0) finding files: BEaST-FEAST-Real-Unreal-for-website-768x543.jpg: adding to list (137)
+0006.041 (0) finding files: IV-Jornadas-724x1024.jpg: adding to list (138)
+0006.041 (0) finding files: Liminar-300x201.jpg: adding to list (139)
+0006.041 (0) finding files: 2019-Luque-Dreaming.jpg: adding to list (140)
+0006.041 (0) finding files: Telescope-II-Navarra-1536x864.jpg: adding to list (141)
+0006.041 (0) finding files: 2017-CEPROMUSIC-Dont-have-Anuncio-167x300.png: adding to list (142)
+0006.041 (0) finding files: IV-Jornadas-768x1086.jpg: adding to list (143)
+0006.041 (0) finding files: 2019-Luque-Dreaming-150x150.jpg: adding to list (144)
+0006.041 (0) finding files: Boon-300x200.jpg: adding to list (145)
+0006.041 (0) finding files: Concierto-en-México-y-Brasil.jpg: adding to list (146)
+0006.041 (0) finding files: 2019-frÃ­o-Casa-del-Lago-Juan-JosÃ©-Arreola-UNAM-624x877.jpg: adding to list (147)
+0006.041 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano-150x150.jpg: adding to list (148)
+0006.041 (0) finding files: 2019-Mirrors-Jaime-Agusto-Serrano-1086x1536.jpg: adding to list (149)
+0006.041 (0) finding files: Concierto-en-México-y-Brasil-279x300.jpg: adding to list (150)
+0006.041 (0) finding files: 2019-Manzanilla-Dreaming-Santa-Fe.jpg: adding to list (151)
+0006.041 (0) Beginning creation of dump of uploads (split every: 400 MB)
+0006.055 (0) Total entities for the zip file: 5 directories, 172 files (0 skipped as non-modified), 24.2 MB
+0006.059 (0) Zip: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-uploads.zip.tmp: 100 files added (on-disk size: 0 KB)
+0006.512 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-uploads.zip.tmp: size is now: 24.20 MB
+0006.759 (0) Created uploads zip (0) - 24831.5 KB in 0.7 s (34651.9 KB/s) (sha1: f8de8cd9dc4f97485ba72cbc55d10a5bd7f3965b, sha256: 1c4b2b5296b9a24c8090bd721595ac331de7783fb532017c45e7408d8bfa362f)
+0006.761 (0) No backup of wpcore: excluded by user's options
+0006.763 (0) Beginning backup of other directories found in the content directory (index: 0)
+0006.764 (0) Exclusion option setting (others): upgrade,cache,updraft,backup*,*backups,mysql.sql,debug.log
+0006.764 (0) Looking for candidates to backup in: /home/customer/www/carlosl132.sg-host.com/public_html/wp-content
+0006.765 (0) finding files: themes: skipping: this is the themes directory
+0006.766 (0) finding files: index.php: adding to list (1)
+0006.766 (0) finding files: plugins: skipping: this is the plugins directory
+0006.766 (0) finding files: uploads: skipping: this is the uploads directory
+0006.767 (0) finding files: .htaccess: adding to list (2)
+0006.767 (0) finding files: upgrade: skipping: excluded by options
+0006.768 (0) finding files: updraft: skipping: this is the updraft directory
+0006.770 (0) Total entities for the zip file: 0 directories, 2 files (0 skipped as non-modified), 0 MB
+0006.789 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-others.zip.tmp: size is now: 0.00 MB
+0006.793 (0) Created others zip (0) - 0.5 KB in 0 s (20.6 KB/s) (sha1: 32de5b025bdc1c99d22e1e8b2d9bf587bc077690, sha256: da85f31b4963233c73aabbb12aaf86ab2658fc4bbf554e8df79425e42a34271c)
+0006.795 (0) No backup of more: excluded by user's options
+0006.797 (0) Saving backup status to database (elements: 8)
+0006.802 (0) Beginning creation of database dump (WordPress DB)
+0006.804 (0) SQL compatibility mode is: NO_ENGINE_SUBSTITUTION
+0006.806 (0) Testing potential mysqldump binary: /usr/bin/mysqldump
+0006.821 (0) Output: /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;\n/*!40103 SET TIME_ZONE='+00:00' */;\n/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\nDROP TABLE IF EXISTS `SlA_options`;\n/*!40101 SET @saved_cs_client     = @@character_set_client */;\n/*!40101 SET character_set_client = utf8 */;\nCR (truncated - 1445 bytes total)
+0006.822 (0) Working binary mysqldump found: /usr/bin/mysqldump
+0006.841 (0) Table SlA_options: Total expected rows (approximate): 367
+0006.867 (0) Table SlA_options: Rows added in this batch (next record: 424164): 370 (uncompressed bytes in this segment=237150) in 0.02 seconds
+0006.871 (0) Table SlA_options: finishing file(s) (2, 67.5 KB)
+0006.873 (0) Table SlA_users: Total expected rows (approximate): 0
+0006.884 (0) Table SlA_users: Rows added in this batch (next record: 2): 1 (uncompressed bytes in this segment=1164) in 0.01 seconds
+0006.886 (0) Table SlA_users: finishing file(s) (2, 0.6 KB)
+0006.889 (0) Table SlA_usermeta: Total expected rows (approximate): 57
+0006.893 (0) Table SlA_usermeta: Rows added in this batch (next record: 99): 57 (uncompressed bytes in this segment=3760) in 0.00 seconds
+0006.896 (0) Table SlA_usermeta: finishing file(s) (2, 1.8 KB)
+0006.898 (0) Table SlA_commentmeta: Total expected rows (approximate): 0
+0006.901 (0) Table SlA_commentmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=595) in 0.00 seconds
+0006.904 (0) Table SlA_commentmeta: finishing file(s) (2, 0.4 KB)
+0006.906 (0) Table SlA_comments: Total expected rows (approximate): 0
+0006.910 (0) Table SlA_comments: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1429) in 0.00 seconds
+0006.912 (0) Table SlA_comments: finishing file(s) (2, 0.5 KB)
+0006.914 (0) Table SlA_links: Total expected rows (approximate): 7
+0006.918 (0) Table SlA_links: Rows added in this batch (next record: 7): 7 (uncompressed bytes in this segment=1897) in 0.00 seconds
+0006.920 (0) Table SlA_links: finishing file(s) (2, 0.6 KB)
+0006.922 (0) Table SlA_postmeta: Total expected rows (approximate): 4444
+0007.044 (0) Table SlA_postmeta: Rows added in this batch (next record: 42293): 4007 (uncompressed bytes in this segment=1511837) in 0.12 seconds
+0007.048 (0) Table SlA_postmeta: finishing file(s) (2, 153.9 KB)
+0007.050 (0) Table SlA_posts: Total expected rows (approximate): 979
+0007.720 (0) Table SlA_posts: Rows added in this batch (next record: 3181): 1015 (uncompressed bytes in this segment=10826634) in 0.67 seconds
+0007.724 (0) Table SlA_posts: finishing file(s) (2, 1892.7 KB)
+0007.727 (0) Table SlA_term_relationships: Total expected rows (approximate): 244
+0007.730 (0) Table SlA_term_relationships: Rows added in this batch (next record: 100000): 232 (uncompressed bytes in this segment=4092) in 0.00 seconds
+0007.732 (0) Table SlA_term_relationships: finishing file(s) (2, 0.9 KB)
+0007.734 (0) Table SlA_term_taxonomy: Total expected rows (approximate): 6
+0007.737 (0) Table SlA_term_taxonomy: Rows added in this batch (next record: 6): 6 (uncompressed bytes in this segment=1030) in 0.00 seconds
+0007.740 (0) Table SlA_term_taxonomy: finishing file(s) (2, 0.5 KB)
+0007.743 (0) Table SlA_termmeta: Total expected rows (approximate): 0
+0007.747 (0) Table SlA_termmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=568) in 0.00 seconds
+0007.749 (0) Table SlA_termmeta: finishing file(s) (2, 0.3 KB)
+0007.752 (0) Table SlA_terms: Total expected rows (approximate): 6
+0007.756 (0) Table SlA_terms: Rows added in this batch (next record: 6): 6 (uncompressed bytes in this segment=836) in 0.00 seconds
+0007.758 (0) Table SlA_terms: finishing file(s) (2, 0.5 KB)
+0007.761 (0) Table SlA_blc_filters: Total expected rows (approximate): 0
+0007.764 (0) Table SlA_blc_filters: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=543) in 0.00 seconds
+0007.767 (0) Table SlA_blc_filters: finishing file(s) (2, 0.3 KB)
+0007.770 (0) Table SlA_blc_instances: Total expected rows (approximate): 237
+0007.776 (0) Table SlA_blc_instances: Rows added in this batch (next record: 2912): 237 (uncompressed bytes in this segment=43403) in 0.00 seconds
+0007.779 (0) Table SlA_blc_instances: finishing file(s) (2, 9 KB)
+0007.781 (0) Table SlA_blc_links: Total expected rows (approximate): 156
+0007.796 (0) Table SlA_blc_links: Rows added in this batch (next record: 194): 192 (uncompressed bytes in this segment=446515) in 0.01 seconds
+0007.801 (0) Table SlA_blc_links: finishing file(s) (2, 62.6 KB)
+0007.803 (0) Table SlA_blc_synch: Total expected rows (approximate): 16
+0007.805 (0) Table SlA_blc_synch: Rows added in this batch (next record: 1000): 16 (uncompressed bytes in this segment=1334) in 0.00 seconds
+0007.808 (0) Table SlA_blc_synch: finishing file(s) (2, 0.5 KB)
+0007.810 (0) Table SlA_fbv: Total expected rows (approximate): 0
+0007.814 (0) Table SlA_fbv: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=599) in 0.00 seconds
+0007.816 (0) Table SlA_fbv: finishing file(s) (2, 0.4 KB)
+0007.818 (0) Table SlA_fbv_attachment_folder: Total expected rows (approximate): 0
+0007.821 (0) Table SlA_fbv_attachment_folder: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=536) in 0.00 seconds
+0007.824 (0) Table SlA_fbv_attachment_folder: finishing file(s) (2, 0.3 KB)
+0007.826 (0) Table SlA_sgs_log_events: Total expected rows (approximate): 30
+0007.829 (0) Table SlA_sgs_log_events: Rows added in this batch (next record: 34): 34 (uncompressed bytes in this segment=6881) in 0.00 seconds
+0007.832 (0) Table SlA_sgs_log_events: finishing file(s) (2, 1.1 KB)
+0007.834 (0) Table SlA_sgs_log_visitors: Total expected rows (approximate): 6
+0007.836 (0) Table SlA_sgs_log_visitors: Rows added in this batch (next record: 6): 6 (uncompressed bytes in this segment=896) in 0.00 seconds
+0007.838 (0) Table SlA_sgs_log_visitors: finishing file(s) (2, 0.4 KB)
+0007.841 (0) Table SlA_yoast_indexable: Total expected rows (approximate): 593
+0007.871 (0) Table SlA_yoast_indexable: Rows added in this batch (next record: 1774): 589 (uncompressed bytes in this segment=272806) in 0.03 seconds
+0007.875 (0) Table SlA_yoast_indexable: finishing file(s) (2, 34.6 KB)
+0007.877 (0) Table SlA_yoast_indexable_hierarchy: Total expected rows (approximate): 265
+0007.880 (0) Table SlA_yoast_indexable_hierarchy: Rows added in this batch (next record: 1000): 253 (uncompressed bytes in this segment=5304) in 0.00 seconds
+0007.883 (0) Table SlA_yoast_indexable_hierarchy: finishing file(s) (2, 1.1 KB)
+0007.885 (0) Table SlA_yoast_migrations: Total expected rows (approximate): 21
+0007.889 (0) Table SlA_yoast_migrations: Rows added in this batch (next record: 23): 23 (uncompressed bytes in this segment=1207) in 0.00 seconds
+0007.892 (0) Table SlA_yoast_migrations: finishing file(s) (2, 0.6 KB)
+0007.895 (0) Table SlA_yoast_primary_term: Total expected rows (approximate): 0
+0007.898 (0) Table SlA_yoast_primary_term: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=864) in 0.00 seconds
+0007.900 (0) Table SlA_yoast_primary_term: finishing file(s) (2, 0.4 KB)
+0007.902 (0) Table SlA_yoast_seo_links: Total expected rows (approximate): 647
+0007.917 (0) Table SlA_yoast_seo_links: Rows added in this batch (next record: 12707): 647 (uncompressed bytes in this segment=80071) in 0.01 seconds
+0007.920 (0) Table SlA_yoast_seo_links: finishing file(s) (2, 10.5 KB)
+0007.923 (0) Table SlA_yoast_seo_meta: Total expected rows (approximate): 880
+0007.931 (0) Table SlA_yoast_seo_meta: Rows added in this batch (next record: 1489): 880 (uncompressed bytes in this segment=13277) in 0.01 seconds
+0007.934 (0) Table SlA_yoast_seo_meta: finishing file(s) (2, 2.3 KB)
+0007.936 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_options.table.tmpr424165.gz (1/26/fopen): adding to final database dump
+0007.938 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_options.table.gz (2/26/fopen): adding to final database dump
+0007.939 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_users.table.tmpr3.gz (3/26/fopen): adding to final database dump
+0007.940 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_users.table.gz (4/26/fopen): adding to final database dump
+0007.940 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_usermeta.table.tmpr100.gz (5/26/fopen): adding to final database dump
+0007.941 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_usermeta.table.gz (6/26/fopen): adding to final database dump
+0007.941 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_commentmeta.table.tmpr0.gz (7/26/fopen): adding to final database dump
+0007.942 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_commentmeta.table.gz (8/26/fopen): adding to final database dump
+0007.942 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_comments.table.tmpr0.gz (9/26/fopen): adding to final database dump
+0007.943 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_comments.table.gz (10/26/fopen): adding to final database dump
+0007.943 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_links.table.tmpr8.gz (11/26/fopen): adding to final database dump
+0007.944 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_links.table.gz (12/26/fopen): adding to final database dump
+0007.945 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_postmeta.table.tmpr42294.gz (13/26/fopen): adding to final database dump
+0007.950 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_postmeta.table.gz (14/26/fopen): adding to final database dump
+0007.951 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_posts.table.tmpr3182.gz (15/26/fopen): adding to final database dump
+0007.995 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_posts.table.gz (16/26/fopen): adding to final database dump
+0007.996 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_term_relationships.table.tmpr100001.gz (17/26/fopen): adding to final database dump
+0007.997 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_term_relationships.table.gz (18/26/fopen): adding to final database dump
+0007.998 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_term_taxonomy.table.tmpr7.gz (19/26/fopen): adding to final database dump
+0007.999 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_term_taxonomy.table.gz (20/26/fopen): adding to final database dump
+0007.999 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_termmeta.table.tmpr0.gz (21/26/fopen): adding to final database dump
+0008.000 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_termmeta.table.gz (22/26/fopen): adding to final database dump
+0008.000 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_terms.table.tmpr7.gz (23/26/fopen): adding to final database dump
+0008.001 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_terms.table.gz (24/26/fopen): adding to final database dump
+0008.001 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_filters.table.tmpr0.gz (25/26/fopen): adding to final database dump
+0008.001 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_filters.table.gz (26/26/fopen): adding to final database dump
+0008.002 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_instances.table.tmpr2913.gz (27/26/fopen): adding to final database dump
+0008.003 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_instances.table.gz (28/26/fopen): adding to final database dump
+0008.003 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_links.table.tmpr195.gz (29/26/fopen): adding to final database dump
+0008.005 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_links.table.gz (30/26/fopen): adding to final database dump
+0008.005 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_synch.table.tmpr1001.gz (31/26/fopen): adding to final database dump
+0008.006 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_blc_synch.table.gz (32/26/fopen): adding to final database dump
+0008.006 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_fbv.table.tmpr0.gz (33/26/fopen): adding to final database dump
+0008.007 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_fbv.table.gz (34/26/fopen): adding to final database dump
+0008.008 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_fbv_attachment_folder.table.tmpr1.gz (35/26/fopen): adding to final database dump
+0008.008 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_fbv_attachment_folder.table.gz (36/26/fopen): adding to final database dump
+0008.008 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_sgs_log_events.table.tmpr35.gz (37/26/fopen): adding to final database dump
+0008.009 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_sgs_log_events.table.gz (38/26/fopen): adding to final database dump
+0008.009 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_sgs_log_visitors.table.tmpr7.gz (39/26/fopen): adding to final database dump
+0008.010 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_sgs_log_visitors.table.gz (40/26/fopen): adding to final database dump
+0008.010 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_indexable.table.tmpr1775.gz (41/26/fopen): adding to final database dump
+0008.011 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_indexable.table.gz (42/26/fopen): adding to final database dump
+0008.012 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_indexable_hierarchy.table.tmpr1001.gz (43/26/fopen): adding to final database dump
+0008.012 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_indexable_hierarchy.table.gz (44/26/fopen): adding to final database dump
+0008.013 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_migrations.table.tmpr24.gz (45/26/fopen): adding to final database dump
+0008.013 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_migrations.table.gz (46/26/fopen): adding to final database dump
+0008.013 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_primary_term.table.tmpr0.gz (47/26/fopen): adding to final database dump
+0008.014 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_primary_term.table.gz (48/26/fopen): adding to final database dump
+0008.014 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_seo_links.table.tmpr12708.gz (49/26/fopen): adding to final database dump
+0008.015 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_seo_links.table.gz (50/26/fopen): adding to final database dump
+0008.015 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_seo_meta.table.tmpr1490.gz (51/26/fopen): adding to final database dump
+0008.016 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db-table-SlA_yoast_seo_meta.table.gz (52/26/fopen): adding to final database dump
+0008.020 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db.gz: finished writing out complete database file (2244.7 KB)
+0008.046 (0) Total database tables backed up: 26 (backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db.gz, size: 2298713, sha1: 28bcb54f9b197364f510fd8df669ba6416e851ca, sha256: d8224c5712f14bb81b374aec8615cd838b49a4de73beece426207a261626b3eb)
+0008.051 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip: plugins: This file has not yet been successfully uploaded: will queue
+0008.052 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip: themes: This file has not yet been successfully uploaded: will queue
+0008.052 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-uploads.zip: uploads: This file has not yet been successfully uploaded: will queue
+0008.052 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-others.zip: others: This file has not yet been successfully uploaded: will queue
+0008.053 (0) backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db.gz: db: This file has not yet been successfully uploaded: will queue
+0008.053 (0) Saving backup history. Total backup size: 48.1 MB
+0008.055 (0) Requesting upload of the files that have not yet been successfully uploaded (5)
+0008.057 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0008.057 (0) No remote despatch: user chose no remote backup service
+0008.058 (0) Recording as successfully uploaded: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-plugins.zip
+0008.059 (0) Recording as successfully uploaded: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-themes.zip
+0008.060 (0) Recording as successfully uploaded: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-uploads.zip
+0008.061 (0) Recording as successfully uploaded: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-others.zip
+0008.062 (0) Recording as successfully uploaded: backup_2022-04-26-0129_Sergio_Luque_7c0e46cc1c36-db.gz
+0008.064 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=5, retain_db=5
+0008.065 (0) Number of backup sets in history: 7; groups (db): 1
+0008.065 (0) Examining (for databases) backup set with group_id=0, nonce=7c0e46cc1c36, datestamp=1650936597 (Apr 26 2022 01:29:57)
+0008.066 (0) This backup set is the backup set just made, so will not be deleted.
+0008.066 (0) Examining (for databases) backup set with group_id=0, nonce=f7165e9216bc, datestamp=1650849797 (Apr 25 2022 01:23:17)
+0008.066 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.066 (0) Examining (for databases) backup set with group_id=0, nonce=7cdadaa2a603, datestamp=1650762985 (Apr 24 2022 01:16:25)
+0008.067 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.067 (0) Examining (for databases) backup set with group_id=0, nonce=58461fb897df, datestamp=1650676596 (Apr 23 2022 01:16:36)
+0008.067 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.067 (0) Examining (for databases) backup set with group_id=0, nonce=17fb038a6f6d, datestamp=1650577173 (Apr 21 2022 21:39:33)
+0008.067 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.067 (0) Examining (for databases) backup set with group_id=0, nonce=16c6ea5cd194, datestamp=1650490809 (Apr 20 2022 21:40:09)
+0008.067 (0) 1650490809: db: this set includes a database (backup_2022-04-20-2140_Sergio_Luque_16c6ea5cd194-db.gz); db count is now 5
+0008.067 (0) 1650490809: db: over retain limit (5); will delete this database
+0008.067 (0) Delete file: backup_2022-04-20-2140_Sergio_Luque_16c6ea5cd194-db.gz, service=none
+0008.068 (0) This backup set remains non-empty (f=1/d=0); will retain in history
+0008.068 (0) Examining (for databases) backup set with group_id=0, nonce=1ff8bf9b54d1, datestamp=1600294706 (Sep 16 2020 22:18:26)
+0008.068 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0008.068 (0) Number of backup sets in history: 7; groups (files): 1
+0008.069 (0) Examining (for files) backup set with nonce=7c0e46cc1c36, datestamp=1650936597 (Apr 26 2022 01:29:57)
+0008.069 (0) This backup set is the backup set just made, so will not be deleted.
+0008.069 (0) This backup set is the backup set just made, so will not be deleted.
+0008.069 (0) This backup set is the backup set just made, so will not be deleted.
+0008.069 (0) This backup set is the backup set just made, so will not be deleted.
+0008.069 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.070 (0) Examining (for files) backup set with nonce=f7165e9216bc, datestamp=1650849797 (Apr 25 2022 01:23:17)
+0008.070 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.070 (0) Examining (for files) backup set with nonce=7cdadaa2a603, datestamp=1650762985 (Apr 24 2022 01:16:25)
+0008.070 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.070 (0) Examining (for files) backup set with nonce=58461fb897df, datestamp=1650676596 (Apr 23 2022 01:16:36)
+0008.070 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.070 (0) Examining (for files) backup set with nonce=17fb038a6f6d, datestamp=1650577173 (Apr 21 2022 21:39:33)
+0008.070 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.070 (0) Examining (for files) backup set with nonce=16c6ea5cd194, datestamp=1650490809 (Apr 20 2022 21:40:09)
+0008.070 (0) plugins: over retain limit (5); will delete this file entity
+0008.070 (0) themes: over retain limit (5); will delete this file entity
+0008.070 (0) uploads: over retain limit (5); will delete this file entity
+0008.070 (0) others: over retain limit (5); will delete this file entity
+0008.070 (0) Delete file: backup_2022-04-20-2140_Sergio_Luque_16c6ea5cd194-plugins.zip, service=none
+0008.070 (0) Delete file: backup_2022-04-20-2140_Sergio_Luque_16c6ea5cd194-themes.zip, service=none
+0008.071 (0) Delete file: backup_2022-04-20-2140_Sergio_Luque_16c6ea5cd194-uploads.zip, service=none
+0008.071 (0) Delete file: backup_2022-04-20-2140_Sergio_Luque_16c6ea5cd194-others.zip, service=none
+0008.072 (0) This backup set is now empty; will remove from history
+0008.072 (0) Corresponding log file (log.16c6ea5cd194.txt) not found - must have already been deleted
+0008.073 (0) Examining (for files) backup set with nonce=1ff8bf9b54d1, datestamp=1600294706 (Sep 16 2020 22:18:26)
+0008.073 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0008.073 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0008.073 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0008.073 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0008.073 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0008.073 (0) Retain: saving new backup history (sets now: 6) and finishing retain operation
+0008.075 (0) Resume backup (7c0e46cc1c36, 0): finish run
+0008.077 (0) Decremented the semaphore (fd) by 1
+0008.077 (0) Semaphore (fd) unlocked
+0008.078 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0008.080 (0) No email will/can be sent - the user has not configured an email address.
+0008.080 (0) The backup apparently succeeded and is now complete

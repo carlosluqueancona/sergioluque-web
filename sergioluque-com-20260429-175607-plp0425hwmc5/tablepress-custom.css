@@ -1,0 +1,82 @@
+#content .tablepress-id-1 {
+	max-width: 66%;
+	margin: 0 auto 1em !important;
+}
+
+.tablepress thead th {
+	background-color: transparent;
+	text-transform: none;
+	font-size: 12px;
+}
+
+.tablepress td {
+	background-color: none;
+	padding: 2px;
+}
+
+.tablepress-id-1,
+.tablepress-id-1 tr,
+.tablepress-id-1 tbody td,
+.tablepress-id-1 thead th,
+.tablepress-id-1 tfoot th,
+.tablepress-id-2,
+.tablepress-id-2 tr,
+.tablepress-id-2 tbody td,
+.tablepress-id-2 thead th,
+.tablepress-id-2 tfoot th {
+	border: none;
+}
+
+.tablepress .row-hover tr:hover td {
+	background-color: #f5f5f5;
+}
+
+.tablepress-id-1 .column-3 {
+	text-align: right;
+}
+
+/* .tablepress-id-1 .column-3, */
+.tablepress-id-1 .column-2 {
+	text-align: center;
+}
+
+/* .tablepress-id-1 .row-1 .column-2 {
+	width: 35px;
+} */
+.tablepress-id-1 .column-2 {
+/* width: 35px; */
+	width: 45px;
+}
+
+/* .tablepress-id-1 .column-4 {
+	width: 58px;
+}
+ */
+.tablepress-id-1 .row-hover .row-16:hover td {
+	background-color: transparent !important;
+}
+
+.tablepress-id-1 .row-17 .column-1,
+.tablepress-id-1 .row-18 .column-1,
+.tablepress-id-1 .row-19 .column-1 {
+	padding-left: 14px;
+}
+
+#content .tablepress-id-2 {
+	max-width: 94%;
+	margin: 0 auto 1em !important;
+}
+
+.tablepress-id-2 .column-2 {
+	text-align: center;
+}
+
+.tablepress-wrapper-l {
+	width: 49%;
+	float: left;
+}
+
+.tablepress-wrapper-r {
+	width: 49%;
+	float: right;
+}

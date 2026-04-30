@@ -1,0 +1,277 @@
+0000.000 (0) Opened log file at time: Tue, 26 Apr 2022 20:53:37 +0000 on https://carlosl132.sg-host.com
+0000.001 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 2.16.61.25 WP: 5.9.3 PHP: 7.4.29 (apache2handler, Linux giowm1120.siteground.biz 3.12.18-clouder0 #2 SMP PREEMPT Mon Mar 7 20:55:37 EET 2022 x86_64) MySQL: 5.7.32-35-log (max packet size=33554432) WPLANG: en_US Server: Apache safe_mode: 0 max_execution_time: 900 memory_limit: 768M (used: 51.8M | 8M) multisite: N openssl: OpenSSL 1.1.1n FIPS  18 Mar 2022 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.002 (0) Free space on disk containing Updraft's temporary directory: 1128055.7 MB
+0000.004 (0) Tasks: Backup files: 1 (schedule: daily) Backup DB: 1 (schedule: daily)
+0000.007 (0) Requesting semaphore lock (fd) (apparently not via scheduler)
+0000.008 (0) Set semaphore last lock (fd) time to 2022-04-26 20:53:37
+0000.009 (0) Semaphore lock (fd) complete
+0000.011 (0) Backup run: resumption=0, nonce=34f070d9a7ad, file_nonce=34f070d9a7ad begun at=1651006417 (0s ago), job type=backup, label=Automatic backup before update
+0000.012 (0) Scheduling a resumption (1) after 300 seconds (1651006717) in case this run gets aborted
+0000.024 (0) Checking if we have a zip executable available
+0000.025 (0) Testing: /usr/bin/zip
+0000.030 (0) Output: zip warning: binziptest/test.zip not found or empty
+0000.030 (0) Output: adding: binziptest/subdir1/	(in=0) (out=0) (stored 0%)
+0000.031 (0) Output: adding: binziptest/subdir1/subdir2/	(in=0) (out=0) (stored 0%)
+0000.031 (0) Output: adding: binziptest/subdir1/subdir2/test.html	(in=131) (out=107) (deflated 18%)
+0000.032 (0) Output: total bytes=131, compressed=107 -> 18% savings
+0000.049 (0) Output: adding: binziptest/subdir1/subdir2/test2.html	(in=138) (out=113) (deflated 18%)
+0000.050 (0) Output: total bytes=269, compressed=220 -> 18% savings
+0000.055 (0) Working binary zip found: /usr/bin/zip
+0000.056 (0) Zip engine: found/will use a binary zip: /usr/bin/zip
+0000.057 (0) Creation of backups of directories: beginning
+0000.059 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0000.232 (0) Total entities for the zip file: 712 directories, 4503 files (0 skipped as non-modified), 41.7 MB
+0000.236 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 100 files added (on-disk size: 0 KB)
+0000.239 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 200 files added (on-disk size: 0 KB)
+0000.242 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 300 files added (on-disk size: 0 KB)
+0000.245 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 400 files added (on-disk size: 0 KB)
+0000.248 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 500 files added (on-disk size: 0 KB)
+0000.252 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 600 files added (on-disk size: 0 KB)
+0000.257 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 700 files added (on-disk size: 0 KB)
+0000.261 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 800 files added (on-disk size: 0 KB)
+0000.265 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 900 files added (on-disk size: 0 KB)
+0000.269 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1000 files added (on-disk size: 0 KB)
+0000.270 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (7.3 MB, 4503 files batched, 1001 (1001) added so far); re-opening (prior size: 0 KB)
+0000.999 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: size is now: 2.40 MB
+0001.009 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1100 files added (on-disk size: 2486.2 KB)
+0001.015 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1200 files added (on-disk size: 2486.2 KB)
+0001.020 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1300 files added (on-disk size: 2486.2 KB)
+0001.024 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1400 files added (on-disk size: 2486.2 KB)
+0001.028 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1500 files added (on-disk size: 2486.2 KB)
+0001.032 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1600 files added (on-disk size: 2486.2 KB)
+0001.037 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1700 files added (on-disk size: 2486.2 KB)
+0001.041 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1800 files added (on-disk size: 2486.2 KB)
+0001.046 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 1900 files added (on-disk size: 2486.2 KB)
+0001.051 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2000 files added (on-disk size: 2486.2 KB)
+0001.052 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (9.7 MB, 4503 files batched, 1001 (2002) added so far); re-opening (prior size: 2486.2 KB)
+0001.941 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: size is now: 5.40 MB
+0001.946 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2100 files added (on-disk size: 5558.3 KB)
+0001.949 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2200 files added (on-disk size: 5558.3 KB)
+0001.953 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2300 files added (on-disk size: 5558.3 KB)
+0001.956 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2400 files added (on-disk size: 5558.3 KB)
+0001.960 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2500 files added (on-disk size: 5558.3 KB)
+0001.963 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2600 files added (on-disk size: 5558.3 KB)
+0001.967 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2700 files added (on-disk size: 5558.3 KB)
+0001.972 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2800 files added (on-disk size: 5558.3 KB)
+0001.976 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 2900 files added (on-disk size: 5558.3 KB)
+0001.980 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3000 files added (on-disk size: 5558.3 KB)
+0001.981 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (10.3 MB, 4503 files batched, 1001 (3003) added so far); re-opening (prior size: 5558.3 KB)
+0002.816 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: size is now: 9.10 MB
+0002.822 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3100 files added (on-disk size: 9278 KB)
+0002.826 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3200 files added (on-disk size: 9278 KB)
+0002.831 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3300 files added (on-disk size: 9278 KB)
+0002.836 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3400 files added (on-disk size: 9278 KB)
+0002.841 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3500 files added (on-disk size: 9278 KB)
+0002.847 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3600 files added (on-disk size: 9278 KB)
+0002.852 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3700 files added (on-disk size: 9278 KB)
+0002.856 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3800 files added (on-disk size: 9278 KB)
+0002.861 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 3900 files added (on-disk size: 9278 KB)
+0002.865 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 4000 files added (on-disk size: 9278 KB)
+0002.866 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (5.8 MB, 4503 files batched, 1001 (4004) added so far); re-opening (prior size: 9278 KB)
+0003.613 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: size is now: 11.00 MB
+0003.619 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 4100 files added (on-disk size: 11217 KB)
+0003.625 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 4200 files added (on-disk size: 11217 KB)
+0003.629 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 4300 files added (on-disk size: 11217 KB)
+0003.633 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 4400 files added (on-disk size: 11217 KB)
+0003.636 (0) Zip: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: 4500 files added (on-disk size: 11217 KB)
+0004.261 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip.tmp: size is now: 13.60 MB
+0004.386 (0) Created plugins zip (0) - 13947.5 KB in 4.3 s (3224.8 KB/s) (sha1: dbe54f15b08579469fe8545f0d0ce91a64b02b45, sha256: def2e1f14c3aa4659bdbbd10705faff5c7e916ec2aa9dfa063f30e6a8cfd742f)
+0004.388 (0) No backup of themes: excluded by user's options
+0004.388 (0) No backup of uploads: excluded by user's options
+0004.389 (0) No backup of wpcore: excluded by user's options
+0004.389 (0) No backup of others: excluded by user's options
+0004.390 (0) No backup of more: excluded by user's options
+0004.392 (0) Saving backup status to database (elements: 2)
+0004.394 (0) Beginning creation of database dump (WordPress DB)
+0004.396 (0) SQL compatibility mode is: NO_ENGINE_SUBSTITUTION
+0004.397 (0) Testing potential mysqldump binary: /usr/bin/mysqldump
+0004.411 (0) Output: /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;\n/*!40103 SET TIME_ZONE='+00:00' */;\n/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\nDROP TABLE IF EXISTS `SlA_options`;\n/*!40101 SET @saved_cs_client     = @@character_set_client */;\n/*!40101 SET character_set_client = utf8 */;\nCR (truncated - 1445 bytes total)
+0004.412 (0) Working binary mysqldump found: /usr/bin/mysqldump
+0004.431 (0) Table SlA_options: Total expected rows (approximate): 405
+0004.458 (0) Table SlA_options: Rows added in this batch (next record: 424243): 409 (uncompressed bytes in this segment=470471) in 0.03 seconds
+0004.461 (0) Table SlA_options: finishing file(s) (2, 116.6 KB)
+0004.463 (0) Table SlA_users: Total expected rows (approximate): 0
+0004.465 (0) Table SlA_users: Rows added in this batch (next record: 2): 1 (uncompressed bytes in this segment=1164) in 0.00 seconds
+0004.467 (0) Table SlA_users: finishing file(s) (2, 0.6 KB)
+0004.469 (0) Table SlA_usermeta: Total expected rows (approximate): 57
+0004.471 (0) Table SlA_usermeta: Rows added in this batch (next record: 99): 57 (uncompressed bytes in this segment=3756) in 0.00 seconds
+0004.473 (0) Table SlA_usermeta: finishing file(s) (2, 1.8 KB)
+0004.475 (0) Table SlA_commentmeta: Total expected rows (approximate): 0
+0004.477 (0) Table SlA_commentmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=595) in 0.00 seconds
+0004.479 (0) Table SlA_commentmeta: finishing file(s) (2, 0.4 KB)
+0004.481 (0) Table SlA_comments: Total expected rows (approximate): 0
+0004.483 (0) Table SlA_comments: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1429) in 0.00 seconds
+0004.485 (0) Table SlA_comments: finishing file(s) (2, 0.5 KB)
+0004.487 (0) Table SlA_links: Total expected rows (approximate): 7
+0004.489 (0) Table SlA_links: Rows added in this batch (next record: 7): 7 (uncompressed bytes in this segment=1897) in 0.00 seconds
+0004.490 (0) Table SlA_links: finishing file(s) (2, 0.6 KB)
+0004.492 (0) Table SlA_postmeta: Total expected rows (approximate): 4444
+0004.557 (0) Table SlA_postmeta: Rows added in this batch (next record: 42302): 3977 (uncompressed bytes in this segment=1494481) in 0.07 seconds
+0004.561 (0) Table SlA_postmeta: finishing file(s) (2, 151.9 KB)
+0004.563 (0) Table SlA_posts: Total expected rows (approximate): 979
+0004.964 (0) Table SlA_posts: Rows added in this batch (next record: 3181): 1013 (uncompressed bytes in this segment=10822158) in 0.40 seconds
+0004.967 (0) Table SlA_posts: finishing file(s) (2, 1891.9 KB)
+0004.968 (0) Table SlA_term_relationships: Total expected rows (approximate): 244
+0004.971 (0) Table SlA_term_relationships: Rows added in this batch (next record: 100000): 230 (uncompressed bytes in this segment=4062) in 0.00 seconds
+0004.973 (0) Table SlA_term_relationships: finishing file(s) (2, 0.9 KB)
+0004.974 (0) Table SlA_term_taxonomy: Total expected rows (approximate): 6
+0004.977 (0) Table SlA_term_taxonomy: Rows added in this batch (next record: 6): 6 (uncompressed bytes in this segment=1030) in 0.00 seconds
+0004.979 (0) Table SlA_term_taxonomy: finishing file(s) (2, 0.5 KB)
+0004.980 (0) Table SlA_termmeta: Total expected rows (approximate): 0
+0004.983 (0) Table SlA_termmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=568) in 0.00 seconds
+0004.985 (0) Table SlA_termmeta: finishing file(s) (2, 0.3 KB)
+0004.987 (0) Table SlA_terms: Total expected rows (approximate): 6
+0004.989 (0) Table SlA_terms: Rows added in this batch (next record: 6): 6 (uncompressed bytes in this segment=836) in 0.00 seconds
+0004.990 (0) Table SlA_terms: finishing file(s) (2, 0.5 KB)
+0004.992 (0) Table SlA_blc_filters: Total expected rows (approximate): 0
+0004.993 (0) Table SlA_blc_filters: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=543) in 0.00 seconds
+0004.995 (0) Table SlA_blc_filters: finishing file(s) (2, 0.3 KB)
+0004.997 (0) Table SlA_blc_instances: Total expected rows (approximate): 237
+0005.001 (0) Table SlA_blc_instances: Rows added in this batch (next record: 2912): 237 (uncompressed bytes in this segment=43403) in 0.00 seconds
+0005.003 (0) Table SlA_blc_instances: finishing file(s) (2, 9 KB)
+0005.004 (0) Table SlA_blc_links: Total expected rows (approximate): 156
+0005.019 (0) Table SlA_blc_links: Rows added in this batch (next record: 194): 192 (uncompressed bytes in this segment=446888) in 0.01 seconds
+0005.022 (0) Table SlA_blc_links: finishing file(s) (2, 62.7 KB)
+0005.024 (0) Table SlA_blc_synch: Total expected rows (approximate): 16
+0005.026 (0) Table SlA_blc_synch: Rows added in this batch (next record: 1000): 16 (uncompressed bytes in this segment=1334) in 0.00 seconds
+0005.028 (0) Table SlA_blc_synch: finishing file(s) (2, 0.5 KB)
+0005.030 (0) Table SlA_fbv: Total expected rows (approximate): 0
+0005.032 (0) Table SlA_fbv: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=599) in 0.00 seconds
+0005.034 (0) Table SlA_fbv: finishing file(s) (2, 0.4 KB)
+0005.036 (0) Table SlA_fbv_attachment_folder: Total expected rows (approximate): 0
+0005.038 (0) Table SlA_fbv_attachment_folder: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=536) in 0.00 seconds
+0005.040 (0) Table SlA_fbv_attachment_folder: finishing file(s) (2, 0.3 KB)
+0005.042 (0) Table SlA_sgs_log_events: Total expected rows (approximate): 54
+0005.045 (0) Table SlA_sgs_log_events: Rows added in this batch (next record: 54): 54 (uncompressed bytes in this segment=10059) in 0.00 seconds
+0005.048 (0) Table SlA_sgs_log_events: finishing file(s) (2, 1.5 KB)
+0005.050 (0) Table SlA_sgs_log_visitors: Total expected rows (approximate): 10
+0005.052 (0) Table SlA_sgs_log_visitors: Rows added in this batch (next record: 10): 10 (uncompressed bytes in this segment=1028) in 0.00 seconds
+0005.054 (0) Table SlA_sgs_log_visitors: finishing file(s) (2, 0.5 KB)
+0005.056 (0) Table SlA_yoast_indexable: Total expected rows (approximate): 593
+0005.086 (0) Table SlA_yoast_indexable: Rows added in this batch (next record: 1774): 587 (uncompressed bytes in this segment=272522) in 0.03 seconds
+0005.090 (0) Table SlA_yoast_indexable: finishing file(s) (2, 34.7 KB)
+0005.092 (0) Table SlA_yoast_indexable_hierarchy: Total expected rows (approximate): 265
+0005.095 (0) Table SlA_yoast_indexable_hierarchy: Rows added in this batch (next record: 1000): 251 (uncompressed bytes in this segment=5268) in 0.00 seconds
+0005.097 (0) Table SlA_yoast_indexable_hierarchy: finishing file(s) (2, 1 KB)
+0005.099 (0) Table SlA_yoast_migrations: Total expected rows (approximate): 21
+0005.101 (0) Table SlA_yoast_migrations: Rows added in this batch (next record: 23): 23 (uncompressed bytes in this segment=1207) in 0.00 seconds
+0005.104 (0) Table SlA_yoast_migrations: finishing file(s) (2, 0.6 KB)
+0005.106 (0) Table SlA_yoast_primary_term: Total expected rows (approximate): 0
+0005.107 (0) Table SlA_yoast_primary_term: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=864) in 0.00 seconds
+0005.109 (0) Table SlA_yoast_primary_term: finishing file(s) (2, 0.4 KB)
+0005.112 (0) Table SlA_yoast_seo_links: Total expected rows (approximate): 647
+0005.120 (0) Table SlA_yoast_seo_links: Rows added in this batch (next record: 12707): 647 (uncompressed bytes in this segment=80071) in 0.01 seconds
+0005.122 (0) Table SlA_yoast_seo_links: finishing file(s) (2, 10.5 KB)
+0005.124 (0) Table SlA_yoast_seo_meta: Total expected rows (approximate): 880
+0005.129 (0) Table SlA_yoast_seo_meta: Rows added in this batch (next record: 1489): 880 (uncompressed bytes in this segment=13277) in 0.00 seconds
+0005.132 (0) Table SlA_yoast_seo_meta: finishing file(s) (2, 2.3 KB)
+0005.133 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_options.table.tmpr424244.gz (1/26/fopen): adding to final database dump
+0005.136 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_options.table.gz (2/26/fopen): adding to final database dump
+0005.137 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_users.table.tmpr3.gz (3/26/fopen): adding to final database dump
+0005.137 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_users.table.gz (4/26/fopen): adding to final database dump
+0005.138 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_usermeta.table.tmpr100.gz (5/26/fopen): adding to final database dump
+0005.138 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_usermeta.table.gz (6/26/fopen): adding to final database dump
+0005.139 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_commentmeta.table.tmpr0.gz (7/26/fopen): adding to final database dump
+0005.140 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_commentmeta.table.gz (8/26/fopen): adding to final database dump
+0005.141 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_comments.table.tmpr0.gz (9/26/fopen): adding to final database dump
+0005.142 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_comments.table.gz (10/26/fopen): adding to final database dump
+0005.142 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_links.table.tmpr8.gz (11/26/fopen): adding to final database dump
+0005.143 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_links.table.gz (12/26/fopen): adding to final database dump
+0005.143 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_postmeta.table.tmpr42303.gz (13/26/fopen): adding to final database dump
+0005.147 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_postmeta.table.gz (14/26/fopen): adding to final database dump
+0005.147 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_posts.table.tmpr3182.gz (15/26/fopen): adding to final database dump
+0005.187 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_posts.table.gz (16/26/fopen): adding to final database dump
+0005.188 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_term_relationships.table.tmpr100001.gz (17/26/fopen): adding to final database dump
+0005.189 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_term_relationships.table.gz (18/26/fopen): adding to final database dump
+0005.189 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_term_taxonomy.table.tmpr7.gz (19/26/fopen): adding to final database dump
+0005.190 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_term_taxonomy.table.gz (20/26/fopen): adding to final database dump
+0005.190 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_termmeta.table.tmpr0.gz (21/26/fopen): adding to final database dump
+0005.191 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_termmeta.table.gz (22/26/fopen): adding to final database dump
+0005.191 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_terms.table.tmpr7.gz (23/26/fopen): adding to final database dump
+0005.192 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_terms.table.gz (24/26/fopen): adding to final database dump
+0005.192 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_filters.table.tmpr0.gz (25/26/fopen): adding to final database dump
+0005.193 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_filters.table.gz (26/26/fopen): adding to final database dump
+0005.193 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_instances.table.tmpr2913.gz (27/26/fopen): adding to final database dump
+0005.194 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_instances.table.gz (28/26/fopen): adding to final database dump
+0005.194 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_links.table.tmpr195.gz (29/26/fopen): adding to final database dump
+0005.196 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_links.table.gz (30/26/fopen): adding to final database dump
+0005.197 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_synch.table.tmpr1001.gz (31/26/fopen): adding to final database dump
+0005.197 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_blc_synch.table.gz (32/26/fopen): adding to final database dump
+0005.198 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_fbv.table.tmpr0.gz (33/26/fopen): adding to final database dump
+0005.198 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_fbv.table.gz (34/26/fopen): adding to final database dump
+0005.199 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_fbv_attachment_folder.table.tmpr1.gz (35/26/fopen): adding to final database dump
+0005.199 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_fbv_attachment_folder.table.gz (36/26/fopen): adding to final database dump
+0005.200 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_sgs_log_events.table.tmpr55.gz (37/26/fopen): adding to final database dump
+0005.200 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_sgs_log_events.table.gz (38/26/fopen): adding to final database dump
+0005.200 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_sgs_log_visitors.table.tmpr11.gz (39/26/fopen): adding to final database dump
+0005.201 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_sgs_log_visitors.table.gz (40/26/fopen): adding to final database dump
+0005.201 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_indexable.table.tmpr1775.gz (41/26/fopen): adding to final database dump
+0005.203 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_indexable.table.gz (42/26/fopen): adding to final database dump
+0005.203 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_indexable_hierarchy.table.tmpr1001.gz (43/26/fopen): adding to final database dump
+0005.204 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_indexable_hierarchy.table.gz (44/26/fopen): adding to final database dump
+0005.204 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_migrations.table.tmpr24.gz (45/26/fopen): adding to final database dump
+0005.204 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_migrations.table.gz (46/26/fopen): adding to final database dump
+0005.205 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_primary_term.table.tmpr0.gz (47/26/fopen): adding to final database dump
+0005.205 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_primary_term.table.gz (48/26/fopen): adding to final database dump
+0005.206 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_seo_links.table.tmpr12708.gz (49/26/fopen): adding to final database dump
+0005.206 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_seo_links.table.gz (50/26/fopen): adding to final database dump
+0005.207 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_seo_meta.table.tmpr1490.gz (51/26/fopen): adding to final database dump
+0005.207 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db-table-SlA_yoast_seo_meta.table.gz (52/26/fopen): adding to final database dump
+0005.219 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db.gz: finished writing out complete database file (2291.8 KB)
+0005.244 (0) Total database tables backed up: 26 (backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db.gz, size: 2346880, sha1: 77377129a410779b513fabb36cbf14aff02f3bd9, sha256: c68634f2b9fca930515661e524e4545c66a744dde773e19699f12deb923152b2)
+0005.249 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip: plugins: This file has not yet been successfully uploaded: will queue
+0005.249 (0) backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db.gz: db: This file has not yet been successfully uploaded: will queue
+0005.252 (0) Saving backup history. Total backup size: 15.9 MB
+0005.255 (0) Requesting upload of the files that have not yet been successfully uploaded (2)
+0005.257 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0005.257 (0) No remote despatch: user chose no remote backup service
+0005.257 (0) Recording as successfully uploaded: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-plugins.zip
+0005.258 (0) Recording as successfully uploaded: backup_2022-04-26-2053_Sergio_Luque_34f070d9a7ad-db.gz
+0005.260 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=5, retain_db=5
+0005.261 (0) Number of backup sets in history: 7; groups (db): 1
+0005.261 (0) Examining (for databases) backup set with group_id=0, nonce=34f070d9a7ad, datestamp=1651006417 (Apr 26 2022 20:53:37)
+0005.262 (0) This backup set is the backup set just made, so will not be deleted.
+0005.262 (0) Examining (for databases) backup set with group_id=0, nonce=7c0e46cc1c36, datestamp=1650936597 (Apr 26 2022 01:29:57)
+0005.262 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.262 (0) Examining (for databases) backup set with group_id=0, nonce=f7165e9216bc, datestamp=1650849797 (Apr 25 2022 01:23:17)
+0005.262 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.262 (0) Examining (for databases) backup set with group_id=0, nonce=7cdadaa2a603, datestamp=1650762985 (Apr 24 2022 01:16:25)
+0005.262 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.262 (0) Examining (for databases) backup set with group_id=0, nonce=58461fb897df, datestamp=1650676596 (Apr 23 2022 01:16:36)
+0005.262 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.262 (0) Examining (for databases) backup set with group_id=0, nonce=17fb038a6f6d, datestamp=1650577173 (Apr 21 2022 21:39:33)
+0005.262 (0) 1650577173: db: this set includes a database (backup_2022-04-21-2139_Sergio_Luque_17fb038a6f6d-db.gz); db count is now 5
+0005.262 (0) 1650577173: db: over retain limit (5); will delete this database
+0005.262 (0) Delete file: backup_2022-04-21-2139_Sergio_Luque_17fb038a6f6d-db.gz, service=none
+0005.263 (0) This backup set remains non-empty (f=1/d=0); will retain in history
+0005.264 (0) Examining (for databases) backup set with group_id=0, nonce=1ff8bf9b54d1, datestamp=1600294706 (Sep 16 2020 22:18:26)
+0005.264 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0005.264 (0) Number of backup sets in history: 7; groups (files): 1
+0005.264 (0) Examining (for files) backup set with nonce=34f070d9a7ad, datestamp=1651006417 (Apr 26 2022 20:53:37)
+0005.264 (0) This backup set is the backup set just made, so will not be deleted.
+0005.264 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.265 (0) Examining (for files) backup set with nonce=7c0e46cc1c36, datestamp=1650936597 (Apr 26 2022 01:29:57)
+0005.265 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.265 (0) Examining (for files) backup set with nonce=f7165e9216bc, datestamp=1650849797 (Apr 25 2022 01:23:17)
+0005.265 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.265 (0) Examining (for files) backup set with nonce=7cdadaa2a603, datestamp=1650762985 (Apr 24 2022 01:16:25)
+0005.265 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.265 (0) Examining (for files) backup set with nonce=58461fb897df, datestamp=1650676596 (Apr 23 2022 01:16:36)
+0005.265 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.265 (0) Examining (for files) backup set with nonce=17fb038a6f6d, datestamp=1650577173 (Apr 21 2022 21:39:33)
+0005.265 (0) plugins: over retain limit (5); will delete this file entity
+0005.265 (0) Delete file: backup_2022-04-21-2139_Sergio_Luque_17fb038a6f6d-plugins.zip, service=none
+0005.266 (0) This backup set remains non-empty (f=1/d=0); will retain in history
+0005.266 (0) Examining (for files) backup set with nonce=1ff8bf9b54d1, datestamp=1600294706 (Sep 16 2020 22:18:26)
+0005.266 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0005.266 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0005.266 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0005.266 (0) This backup set (1600294706) was an 'Always Keep' backup, so it will not be pruned. Skipping.
+0005.266 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0005.267 (0) Retain: saving new backup history (sets now: 7) and finishing retain operation
+0005.269 (0) Resume backup (34f070d9a7ad, 0): finish run
+0005.270 (0) Decremented the semaphore (fd) by 1
+0005.270 (0) Semaphore (fd) unlocked
+0005.271 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0005.272 (0) No email will/can be sent - the user has not configured an email address.
+0005.273 (0) The backup apparently succeeded and is now complete

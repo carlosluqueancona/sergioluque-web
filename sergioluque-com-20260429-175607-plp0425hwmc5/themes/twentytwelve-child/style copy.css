@@ -1,0 +1,101 @@
+/*
+ Theme Name:   Twenty Twelve Child
+ Template:     twentytwelve
+*/
+
+
+@import url("../twentytwelve/style.css");
+
+
+/* =Theme customization starts here
+-------------------------------------------------------------- */
+/*
+header hgroup { 
+	float: left; 
+}
+*/
+
+
+/*
+.site-header {
+    margin-top: 18px;
+    padding: 0;
+}
+*/
+
+/* Navigation Menu */
+.main-navigation {
+	margin-top: 0px;
+ 	margin-top: 0rem;
+	text-align: center;
+	
+/* 	float: right; */
+
+}
+.main-navigation li a {
+	text-transform:none;
+}
+/* .main-navigation ul.nav-menu, .main-navigation div.nav-menu > ul { border-bottom: 0px; border-top: 0px;} */
+
+.site-content {
+	margin-top: 12px;
+	margin-left: 24px;
+	margin-right: 24px;
+}
+
+/* Minimum width of 960 pixels. */
+@media screen and (min-width: 960px) {
+	body .site {
+		padding: 0 40px;
+		padding: 0 2.85714286rem;
+	}
+
+}
+
+.site-header h1 {
+	font-size: 22px;
+	line-height: 1.5;
+}
+
+
+
+/* .main-navigation ul.nav-menu, .main-navigation div.nav-menu > ul { border-bottom: 0px; border-top: 0px;} */
+
+
+/* Navigation Menu */
+
+/*
+.main-navigation {
+	margin-top: 12px;
+ 	margin-top: 0.85714286rem;
+}
+*/
+
+/*
+.site-info {
+   display: none;
+}
+*/
+
+a:hover {
+	text-decoration: underline;
+	color: #ADC826;
+}
+/*
+.entry-header .comments-link {
+    display: none;
+}
+*/
+/*
+.entry-content a:link { color: #666666; }
+.entry-content a:visited { color: #666666; }
+.entry-content a:hover { color: #ADC826; }
+*/
+.news {
+	margin-top: 0px;
+	margin-bottom: 24px;
+}
+.image {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
