@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:runtime": "node scripts/check-runtime-misuse.mjs",
     "worker:dev": "cd worker && wrangler dev",
     "worker:deploy": "cd worker && wrangler deploy",
     "pages:deploy": "npx @cloudflare/next-on-pages && wrangler pages deploy .vercel/output/static"
