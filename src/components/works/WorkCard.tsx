@@ -93,6 +93,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
     Boolean(premiereInfo) ||
     Boolean(obra.commissions) ||
     Boolean(obra.ensembles) ||
+    Boolean(obra.recordedAt) ||
     Boolean(excerpt)
 
   return (
@@ -194,12 +195,15 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
           </p>
         )}
 
-        {/* Auxiliary metadata: premiere, commissions, performers */}
+        {/* Auxiliary metadata. Order mirrors /listen/[slug] (the detail
+            page): Performed by → Recorded at → Premiere → Commissioned
+            by. Each row only renders when populated. */}
         {hasMeta && (
           <div>
+            {obra.ensembles && <MetaRow label={S.works.ensembles} value={obra.ensembles} />}
+            {obra.recordedAt && <MetaRow label={S.works.recordedAt} value={obra.recordedAt} />}
             {premiereInfo && <MetaRow label={S.works.premiere} value={premiereInfo} />}
             {obra.commissions && <MetaRow label={S.works.commissions} value={obra.commissions} />}
-            {obra.ensembles && <MetaRow label={S.works.ensembles} value={obra.ensembles} />}
             {excerpt && (
               <p
                 className="t-meta"
