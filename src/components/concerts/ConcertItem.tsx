@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { Evento } from '@/types'
 import { PostBody } from '@/components/blog/PostBody'
+import { TrackedExternalLink } from '@/components/analytics/TrackedExternalLink'
 
 const isHttpUrl = (s: string | undefined): s is string =>
   !!s && /^https?:\/\//i.test(s)
@@ -61,14 +62,14 @@ export function ConcertItem({ evento }: ConcertItemProps) {
           </div>
         )}
         {evento.externalLink && (
-          <a
+          <TrackedExternalLink
             href={evento.externalLink}
-            target="_blank"
-            rel="noopener noreferrer"
             className="concert-item__link"
+            eventName="news_external_click"
+            eventParams={{ event_title: title }}
           >
             →
-          </a>
+          </TrackedExternalLink>
         )}
       </div>
     </article>
