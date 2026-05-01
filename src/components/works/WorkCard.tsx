@@ -30,13 +30,14 @@ function descriptionExcerpt(raw: string | undefined, max = 220): string | null {
 
 const metaRowStyle: React.CSSProperties = {
   display: 'grid',
-  // 132 px fits "COMMISSIONED BY" (15 chars) at Space Mono 10px with
-  // 0.1em letter-spacing without wrapping — the previous 92 px held
-  // the older "COMMISSIONS" label but broke the renamed one onto two
-  // lines. `nowrap` on the label is defense-in-depth in case the
-  // string ever changes again.
-  gridTemplateColumns: '132px 1fr',
-  gap: '12px',
+  // Tightened from 132 px → 110 px and gap 12 px → 6 px so the value
+  // sits closer to the label. 110 px is the rendered width of
+  // "COMMISSIONED BY" at Space Mono 10px with 0.1em letter-spacing
+  // (no wrap thanks to `metaLabelStyle`) — anything tighter would
+  // crash the longest label. The two long labels stay vertically
+  // aligned because both rows use the same fixed track.
+  gridTemplateColumns: '110px 1fr',
+  gap: '6px',
   alignItems: 'baseline',
   margin: '0 0 4px',
 }
