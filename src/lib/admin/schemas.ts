@@ -98,7 +98,10 @@ export const SCHEMAS: Record<string, EntitySchema> = {
       { key: 'venue', label: 'Venue', type: 'text' },
       { key: 'city', label: 'City', type: 'text' },
       { key: 'country', label: 'Country', type: 'text' },
-      { key: 'description', label: 'Description', type: 'textarea', rows: 4 },
+      { key: 'description', label: 'Short description', type: 'textarea', rows: 4 },
+      // Long-form free text rendered below the short description on
+      // /news. Markdown-style content (PostBody renders it). Optional.
+      { key: 'body', label: 'Body (long-form, markdown)', type: 'textarea', rows: 10 },
       { key: 'external_link', label: 'External link', type: 'url' },
       { key: 'image_url', label: 'Image', type: 'image-upload' },
     ],

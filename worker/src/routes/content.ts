@@ -108,6 +108,7 @@ function mapEvento(row: Record<string, unknown>, _locale: string): Evento {
     city: (row['city'] as string) || undefined,
     country: (row['country'] as string) || undefined,
     description: pick(row, 'description'),
+    body: pick(row, 'body'),
     externalLink: (row['external_link'] as string) || undefined,
     imageUrl: (row['image_url'] as string) || undefined,
   };
