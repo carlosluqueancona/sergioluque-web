@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { z } from 'zod'
 import { useState } from 'react'
 import { S } from '@/lib/strings'
+import { trackEvent } from '@/components/layout/GoogleAnalytics'
 
 const schema = z.object({
   name: z.string().min(1),
@@ -44,11 +45,17 @@ export function ContactForm() {
       if (json.success) {
         setStatus('success')
         reset()
+        // Successful submission only — failed sends don't fire so the
+        // GA conversion count matches actual emails delivered. No PII
+        // in the event payload (email/name/message stay server-side).
+        trackEvent('contact_form_submit')
       } else {
         setStatus('error')
+        trackEvent('contact_form_error', { reason: 'server_rejected' })
       }
     } catch {
       setStatus('error')
+      trackEvent('contact_form_error', { reason: 'network_error' })
     }
   }
 
