@@ -127,6 +127,14 @@ export function WaveformBars({
       style={{
         display: 'flex',
         alignItems: 'flex-end',
+        // `space-between` distributes the leftover width evenly so the
+        // bars span the full container instead of clumping at the start
+        // when (bars × barWidth + (bars-1) × gap) is narrower than the
+        // available space — which it almost always is on desktop. The
+        // explicit `gap` becomes a *minimum* spacing; space-between
+        // grows it past that to fill. Was: `gap: ${gap}px` only, which
+        // left the waveform short of the slider line below it.
+        justifyContent: 'space-between',
         gap: `${gap}px`,
         height: `${height}px`,
         width: '100%',
