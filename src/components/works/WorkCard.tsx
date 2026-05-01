@@ -203,14 +203,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
             {excerpt && (
               <p
                 className="t-meta"
-                style={{
-                  margin: '12px 0 0',
-                  color: 'var(--text-secondary)',
-                  letterSpacing: 0,
-                  fontFamily: 'var(--font-ibm-plex-sans), sans-serif',
-                  fontSize: '14px',
-                  lineHeight: 1.55,
-                }}
+                style={{ margin: '12px 0 0', lineHeight: 1.6 }}
               >
                 {excerpt}
               </p>
