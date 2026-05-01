@@ -5,6 +5,7 @@ import { S } from '@/lib/strings'
 import { WaveformBars } from './WaveformBars'
 import { formatTime } from '@/lib/utils'
 import { useAudioGraph } from '@/lib/audio/useAudioGraph'
+import { trackEvent } from '@/components/layout/GoogleAnalytics'
 
 interface AudioPlayerMiniProps {
   audioUrl: string
@@ -20,7 +21,7 @@ interface AudioPlayerMiniProps {
  * detail page is currently disabled, so users never see the full
  * player and the Mini has to carry the same affordances.
  */
-export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlayerMiniProps) {
+export function AudioPlayerMini({ audioUrl, title, duration }: AudioPlayerMiniProps) {
   const t = S.audio
   const audioRef = useRef<HTMLAudioElement>(null)
   const { unlock, getAnalyser } = useAudioGraph(audioRef)
@@ -34,6 +35,10 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
   // slider track so the user can see why scrubbing past a certain
   // point doesn't work yet.
   const [bufferedRatio, setBufferedRatio] = useState(0)
+  // See AudioPlayer.tsx — fire `play_audio` once per mount, dimensioned
+  // by `surface: 'card'` so we can split detail-page plays vs. card
+  // plays in GA reports.
+  const hasTrackedPlayRef = useRef(false)
 
   const togglePlay = useCallback(async () => {
     const audio = audioRef.current
@@ -48,13 +53,17 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
       try {
         await audio.play()
         setIsPlaying(true)
+        if (!hasTrackedPlayRef.current) {
+          hasTrackedPlayRef.current = true
+          trackEvent('play_audio', { work_title: title, surface: 'card' })
+        }
       } catch {
         setIsPlaying(false)
       } finally {
         setIsLoading(false)
       }
     }
-  }, [isPlaying, unlock])
+  }, [isPlaying, unlock, title])
 
   const handleTimeUpdate = useCallback(() => {
     setCurrentTime(audioRef.current?.currentTime ?? 0)

@@ -5,6 +5,7 @@ import { WaveformBars } from './WaveformBars'
 import { formatTime } from '@/lib/utils'
 import { useAudioGraph } from '@/lib/audio/useAudioGraph'
 import { S } from '@/lib/strings'
+import { trackEvent } from '@/components/layout/GoogleAnalytics'
 
 interface AudioPlayerProps {
   audioUrl: string
@@ -20,6 +21,11 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
   const [currentTime, setCurrentTime] = useState(0)
   const [audioDuration, setAudioDuration] = useState(duration ?? 0)
   const [isLoading, setIsLoading] = useState(false)
+  // Fire `play_audio` once per mount on the first successful play. A
+  // pause-then-resume on the same component instance is the same
+  // listening session and shouldn't double-count. A fresh mount
+  // (navigation or refresh) reopens the session legitimately.
+  const hasTrackedPlayRef = useRef(false)
 
   const togglePlay = useCallback(async () => {
     const audio = audioRef.current
@@ -35,13 +41,17 @@ export function AudioPlayer({ audioUrl, title, duration }: AudioPlayerProps) {
       try {
         await audio.play()
         setIsPlaying(true)
+        if (!hasTrackedPlayRef.current) {
+          hasTrackedPlayRef.current = true
+          trackEvent('play_audio', { work_title: title, surface: 'detail' })
+        }
       } catch {
         setIsPlaying(false)
       } finally {
         setIsLoading(false)
       }
     }
-  }, [isPlaying, unlock])
+  }, [isPlaying, unlock, title])
 
   const handleTimeUpdate = useCallback(() => {
     const audio = audioRef.current
