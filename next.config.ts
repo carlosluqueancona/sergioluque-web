@@ -59,8 +59,13 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "img-src 'self' data: https://media.sergioluque.com https://sergioluque-cms.carlosluque-095.workers.dev https://api.sergioluque.com https://upload.wikimedia.org https://www.googletagmanager.com https://www.google-analytics.com",
-      "media-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://media.sergioluque.com https://w.soundcloud.com",
-      "connect-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://www.google-analytics.com https://www.googletagmanager.com https://api.sergioluque.com",
+      "media-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://media.sergioluque.com https://w.soundcloud.com https://*.r2.cloudflarestorage.com",
+      // *.r2.cloudflarestorage.com is the S3-compatible endpoint that
+      // the admin client PUTs to directly when uploading via presigned
+      // URLs (src/lib/admin/upload.ts). Without it CSP blocks the XHR
+      // before it leaves the browser and the user sees a generic
+      // "Network error during upload".
+      "connect-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://www.google-analytics.com https://www.googletagmanager.com https://api.sergioluque.com https://*.r2.cloudflarestorage.com",
       "frame-src https://w.soundcloud.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
