@@ -21,19 +21,40 @@ jobs:
       # SHAs are not — so even if a maintainer's account is compromised
       # and the tag is moved (cf. tj-actions/changed-files Mar 2025), CI
       # keeps running the audited code we pinned to.
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      #
+      # All actions on Node 24 — GitHub deprecated Node 20 actions in
+      # 2025 and will force-upgrade them in June 2026. Bumped checkout
+      # v4 → v6 and setup-node v4 → v6 to preempt the auto-bump. Also
+      # bumped wrangler-action v3.14.0 → v3.15.0 (still v3, just newer
+      # patch; no breaking change to inputs).
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           # Workflow does not push back to git, so don't leave the
           # token attached to .git/config where a later step could pick
           # it up.
           persist-credentials: false
 
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: '20'
 
       - name: Install pnpm
         run: npm install -g pnpm@10
+
+      # Cache pnpm's content-addressed store so a clean runner can skip
+      # the actual download step on `pnpm install`. The store dir on
+      # Linux runners lives outside the repo (~/.local/share/pnpm/store
+      # by default), so we ask pnpm directly. Key includes the lockfile
+      # hash → any dep change forces a fresh download. Saves ~30s/run.
+      - name: Resolve pnpm store dir
+        run: echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Cache pnpm store
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.PNPM_STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       # CN-020: single workspace install covers root + worker. Worker
       # is now declared in pnpm-workspace.yaml; the previous separate
@@ -41,6 +62,22 @@ jobs:
       # lockfile in a second package manager) has been removed.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Cache Next's incremental build artifacts. Next manages
+      # invalidation internally based on file content hashes inside
+      # .next/cache, so the cache key only needs to bump when the
+      # dependency tree (lockfile) does — restore-keys handles the
+      # "warm but stale" path for all other commits. Saves ~20s/run on
+      # warm cache, no-op on cold.
+      - name: Cache Next.js build
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: |
+            .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('next.config.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-nextjs-
 
       # Catches `export const runtime` in template/error/loading/not-found/
       # default/global-error — Next.js segment config doesn't apply there
@@ -56,7 +93,7 @@ jobs:
       # with `cd worker && pnpm dlx wrangler deploy` until the token is widened.
       - name: Deploy Worker (sergioluque-cms)
         continue-on-error: true
-        uses: cloudflare/wrangler-action@392082e81ffbcb9ebdde27400634aa004b35ea37 # v3.14.0
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3.15.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -104,7 +141,7 @@ jobs:
       # Override the auto-detected git message with the commit SHA so the
       # API never sees Unicode the operator might write in a real message.
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@392082e81ffbcb9ebdde27400634aa004b35ea37 # v3.14.0
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3.15.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
