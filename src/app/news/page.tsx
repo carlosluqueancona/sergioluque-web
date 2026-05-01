@@ -30,9 +30,6 @@ export default async function ConciertosPage() {
 
       {pasados.length > 0 && (
         <section>
-          <h2 className="t-label" style={{ marginBottom: '24px' }}>
-            {S.concerts.past}
-          </h2>
           <ConcertList eventos={pasados} />
         </section>
       )}

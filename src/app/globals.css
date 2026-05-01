@@ -281,11 +281,16 @@ html[data-cta="orange"][data-theme="light"] {
 .work-card:nth-of-type(n+9) { animation-delay: 560ms; }
 
 /* Concert / news rows.
-   Desktop: 3 columns — image (80px) · date (140px) · content (1fr).
+   Desktop: 3 columns — image (160px) · date (140px) · content (1fr).
    Mobile (≤720px): the date no longer earns its own column; it stacks
    above the title inside the content cell, and the image shrinks to
-   72px. Inline grid styles were a dead end because CSS media queries
+   112px. Inline grid styles were a dead end because CSS media queries
    can't override them — every layout rule lives here now.
+
+   Image landed at 160px (was 80) per stakeholder ask — concert photos
+   carry weight on the news rail, the previous square was almost an
+   afterthought. Aspect stays 1:1 so the grid baseline doesn't drift
+   when an entry has no image; the row just collapses to two columns.
 
    Title hover gains the accent color, same hover language as
    `.work-card`. The container hover repaints to --surface so the row
@@ -303,7 +308,7 @@ html[data-cta="orange"][data-theme="light"] {
   background: var(--surface);
 }
 .concert-item--with-image {
-  grid-template-columns: 80px 140px 1fr;
+  grid-template-columns: 160px 140px 1fr;
   grid-template-areas: 'image date content';
 }
 .concert-item--no-image {
@@ -313,8 +318,8 @@ html[data-cta="orange"][data-theme="light"] {
 .concert-item__image {
   grid-area: image;
   display: block;
-  width: 80px;
-  height: 80px;
+  width: 160px;
+  height: 160px;
   object-fit: cover;
 }
 .concert-item__date {
@@ -362,7 +367,7 @@ html[data-cta="orange"][data-theme="light"] {
    right. Date becomes a small meta line above the title. */
 @media (max-width: 720px) {
   .concert-item--with-image {
-    grid-template-columns: 72px 1fr;
+    grid-template-columns: 112px 1fr;
     grid-template-areas:
       'image date'
       'image content';
@@ -378,8 +383,8 @@ html[data-cta="orange"][data-theme="light"] {
     row-gap: 4px;
   }
   .concert-item__image {
-    width: 72px;
-    height: 72px;
+    width: 112px;
+    height: 112px;
     align-self: start;
   }
   .concert-item__date {
