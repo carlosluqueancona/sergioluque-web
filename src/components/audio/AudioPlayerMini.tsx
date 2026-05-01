@@ -28,6 +28,12 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
   const [currentTime, setCurrentTime] = useState(0)
   const [audioDuration, setAudioDuration] = useState(duration ?? 0)
   const [isLoading, setIsLoading] = useState(false)
+  // Fraction of the audio file that has been downloaded so far (0..1).
+  // The browser fires `progress` events on the <audio> element as more
+  // bytes land in the buffer; we render that as a dim overlay on the
+  // slider track so the user can see why scrubbing past a certain
+  // point doesn't work yet.
+  const [bufferedRatio, setBufferedRatio] = useState(0)
 
   const togglePlay = useCallback(async () => {
     const audio = audioRef.current
@@ -67,6 +73,20 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
   // ExclusivePlayback pauses this player because another player just started.
   const handlePause = useCallback(() => {
     setIsPlaying(false)
+  }, [])
+
+  // `progress` fires every time the browser fetches more of the audio
+  // file. `buffered` is a TimeRanges with potentially several spans if
+  // the user has scrubbed around — take the highest end as our
+  // "downloaded up to here" mark for the visual.
+  const handleBufferProgress = useCallback(() => {
+    const audio = audioRef.current
+    if (!audio || !audio.duration || !isFinite(audio.duration)) return
+    let maxEnd = 0
+    for (let i = 0; i < audio.buffered.length; i++) {
+      maxEnd = Math.max(maxEnd, audio.buffered.end(i))
+    }
+    setBufferedRatio(Math.min(1, maxEnd / audio.duration))
   }, [])
 
   const progress = audioDuration > 0 ? currentTime / audioDuration : 0
@@ -146,6 +166,8 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
         onPause={handlePause}
+        onProgress={handleBufferProgress}
+        onLoadedData={handleBufferProgress}
       />
 
       {/* Decorative waveform — animates from AnalyserNode while playing,
@@ -238,6 +260,25 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
               borderRadius: '2px',
             }}
           >
+            {/* Buffered overlay — shows how much of the file has
+                downloaded. Sits between the track background and the
+                accent fill so the played portion always wins visually.
+                Tinted with --text-muted on top of --border so it reads
+                as "loaded but not yet played." */}
+            <div
+              aria-hidden
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                height: '100%',
+                width: `${bufferedRatio * 100}%`,
+                background: 'var(--text-muted)',
+                opacity: 0.55,
+                borderRadius: '2px',
+                transition: 'width 200ms linear',
+              }}
+            />
             <div
               style={{
                 position: 'absolute',

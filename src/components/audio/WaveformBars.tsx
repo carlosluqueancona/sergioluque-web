@@ -124,8 +124,17 @@ export function WaveformBars({
     const maxBin = Math.max(bars + 1, Math.floor(buf.length * 0.5))
     const logRatio = Math.log(maxBin / minBin) / bars
     const binEdges = new Array(bars + 1)
-    for (let i = 0; i <= bars; i++) {
-      binEdges[i] = Math.floor(minBin * Math.exp(i * logRatio))
+    // Build edges, then enforce strict monotonic increase. Without
+    // this the low-end edges collapse onto the same floor() value
+    // (e.g. floor(1.0), floor(1.08), floor(1.17)... = 1, 1, 1...) and
+    // every bar in that group reads the same bin → moves in lockstep.
+    // Forcing `prev + 1` minimum guarantees each bar gets a unique
+    // bin slice; effectively the low end becomes linear (1 bin per
+    // bar) and the high end stays log, blending naturally.
+    binEdges[0] = minBin
+    for (let i = 1; i <= bars; i++) {
+      const target = Math.floor(minBin * Math.exp(i * logRatio))
+      binEdges[i] = Math.min(maxBin, Math.max(target, binEdges[i - 1] + 1))
     }
 
     const tick = () => {

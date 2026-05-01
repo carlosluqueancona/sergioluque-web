@@ -38,7 +38,13 @@ export function useAudioGraph(
       if (!sourceRef.current) {
         sourceRef.current = ctx.createMediaElementSource(audio)
         analyserRef.current = ctx.createAnalyser()
-        analyserRef.current.fftSize = 256
+        // 1024 → 512 frequency bins. Previous 256 (128 bins) was not
+        // enough resolution: with ~80 bars and a log-spaced bin map,
+        // floor() at the low end collapsed many adjacent bars onto
+        // the same bin and they moved as a block. 1024 gives enough
+        // headroom for hundreds of bars to each pick up a unique
+        // slice.
+        analyserRef.current.fftSize = 1024
         analyserRef.current.smoothingTimeConstant = 0.78
         sourceRef.current.connect(analyserRef.current)
         analyserRef.current.connect(ctx.destination)
