@@ -108,9 +108,25 @@ export function WaveformBars({
       bufRef.current = new Uint8Array(analyser.frequencyBinCount)
     }
     const buf = bufRef.current
-    // Drop the very top of the spectrum (often empty for music) for nicer mapping.
-    const lastBin = Math.max(bars, Math.floor(buf.length * 0.7))
-    const binsPerBar = Math.max(1, Math.floor(lastBin / bars))
+
+    // FFT bins are linearly spaced in Hz, but music energy concentrates
+    // in the low/low-mid range (≤4 kHz) and human hearing is roughly
+    // logarithmic. Linear mapping over the spectrum left the right-most
+    // bars covering ~10-15 kHz where electroacoustic / piano material
+    // has almost no energy — they barely twitched. Two fixes:
+    //   1. Cut the upper limit at ~50 % of the buffer (~12 kHz at the
+    //      default 48 kHz sample rate, well past where music sits).
+    //   2. Distribute bars on a log scale, so each bar covers an
+    //      exponentially-growing slice of bins. Right-side bars now
+    //      aggregate many more bins, which compensates for low energy
+    //      density and makes the whole row react to playback.
+    const minBin = 1
+    const maxBin = Math.max(bars + 1, Math.floor(buf.length * 0.5))
+    const logRatio = Math.log(maxBin / minBin) / bars
+    const binEdges = new Array(bars + 1)
+    for (let i = 0; i <= bars; i++) {
+      binEdges[i] = Math.floor(minBin * Math.exp(i * logRatio))
+    }
 
     const tick = () => {
       analyser.getByteFrequencyData(buf)
@@ -119,10 +135,12 @@ export function WaveformBars({
       for (let i = 0; i < bars; i++) {
         const el = els[i]
         if (!el) continue
+        const start = binEdges[i]
+        const end = Math.max(start + 1, binEdges[i + 1])
         let sum = 0
         let count = 0
-        for (let j = 0; j < binsPerBar; j++) {
-          const v = buf[i * binsPerBar + j]
+        for (let j = start; j < end; j++) {
+          const v = buf[j]
           if (v !== undefined) {
             sum += v
             count++
