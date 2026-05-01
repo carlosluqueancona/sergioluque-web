@@ -5,6 +5,7 @@ import { AudioPlayer, AudioFormatTag } from '@/components/audio'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
 import { detectAudioFormat } from '@/lib/audio-format'
+import { PUBLIC_SECTIONS } from '@/lib/feature-flags'
 import type { Metadata } from 'next'
 
 const isHttpUrl = (s: string | undefined): s is string =>
@@ -23,6 +24,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
+  // Detail pages disabled per operator request — return empty
+  // metadata so the rendered 404 inherits the layout default and
+  // doesn't leak per-obra strings into <head>.
+  if (!PUBLIC_SECTIONS.obraDetail) return {}
   const { slug } = await params
   const [obra, settings] = await Promise.all([getObraBySlug(slug), getSettings()])
   if (!obra) return {}
@@ -56,6 +61,11 @@ export default async function ObraPage({
 }: {
   params: Promise<{ slug: string }>
 }) {
+  // Detail pages disabled per operator request ("desactivada hasta
+  // nuevo aviso"). 404 short-circuits before any DB fetch. Re-enable
+  // by flipping PUBLIC_SECTIONS.obraDetail to true in
+  // src/lib/feature-flags.ts.
+  if (!PUBLIC_SECTIONS.obraDetail) notFound()
   const { slug } = await params
   // Pull obra + settings in parallel — settings carries the operator-
   // picked fallback cover used when this obra has no image_url of its own.

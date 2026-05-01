@@ -74,7 +74,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Obras don't change after publication — `yearly` reflects reality and
   // saves Google's crawl budget for fresher pages.
-  if (obrasR.status === 'fulfilled') {
+  // Gated behind PUBLIC_SECTIONS.obraDetail because /listen/[slug]
+  // returns 404 when that flag is off — including the URLs in the
+  // sitemap with a 404 destination would generate "submitted but
+  // not indexed" errors in Google Search Console.
+  if (PUBLIC_SECTIONS.obraDetail && obrasR.status === 'fulfilled') {
     for (const obra of obrasR.value) {
       if (obra.slug) {
         dynamicEntries.push({
