@@ -298,7 +298,8 @@ registerCrud(admin, 'obras', [
   'instrumentation', 'duration',
   'description', 'audio_url',
   'image_url', 'premiere_date', 'premiere_venue', 'premiere_city',
-  'commissions', 'ensembles', 'is_featured', 'sort_order',
+  'commissions', 'ensembles', 'recorded_at',
+  'is_featured', 'sort_order',
 ]);
 
 registerCrud(admin, 'posts', [

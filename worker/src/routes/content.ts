@@ -51,6 +51,7 @@ function mapObra(row: Record<string, unknown>, _locale: string): Obra {
     premiereCity: (row['premiere_city'] as string) || undefined,
     commissions: (row['commissions'] as string) || undefined,
     ensembles: (row['ensembles'] as string) || undefined,
+    recordedAt: (row['recorded_at'] as string) || undefined,
     isFeatured: Boolean(row['is_featured']),
   };
 }
@@ -143,10 +144,12 @@ content.get('/obras', async (c) => {
     let stmt: D1PreparedStatement;
     if (featured === '1') {
       stmt = c.env.DB.prepare(
-        'SELECT * FROM obras WHERE is_featured = 1 ORDER BY sort_order ASC, year DESC'
+        // CN-feature: sort_order is curated by the admin, descending so the
+        // most recently surfaced piece appears first. year DESC tiebreaker.
+        'SELECT * FROM obras WHERE is_featured = 1 ORDER BY sort_order DESC, year DESC'
       );
     } else {
-      stmt = c.env.DB.prepare('SELECT * FROM obras ORDER BY sort_order ASC, year DESC');
+      stmt = c.env.DB.prepare('SELECT * FROM obras ORDER BY sort_order DESC, year DESC');
     }
     const { results } = await stmt.all<Record<string, unknown>>();
     const obras = (results ?? []).map((r) => mapObra(r, locale));

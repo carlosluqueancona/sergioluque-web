@@ -115,10 +115,25 @@ export default async function ObraPage({
         </div>
 
         <aside>
+          {/*
+           * Order requested by the operator:
+           *   1. Year         (always shown when present)
+           *   2. Duration     (always shown when present)
+           *   3. Performed by (ensembles)
+           *   4. Recorded at  (recordedAt — new field)
+           *   5. Premiere     (date, venue, city joined)
+           *   6. Commissioned by (commissions)
+           *
+           * Each row only renders when its value exists, so the section
+           * collapses cleanly for sparse entries. The list is built once
+           * and filtered to keep the JSX flat and the order explicit.
+           */}
           <dl style={{ borderTop: '1px solid var(--border)' }}>
             {[
               { label: S.works.year, value: obra.year != null ? String(obra.year) : undefined },
               { label: S.works.duration, value: obra.duration },
+              { label: S.works.ensembles, value: obra.ensembles },
+              { label: S.works.recordedAt, value: obra.recordedAt },
               { label: S.works.premiere, value: premiereInfo || undefined },
               { label: S.works.commissions, value: obra.commissions },
             ]
@@ -136,19 +151,6 @@ export default async function ObraPage({
                   </dd>
                 </div>
               ))}
-
-            {obra.ensembles && (
-              <div style={{ padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
-                <dt className="t-label" style={{ marginBottom: '4px' }}>
-                  {S.works.ensembles}
-                </dt>
-                <dd style={{ margin: 0 }}>
-                  <p className="t-caption" style={{ color: 'var(--text-primary)', margin: 0 }}>
-                    {obra.ensembles}
-                  </p>
-                </dd>
-              </div>
-            )}
           </dl>
         </aside>
       </div>

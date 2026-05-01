@@ -20,6 +20,7 @@ interface ObraData {
   premiere_city: string
   commissions: string
   ensembles: string
+  recorded_at: string
   is_featured: boolean
   sort_order: string
 }
@@ -67,6 +68,7 @@ export function ObraForm({ initialData }: ObraFormProps) {
     premiere_city: initialData?.premiere_city ?? '',
     commissions: initialData?.commissions ?? '',
     ensembles: initialData?.ensembles ?? '',
+    recorded_at: initialData?.recorded_at ?? '',
     is_featured: initialData?.is_featured ?? false,
     sort_order: initialData?.sort_order ?? '0',
   })
@@ -245,6 +247,15 @@ export function ObraForm({ initialData }: ObraFormProps) {
           style={inputStyle}
           value={form.ensembles}
           onChange={(e) => set('ensembles', e.target.value)}
+        />
+      </div>
+      <div style={fieldStyle}>
+        <label style={labelStyle}>Recorded at</label>
+        <input
+          style={inputStyle}
+          value={form.recorded_at}
+          onChange={(e) => set('recorded_at', e.target.value)}
+          placeholder="e.g. Studio name, city — or any free text"
         />
       </div>
 

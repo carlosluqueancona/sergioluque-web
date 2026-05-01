@@ -22,6 +22,7 @@ export const S = {
     premiere: 'Premiere',
     commissions: 'Commissioned by',
     ensembles: 'Performed by',
+    recordedAt: 'Recorded at',
     year: 'Year',
     noAudio: 'Audio not available',
   },
