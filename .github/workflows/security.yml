@@ -54,7 +54,11 @@ jobs:
           chmod +x /usr/local/bin/osv-scanner
           osv-scanner --version
       - name: Scan
-        run: osv-scanner --recursive ./
+        # --config picks up osv-scanner.toml at the repo root, which
+        # documents the known-accepted advisories (CN-009 dev/build
+        # chain). New CVEs that are NOT in that allowlist still fail
+        # the job.
+        run: osv-scanner --recursive --config=osv-scanner.toml ./
 
   pnpm-audit:
     name: pnpm audit (advisory check)
