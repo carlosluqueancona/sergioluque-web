@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface WaveformBarsProps {
   getAnalyser: () => AnalyserNode | null
   isPlaying: boolean
+  /** Initial bar count (used for SSR + before the first measurement).
+   *  After mount, the bar count is recomputed to fit the container width. */
   bars?: number
   height?: number
   barWidth?: number
@@ -21,7 +23,7 @@ function idleScale(i: number): number {
 export function WaveformBars({
   getAnalyser,
   isPlaying,
-  bars = 48,
+  bars: initialBars = 48,
   height = 48,
   barWidth = 3,
   gap = 2,
@@ -32,6 +34,31 @@ export function WaveformBars({
   const bufRef = useRef<Uint8Array<ArrayBuffer> | null>(null)
   const progressRef = useRef<number | null>(progress ?? null)
   progressRef.current = progress ?? null
+
+  // Bar count derived from the container width — `space-between` left
+  // huge gaps when the bar count was fixed at 48 and the container was
+  // hundreds of px wide. Recompute on mount and on every resize so the
+  // density stays roughly `barWidth + gap` per slot regardless of where
+  // the player is rendered (Mini in a card, full on the obra page, etc).
+  const [bars, setBars] = useState(initialBars)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const slot = barWidth + gap
+    const recompute = () => {
+      const w = el.clientWidth
+      if (w <= 0) return
+      // +gap because there's no trailing gap after the last bar — keeps
+      // the math symmetric: N bars need N×barWidth + (N-1)×gap of space.
+      const fit = Math.max(1, Math.floor((w + gap) / slot))
+      setBars((prev) => (prev === fit ? prev : fit))
+    }
+    recompute()
+    const ro = new ResizeObserver(recompute)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [barWidth, gap])
 
   useEffect(() => {
     const container = containerRef.current
@@ -127,14 +154,6 @@ export function WaveformBars({
       style={{
         display: 'flex',
         alignItems: 'flex-end',
-        // `space-between` distributes the leftover width evenly so the
-        // bars span the full container instead of clumping at the start
-        // when (bars × barWidth + (bars-1) × gap) is narrower than the
-        // available space — which it almost always is on desktop. The
-        // explicit `gap` becomes a *minimum* spacing; space-between
-        // grows it past that to fill. Was: `gap: ${gap}px` only, which
-        // left the waveform short of the slider line below it.
-        justifyContent: 'space-between',
         gap: `${gap}px`,
         height: `${height}px`,
         width: '100%',
