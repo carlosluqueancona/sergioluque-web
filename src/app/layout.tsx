@@ -87,6 +87,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let headingsCustom = false
   let headingDark: string | undefined
   let headingLight: string | undefined
+  // Social-profile URLs from Settings → injected into Person.sameAs
+  // in the JSON-LD below. Operator manages these in admin → Settings;
+  // unset entries are dropped (the JSON-LD only emits validated URLs).
+  let sameAs: string[] = []
+  let profileImageUrl: string | undefined
   try {
     const settings = await getSettings()
     ctaOrange = !!settings?.ctaOrange
@@ -95,6 +100,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     headingsCustom = !!settings?.headingsCustomEnabled
     headingDark = settings?.headingColorDark
     headingLight = settings?.headingColorLight
+    profileImageUrl = settings?.profileImageUrl
+    sameAs = [
+      settings?.socialTwitter,
+      settings?.socialInstagram,
+      settings?.socialYoutube,
+      settings?.socialSoundcloud,
+      settings?.socialBandcamp,
+      settings?.socialFacebook,
+      settings?.socialLinkedin,
+    ].filter(
+      (u): u is string => typeof u === 'string' && /^https?:\/\//i.test(u)
+    )
     if (settings?.lissajous) {
       // CN-014: escape every character that, inside a JSON literal
       // embedded in an HTML <script> block, can prematurely terminate
@@ -202,11 +219,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   description:
                     'Composer of instrumental, electroacoustic, and stochastic synthesis works.',
                   url: 'https://sergioluque.com',
-                  // sameAs intentionally minimal — add SoundCloud /
-                  // Bandcamp / Wikipedia / ResearchGate / ORCID URLs
-                  // here as the operator surfaces them. Google's
-                  // Knowledge Graph relies on these to disambiguate.
-                  sameAs: [],
+                  // image lets Google attach the right portrait when
+                  // building a Knowledge Panel. Pulls from Settings →
+                  // Profile image, same source as /bio's hero portrait.
+                  ...(profileImageUrl ? { image: profileImageUrl } : {}),
+                  // sameAs corroborates "this is the same person" to
+                  // the Google Knowledge Graph. Populated dynamically
+                  // from admin → Settings → Social, so the operator
+                  // can add new platforms without a code change.
+                  sameAs,
                 },
                 {
                   '@type': 'WebSite',
