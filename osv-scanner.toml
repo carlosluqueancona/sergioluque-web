@@ -34,6 +34,10 @@ reason = "undici unbounded decompression chain. Same chain. CN-009."
 id = "GHSA-4992-7rv2-5pvq"
 reason = "undici CRLF injection via upgrade option. Same chain — code does not pass user input to undici. CN-009."
 
+[[IgnoredVulns]]
+id = "GHSA-2mjp-6q6p-2qxm"
+reason = "undici denial-of-service via crafted host header. Same chain (next-on-pages > miniflare > undici 5.29.0). Local dev/CI only. Patched in undici 6.24.0. CN-009."
+
 # ── uuid ──────────────────────────────────────────────────────────────────
 
 [[IgnoredVulns]]
@@ -51,3 +55,9 @@ reason = "esbuild dev-server CORS default. Transitive: @cloudflare/next-on-pages
 [[IgnoredVulns]]
 id = "GHSA-pxg6-pf52-xh8x"
 reason = "cookie 0.5.0 out-of-bounds characters. Transitive: @cloudflare/next-on-pages > cookie. Dev/build dependency only — runtime cookie handling on the worker uses Web APIs, not this package. Resolved on next-on-pages upgrade."
+
+# ── postcss ───────────────────────────────────────────────────────────────
+
+[[IgnoredVulns]]
+id = "GHSA-qx2v-qp2m-jg93"
+reason = "postcss 8.4.31 unescaped `</style>` injection in stringifier. Transitive: next > postcss. Only exploitable when user-supplied CSS is processed and embedded via the stringifier — this site does not accept user CSS input anywhere. Resolved when `next` updates its postcss pin (next 16.x ships postcss 8.5+)."
