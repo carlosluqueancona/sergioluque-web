@@ -12,6 +12,21 @@ on:
 permissions:
   contents: read
 
+# Force Node.js 24 for any JavaScript action whose action.yml still
+# declares `using: "node20"`. GitHub deprecated Node 20 actions on
+# 2025-09-19 and will force-flip them on 2026-06-02. The only action
+# in this workflow still on Node 20 is cloudflare/wrangler-action
+# (v3.15.0 — its latest as of 2026-04-15) which Cloudflare hasn't
+# bumped yet. Setting the flag here:
+#   1. Removes the deprecation banner from every run.
+#   2. Validates the action behaves correctly on Node 24 BEFORE the
+#      auto-flip — far less risk than discovering an incompatibility
+#      the morning of 2026-06-02.
+# Drop this env block once Cloudflare ships a wrangler-action that
+# declares `using: "node24"`.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
