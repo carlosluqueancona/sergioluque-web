@@ -27,6 +27,7 @@ interface ObraRow {
   premiere_city: string
   commissions: string
   ensembles: string
+  recorded_at: string
   is_featured: number
   sort_order: number
 }
@@ -72,6 +73,7 @@ export default async function EditObraPage({
     premiere_city: obra.premiere_city ?? '',
     commissions: obra.commissions ?? '',
     ensembles: obra.ensembles ?? '',
+    recorded_at: obra.recorded_at ?? '',
     is_featured: obra.is_featured === 1,
     sort_order: String(obra.sort_order ?? 0),
   }

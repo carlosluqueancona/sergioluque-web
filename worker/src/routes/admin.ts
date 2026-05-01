@@ -181,10 +181,27 @@ admin.post('/logout', async (c) => {
 // exploitable factory.
 const SQL_IDENT_RE = /^[a-z_][a-z0-9_]*$/;
 
+// Per-column allowlist for ORDER BY clauses. Only plain identifiers,
+// optional ASC/DESC keywords, comma-joined. Stricter than SQL_IDENT_RE
+// because we need to match "col DESC, col2 ASC" patterns.
+const SQL_ORDER_BY_RE = /^[a-z_][a-z0-9_]*(\s+(asc|desc))?(\s*,\s*[a-z_][a-z0-9_]*(\s+(asc|desc))?)*$/i;
+
+interface RegisterCrudOptions {
+  /**
+   * Override the default `id DESC` ORDER BY on the LIST endpoint.
+   * Validated against SQL_ORDER_BY_RE so a future caller can't smuggle
+   * SQL into the clause. For obras the operator wants
+   * `sort_order DESC, year DESC` so the admin list mirrors the public
+   * /listen ordering.
+   */
+  listOrderBy?: string;
+}
+
 function registerCrud(
   router: Hono<{ Bindings: Env }>,
   table: string,
-  columns: string[]
+  columns: string[],
+  options: RegisterCrudOptions = {}
 ): void {
   if (!SQL_IDENT_RE.test(table)) {
     throw new Error(`registerCrud: invalid table identifier ${JSON.stringify(table)}`);
@@ -193,6 +210,10 @@ function registerCrud(
     if (!SQL_IDENT_RE.test(col)) {
       throw new Error(`registerCrud: invalid column identifier ${JSON.stringify(col)}`);
     }
+  }
+  const listOrderBy = options.listOrderBy ?? 'id DESC';
+  if (!SQL_ORDER_BY_RE.test(listOrderBy)) {
+    throw new Error(`registerCrud: invalid listOrderBy ${JSON.stringify(listOrderBy)}`);
   }
 
   const colList = columns.join(', ');
@@ -206,9 +227,9 @@ function registerCrud(
     if (!payload) return jsonError('Unauthorized', 401, cors);
 
     try {
-      const { results } = await c.env.DB.prepare(`SELECT * FROM ${table} ORDER BY id DESC`).all<
-        Record<string, unknown>
-      >();
+      const { results } = await c.env.DB.prepare(
+        `SELECT * FROM ${table} ORDER BY ${listOrderBy}`
+      ).all<Record<string, unknown>>();
       return json(results ?? [], 200, cors);
     } catch (err) {
       console.error(`${table} list`, err);
@@ -293,14 +314,22 @@ function registerCrud(
 // Monolingual schema after the /_migrate-monolingual run. Until that
 // migration is executed, INSERT/UPDATE on these tables will fail because
 // the flat columns don't exist yet.
-registerCrud(admin, 'obras', [
-  'title', 'slug', 'year',
-  'instrumentation', 'duration',
-  'description', 'audio_url',
-  'image_url', 'premiere_date', 'premiere_venue', 'premiere_city',
-  'commissions', 'ensembles', 'recorded_at',
-  'is_featured', 'sort_order',
-]);
+registerCrud(
+  admin,
+  'obras',
+  [
+    'title', 'slug', 'year',
+    'instrumentation', 'duration',
+    'description', 'audio_url',
+    'image_url', 'premiere_date', 'premiere_venue', 'premiere_city',
+    'commissions', 'ensembles', 'recorded_at',
+    'is_featured', 'sort_order',
+  ],
+  // Admin list mirrors the public /listen ordering — operator curates
+  // sort_order to control what surfaces first. Highest sort_order
+  // first, year DESC tiebreaker.
+  { listOrderBy: 'sort_order DESC, year DESC' }
+);
 
 registerCrud(admin, 'posts', [
   'title', 'slug',
