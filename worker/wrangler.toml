@@ -12,5 +12,19 @@ database_id = "dc6c7575-9577-479d-b484-5642d15e1d48"
 binding = "MEDIA"
 bucket_name = "sergioluque-media"
 
+# Rate limiting for /admin/login. 10 attempts / 60s per (IP, email)
+# composite key. The Env type marks this binding optional so a deploy
+# without rate limiting (free tier, or before this binding is
+# provisioned in the Cloudflare dashboard) still works — the login
+# handler simply falls through to its in-handler 250 ms delay only.
+#
+# Namespace IDs are local identifiers — pick any number per binding.
+# Cloudflare docs: https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
+[[unsafe.bindings]]
+name = "LOGIN_LIMITER"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }
+
 [vars]
 ALLOWED_ORIGINS = "https://sergioluque.com,https://www.sergioluque.com,https://sergioluque-web.pages.dev"

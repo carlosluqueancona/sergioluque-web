@@ -4,11 +4,22 @@ import {
   requireAuth,
   signJWT,
   hashPassword,
+  verifyPassword,
   json,
   jsonError,
   corsHeaders,
   getAllowedOrigins,
 } from '../lib/shared';
+
+// JWT lifetime in seconds (RFC 7519). 24h matches the cookie Max-Age
+// below and the previous deployed behavior; tightening to e.g. 8h is a
+// follow-up, not a breaking change in this PR.
+const JWT_TTL_SECONDS = 24 * 60 * 60;
+// Minimum end-to-end response time for /login. Flattens any timing
+// difference between unknown-email (no DB row → no hash work) and
+// bad-password (full PBKDF2 work) so an attacker cannot use response
+// time to enumerate which emails exist.
+const LOGIN_MIN_RESPONSE_MS = 250;
 
 const admin = new Hono<{ Bindings: Env }>();
 
@@ -34,15 +45,51 @@ async function guardAuth(
 
 admin.post('/login', async (c) => {
   const cors = getCors(c.req.raw, c.env, 'POST, OPTIONS');
+  const startedAt = Date.now();
+
+  // Pad every response to at least LOGIN_MIN_RESPONSE_MS before sending.
+  // Wrap the whole handler so success and failure both flatten timing.
+  const respond = async (resp: Response): Promise<Response> => {
+    const elapsed = Date.now() - startedAt;
+    if (elapsed < LOGIN_MIN_RESPONSE_MS) {
+      await new Promise((r) => setTimeout(r, LOGIN_MIN_RESPONSE_MS - elapsed));
+    }
+    return resp;
+  };
+
   let body: { email?: string; password?: string };
   try {
     body = (await c.req.raw.json()) as { email?: string; password?: string };
   } catch {
-    return jsonError('Invalid JSON', 400, cors);
+    return respond(jsonError('Invalid JSON', 400, cors));
   }
 
   const { email, password } = body;
-  if (!email || !password) return jsonError('email and password required', 400, cors);
+  if (!email || !password) {
+    return respond(jsonError('email and password required', 400, cors));
+  }
+
+  // Rate limit on IP+email composite key. Falls through cleanly when
+  // the binding isn't provisioned yet (free tier / first-deploy of this
+  // PR before wrangler.toml's [[unsafe.bindings]] block lands).
+  const ip = c.req.header('cf-connecting-ip') ?? 'unknown';
+  if (c.env.LOGIN_LIMITER) {
+    try {
+      const { success } = await c.env.LOGIN_LIMITER.limit({
+        key: `login:${ip}:${email.toLowerCase()}`,
+      });
+      if (!success) {
+        return respond(
+          jsonError('Too many attempts. Try again in a minute.', 429, cors)
+        );
+      }
+    } catch {
+      // If the rate limiter itself errors, fail open — the in-handler
+      // delay still mitigates rapid brute-force, and locking out the
+      // legitimate admin on a Cloudflare blip would be worse than
+      // accepting one extra attempt.
+    }
+  }
 
   const row = await c.env.DB.prepare(
     'SELECT id, email, password_hash FROM admin_users WHERE email = ?1 LIMIT 1'
@@ -50,28 +97,72 @@ admin.post('/login', async (c) => {
     .bind(email)
     .first<{ id: number; email: string; password_hash: string }>();
 
-  if (!row) return jsonError('Invalid credentials', 401, cors);
+  if (!row) {
+    // Generic message + delay (LOGIN_MIN_RESPONSE_MS) prevents email
+    // enumeration via response timing.
+    console.log(
+      JSON.stringify({ ev: 'admin_login', ok: false, reason: 'no_user', ip })
+    );
+    return respond(jsonError('Invalid credentials', 401, cors));
+  }
 
-  const hashed = await hashPassword(password);
-  if (hashed !== row.password_hash) return jsonError('Invalid credentials', 401, cors);
+  const result = await verifyPassword(password, row.password_hash);
+  if (!result.ok) {
+    console.log(
+      JSON.stringify({ ev: 'admin_login', ok: false, reason: 'bad_password', ip, sub: row.id })
+    );
+    return respond(jsonError('Invalid credentials', 401, cors));
+  }
 
+  // Transparent legacy → PBKDF2 migration: the row's stored hash was
+  // either a legacy unsalted SHA-256 or PBKDF2 with fewer iterations
+  // than the current target. Either way, rehash and persist on this
+  // successful login. A DB write failure is logged but does NOT block
+  // the login — better to let the admin in than to lock them out on a
+  // transient D1 blip.
+  if (result.needsRehash) {
+    try {
+      const upgraded = await hashPassword(password);
+      await c.env.DB.prepare(
+        'UPDATE admin_users SET password_hash = ?1 WHERE id = ?2'
+      )
+        .bind(upgraded, row.id)
+        .run();
+    } catch (err) {
+      console.error(
+        'admin_login: rehash failed',
+        err instanceof Error ? err.message : 'unknown'
+      );
+    }
+  }
+
+  const nowSec = Math.floor(Date.now() / 1000);
   const token = await signJWT(
-    { sub: String(row.id), email: row.email, exp: Date.now() + 24 * 60 * 60 * 1000 },
+    {
+      sub: String(row.id),
+      email: row.email,
+      iat: nowSec,
+      exp: nowSec + JWT_TTL_SECONDS,
+    },
     c.env.JWT_SECRET
+  );
+
+  console.log(
+    JSON.stringify({ ev: 'admin_login', ok: true, ip, sub: row.id, rehashed: result.needsRehash })
   );
 
   const headers: Record<string, string> = {
     ...cors,
-    'Set-Cookie': `sl_admin_jwt=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=86400`,
+    'Set-Cookie': `sl_admin_jwt=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${JWT_TTL_SECONDS}`,
   };
-  return json({ token }, 200, headers);
+  return respond(json({ token }, 200, headers));
 });
 
 admin.post('/logout', async (c) => {
   const cors = getCors(c.req.raw, c.env, 'POST, OPTIONS');
   const headers: Record<string, string> = {
     ...cors,
-    'Set-Cookie': 'sl_admin_jwt=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0',
+    'Set-Cookie': 'sl_admin_jwt=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0',
   };
   return json({ ok: true }, 200, headers);
 });

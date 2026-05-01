@@ -15,6 +15,12 @@ export interface Env {
   R2_ACCESS_KEY_ID?: string;
   R2_SECRET_ACCESS_KEY?: string;
   R2_BUCKET_NAME?: string;
+  // Cloudflare Workers Rate Limiting binding. Optional — when absent,
+  // the login handler falls through to its in-handler delay only. The
+  // binding ships in wrangler.toml under [[unsafe.bindings]] and may
+  // require Workers Paid; the optional type lets the worker keep
+  // running on free tier or before the binding is provisioned.
+  LOGIN_LIMITER?: { limit: (input: { key: string }) => Promise<{ success: boolean }> };
 }
 
 export interface Obra {
