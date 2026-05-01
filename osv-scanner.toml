@@ -1,0 +1,53 @@
+# OSV-Scanner allowlist — Cyber Neo CN-009.
+#
+# Every entry below is a known advisory that has been triaged, has no
+# fix path under our control today, and lives entirely in the
+# dev/build chain (never reaches the production worker or Pages
+# bundle). Removing one of these allowlist entries — or adding a new
+# one — should require the same diligence as a new finding: confirm
+# the runtime exposure, document the reason, and revisit when the
+# upstream fix lands.
+#
+# Re-evaluate whenever `@cloudflare/next-on-pages` ships a new minor
+# release; the entire transitive chain (miniflare > undici > esbuild
+# > cookie > uuid) flows through that one direct dependency. Once we
+# can drop next-on-pages in favor of `@opennextjs/cloudflare` the
+# whole list should empty out.
+#
+# Reference: https://google.github.io/osv-scanner/configuration/
+
+# ── undici ────────────────────────────────────────────────────────────────
+
+[[IgnoredVulns]]
+id = "GHSA-v9p9-hfj2-hcw8"
+reason = "undici WebSocket unhandled-exception. Transitive: @cloudflare/next-on-pages > miniflare > undici 5.29.0. Local dev/CI only (miniflare is the local worker emulator). Patched in undici 6.24.0; waiting for next-on-pages to bump miniflare. CN-009."
+
+[[IgnoredVulns]]
+id = "GHSA-vrm6-8vpv-qv8q"
+reason = "undici WebSocket unbounded memory in permessage-deflate decompression. Same chain and same wait as GHSA-v9p9-hfj2-hcw8. CN-009."
+
+[[IgnoredVulns]]
+id = "GHSA-g9mf-h72j-4rw9"
+reason = "undici unbounded decompression chain. Same chain. CN-009."
+
+[[IgnoredVulns]]
+id = "GHSA-4992-7rv2-5pvq"
+reason = "undici CRLF injection via upgrade option. Same chain — code does not pass user input to undici. CN-009."
+
+# ── uuid ──────────────────────────────────────────────────────────────────
+
+[[IgnoredVulns]]
+id = "GHSA-w5hq-g745-h8pq"
+reason = "uuid <14.0.0 missing buffer bounds check. Transitive: resend > svix > uuid. Resend SDK does not expose external buffers to the uuid call site, so the partial-write failure mode is not reachable. Tracking upstream uuid bump in svix."
+
+# ── esbuild ───────────────────────────────────────────────────────────────
+
+[[IgnoredVulns]]
+id = "GHSA-67mh-4wv8-2f99"
+reason = "esbuild dev-server CORS default. Transitive: @cloudflare/next-on-pages > esbuild 0.15.18. Local dev only — production deploys use a built bundle, no dev server. Avoid running `pnpm dev` while browsing untrusted origins. Tracked via next-on-pages upgrade. CN-009."
+
+# ── cookie ────────────────────────────────────────────────────────────────
+
+[[IgnoredVulns]]
+id = "GHSA-pxg6-pf52-xh8x"
+reason = "cookie 0.5.0 out-of-bounds characters. Transitive: @cloudflare/next-on-pages > cookie. Dev/build dependency only — runtime cookie handling on the worker uses Web APIs, not this package. Resolved on next-on-pages upgrade."
