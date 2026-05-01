@@ -104,7 +104,12 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
         padding: '24px 16px',
         marginInline: '-16px',
         display: 'grid',
-        gridTemplateColumns: imageSrc ? '120px 1fr' : '1fr',
+        // `minmax(0, 1fr)` not bare `1fr` — without it the content
+        // column's min-content (long titles or the wide waveform inside
+        // the audio player) blows the track wider than the viewport
+        // when the window is narrow. The track then refuses to shrink
+        // even after the viewport gets smaller.
+        gridTemplateColumns: imageSrc ? '120px minmax(0, 1fr)' : 'minmax(0, 1fr)',
         gap: '24px',
         alignItems: 'start',
       }}
@@ -137,7 +142,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
         </span>
       )}
 
-      <div>
+      <div style={{ minWidth: 0 }}>
         {/* Title row */}
         <div
           style={{
