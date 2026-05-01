@@ -14,10 +14,9 @@ export default async function ObrasPage() {
   const [obras, settings] = await Promise.all([getObras(), getSettings()])
   return (
     <div className="page-shell">
-      <h1 className="t-h1">{S.works.title}</h1>
-      <p className="t-label" style={{ marginBottom: '48px' }}>
-        {obras.length} {obras.length === 1 ? S.works.countOne : S.works.countOther}
-      </p>
+      <h1 className="t-h1" style={{ marginBottom: '48px' }}>
+        {S.works.title}
+      </h1>
       <WorkGrid obras={obras} fallbackCoverUrl={settings?.worksFallbackCoverUrl} />
     </div>
   )
