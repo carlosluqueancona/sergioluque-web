@@ -24,8 +24,6 @@ export const S = {
     ensembles: 'Performed by',
     year: 'Year',
     noAudio: 'Audio not available',
-    countOne: 'work',
-    countOther: 'works',
   },
   home: {
     role: 'Composer and researcher',
