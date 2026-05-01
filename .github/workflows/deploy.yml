@@ -46,19 +46,24 @@ jobs:
           command: deploy
 
       # NEXT_PUBLIC_* env vars are inlined at build time, so they must be
-      # available to both `pnpm build` and `next-on-pages`. Set the value
-      # in GitHub → Settings → Secrets and variables → Actions → Variables
-      # (NEXT_PUBLIC_GA_ID = G-XXXXXXXXXX). It's safe as a plain variable —
-      # GA Measurement IDs are public.
+      # available to both `pnpm build` and `next-on-pages`. Set values in
+      # GitHub → Settings → Secrets and variables → Actions → Variables.
+      # Both are safe as plain variables (no secrets):
+      #   - NEXT_PUBLIC_GA_ID   : G-XXXXXXXXXX (Google Analytics ID).
+      #   - NEXT_PUBLIC_SITE_URL: canonical site URL used by sitemap.ts
+      #     and robots.ts (e.g. https://sergioluque.com). If unset, the
+      #     code falls back to https://sergioluque.com hard-coded.
       - name: Build Next.js
         run: pnpm build
         env:
           NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
 
       - name: Build for Cloudflare Pages
         run: pnpm dlx @cloudflare/next-on-pages@1
         env:
           NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
 
       # The Pages project (sergioluque-web) was bootstrapped manually and
       # exists in Cloudflare. The previous workflow had a `pages project
