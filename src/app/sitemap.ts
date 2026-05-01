@@ -47,7 +47,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/bio', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/stochastics', changeFrequency: 'monthly', priority: 0.6 },
     { path: '/contact', changeFrequency: 'yearly', priority: 0.5 },
-    { path: '/privacy', changeFrequency: 'yearly', priority: 0.3 },
+    // /privacy is intentionally NOT in the sitemap. The page itself
+    // declares `robots: { index: false }` so Google doesn't index it.
+    // It stays reachable via the footer link for visitors who need
+    // it (GDPR compliance) — but isn't promoted as searchable
+    // content. Cleaner SEO signal: sitemap only lists pages we want
+    // to rank.
     PUBLIC_SECTIONS.projects
       ? { path: '/projects', changeFrequency: 'monthly', priority: 0.6 }
       : null,

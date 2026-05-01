@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description:
     'How sergioluque.com handles personal data, cookies, analytics, and your rights under the GDPR.',
   alternates: { canonical: '/privacy' },
+  // Reachable via the footer for GDPR compliance, but not search-
+  // promoted. `index: false` tells Google to drop it from results;
+  // `follow: true` so any links inside the policy still pass crawl
+  // signal (the doc references EU regulators which is fine to follow).
+  robots: { index: false, follow: true },
 }
 
 const LAST_UPDATED = '28 April 2026'
