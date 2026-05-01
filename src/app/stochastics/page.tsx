@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { getPublicaciones } from '@/lib/db/queries'
 import { S } from '@/lib/strings'
+import { TrackedExternalLink } from '@/components/analytics/TrackedExternalLink'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -72,16 +73,24 @@ export default async function PublicacionesPage() {
 
               <div style={{ display: 'flex', gap: '16px' }}>
                 {pub.doi && (
-                  <a href={`https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer"
-                    style={{ fontFamily: 'var(--font-space-mono)', fontSize: '10px', color: 'var(--accent)', textDecoration: 'none', letterSpacing: '0.1em' }}>
+                  <TrackedExternalLink
+                    href={`https://doi.org/${pub.doi}`}
+                    eventName="publication_doi_click"
+                    eventParams={{ publication_title: pub.title }}
+                    style={{ fontFamily: 'var(--font-space-mono)', fontSize: '10px', color: 'var(--accent)', textDecoration: 'none', letterSpacing: '0.1em' }}
+                  >
                     {S.publications.doi} ↗
-                  </a>
+                  </TrackedExternalLink>
                 )}
                 {pub.pdfUrl && (
-                  <a href={pub.pdfUrl} target="_blank" rel="noopener noreferrer"
-                    style={{ fontFamily: 'var(--font-space-mono)', fontSize: '10px', color: 'var(--accent)', textDecoration: 'none', letterSpacing: '0.1em' }}>
+                  <TrackedExternalLink
+                    href={pub.pdfUrl}
+                    eventName="publication_pdf_click"
+                    eventParams={{ publication_title: pub.title }}
+                    style={{ fontFamily: 'var(--font-space-mono)', fontSize: '10px', color: 'var(--accent)', textDecoration: 'none', letterSpacing: '0.1em' }}
+                  >
                     {S.publications.download} ↓
-                  </a>
+                  </TrackedExternalLink>
                 )}
               </div>
             </div>

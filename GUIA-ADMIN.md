@@ -220,7 +220,96 @@ Esquina superior derecha: botón con luna ☾ / sol ☀. Toggle entre tema oscur
 
 ---
 
-## 13. Problemas Comunes
+## 13. Estadísticas (Google Analytics)
+
+El sitio mide visitas y engagement con **Google Analytics 4**, propiedad `G-42YX6327BF`. Toda la medición respeta el consentimiento de cookies — antes de que un visitante acepte en el banner, GA recolecta solo *pings sin cookies* (anónimos, sin identificación de usuario).
+
+### 13.1 Cómo entrar
+
+1. https://analytics.google.com
+2. Inicia sesión con la cuenta de Google que tiene acceso a la propiedad
+3. En el selector arriba a la izquierda → propiedad **sergioluque.com (G-42YX6327BF)**
+
+### 13.2 Qué se mide automáticamente
+
+| Reporte | Dónde verlo | Para qué sirve |
+|---|---|---|
+| **Tiempo real** | Reports → Realtime | Ver visitas en vivo (útil después de publicar nueva obra o compartir un link) |
+| **Visitas por página** | Reports → Engagement → Pages and screens | Qué obras / artículos atraen más tráfico |
+| **Origen del tráfico** | Reports → Acquisition → Traffic acquisition | Cuánto viene de Google, redes sociales, etc. |
+| **País / idioma** | Reports → Demographics → Demographic details | Mapa global de la audiencia |
+
+### 13.3 Eventos custom configurados
+
+Más allá de las visitas básicas, el sitio emite estos eventos cuando un visitante interactúa con elementos clave. Todos respetan el banner de consentimiento.
+
+| Evento | Cuándo se dispara | Dimensiones útiles |
+|---|---|---|
+| `play_audio` | Cuando alguien le da Play a un audio (en una obra) | `work_title`, `surface` (`detail` = página individual de la obra, `card` = tarjeta del listado) |
+| `download_cv` | Click al botón de descarga de CV en `/bio` | `destination` (hostname del PDF) |
+| `news_external_click` | Click al link `→` en una entrada de News (`/news`) | `event_title`, `destination` |
+| `publication_doi_click` | Click al DOI de una publicación en `/stochastics` | `publication_title`, `destination` (siempre `doi.org`) |
+| `publication_pdf_click` | Click al PDF de una publicación en `/stochastics` | `publication_title`, `destination` |
+| `contact_form_submit` | Cuando se envía con éxito el formulario de contacto | (sin parámetros) |
+| `contact_form_error` | Cuando el formulario falla (Resend caído, etc.) | `reason` |
+
+### 13.4 Cómo ver estos eventos en GA
+
+1. **Reports → Engagement → Events**
+2. En la tabla, click en el nombre del evento (ej. `play_audio`)
+3. Se abre el detalle con dimensiones y tendencia en el tiempo
+
+Para filtrar por dimensión específica (ej. ver solo plays desde el detail page):
+1. En el detalle del evento, sección **Custom parameters**
+2. Click en `surface` → ves split entre `detail` y `card`
+
+### 13.5 Reportes útiles que te interesa armar
+
+**Top obras escuchadas (los últimos 30 días)**
+- Reports → Engagement → Events → click `play_audio`
+- Dimensión: `work_title`
+- Vas a ver ranking de qué obras se escuchan más
+
+**Tasa de conversión del formulario de contacto**
+- Reports → Engagement → Events → busca `contact_form_submit` en el listado
+- El número total de eventos es exactamente cuántos correos has recibido
+- Si quieres conversion rate: divide entre `page_view` con `page_path = /contact`
+
+**¿Card vs detail page genera más plays?**
+- Detalle del evento `play_audio` → dimensión `surface`
+- Si `card` >> `detail`: la gente escucha desde el listado y rara vez navega al detalle (la mini player es suficiente). Si `detail` >> `card`: el listado es punto de entrada y el contenido completo está en el detalle.
+
+### 13.6 Privacidad y consentimiento
+
+- El sitio tiene un banner de cookies que respeta GDPR (Reglamento Europeo).
+- Antes de que un visitante acepte: GA recibe pings cookieless — números agregados, sin identificación.
+- Después de aceptar: GA setea cookies `_ga` y `_ga_*` con un ID anónimo de visitante (no identifica nombre, email, etc.).
+- El visitante puede cambiar su preferencia en cualquier momento via el link **Cookie preferences** en el footer.
+- Detalles legales completos en `/privacy`.
+
+### 13.7 Si ves números raros
+
+| Síntoma | Causa probable |
+|---|---|
+| Muchos `page_view` pero pocos `play_audio` | Normal — la gente lee bio/news pero no necesariamente reproduce audio |
+| `contact_form_error` con `reason: server_rejected` | Resend (servicio de email) está rechazando — revisa que `RESEND_API_KEY` no haya expirado |
+| `contact_form_error` con `reason: network_error` | Cliente perdió red mid-submit — no es un problema en tu lado |
+| Caída brusca de tráfico | Revisa Reports → Acquisition → Traffic acquisition para ver si algún canal se cayó (ej. perdiste posición en Google) |
+| Pico repentino de tráfico | Revisa el origen — puede ser una mención en redes / prensa / academia. Bueno saber. |
+
+### 13.8 Si no ves ningún dato
+
+Posibles causas:
+1. **Acabas de publicar el sitio** — los datos históricos pueden tardar 24-48h. Realtime debe verse al instante.
+2. **Estás visitando con bloqueador de anuncios o extensión privacy** — tu propia visita no cuenta. Prueba en ventana privada.
+3. **Bloqueaste el banner de cookies** — entonces solo se reciben pings cookieless, que aparecen en reportes pero con datos limitados.
+4. **El cookie banner no está cargando** — abre DevTools (F12) → Console, revisa errores.
+
+Si nada de eso funciona, contacta al técnico.
+
+---
+
+## 14. Problemas Comunes
 
 | Problema | Solución |
 |---|---|
@@ -235,7 +324,7 @@ Esquina superior derecha: botón con luna ☾ / sol ☀. Toggle entre tema oscur
 
 ---
 
-## 14. Convenciones de slugs (URLs)
+## 15. Convenciones de slugs (URLs)
 
 Todos los slugs deben ser:
 - Solo minúsculas: `well-never-know` ✅, `Well-Never-Know` ❌
@@ -247,7 +336,7 @@ Si cambias el slug de una entrada que ya estaba publicada, su URL pública cambi
 
 ---
 
-## 15. Contacto Técnico
+## 16. Contacto Técnico
 
 Si algo deja de funcionar o tienes dudas no cubiertas en esta guía, contacta a Carlos (cerostudiomx@gmail.com).
 

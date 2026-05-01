@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { getSettings } from '@/lib/db/queries'
 import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
+import { TrackedExternalLink } from '@/components/analytics/TrackedExternalLink'
 import type { Metadata } from 'next'
 
 export const runtime = 'edge'
@@ -103,9 +104,14 @@ export default async function BioPage() {
               <hr className="divider-hairline" />
               <div className="bio-block">
                 <span className="t-label">{S.bio.cvLabel}</span>
-                <a href={cvPdfUrl} download className="btn-ghost">
+                <TrackedExternalLink
+                  href={cvPdfUrl}
+                  download
+                  className="btn-ghost"
+                  eventName="download_cv"
+                >
                   {S.cv.download} ↓
-                </a>
+                </TrackedExternalLink>
               </div>
             </>
           )}
