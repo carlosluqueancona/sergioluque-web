@@ -79,8 +79,12 @@ export interface Evento {
   venue?: string;
   city?: string;
   country?: string;
+  /** Short description rendered inline on the news listing. */
   description?: string;
+  /** Long-form free text rendered below the description via PostBody. */
+  body?: string;
   externalLink?: string;
+  imageUrl?: string;
 }
 
 export interface Publicacion {

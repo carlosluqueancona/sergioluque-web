@@ -319,8 +319,15 @@ html[data-cta="orange"][data-theme="light"] {
   grid-area: image;
   display: block;
   width: 160px;
-  height: 160px;
-  object-fit: cover;
+  /* `height: auto` preserves the natural aspect ratio so posters and
+     square photos both render uncropped (operator wants "imágenes
+     completas"). max-height keeps very tall portraits from blowing
+     out the row; if a poster is taller than 240px it'll be letterboxed
+     within the box via object-fit: contain. */
+  height: auto;
+  max-height: 240px;
+  object-fit: contain;
+  align-self: start;
 }
 .concert-item__date {
   grid-area: date;
@@ -351,6 +358,24 @@ html[data-cta="orange"][data-theme="light"] {
   color: var(--text-secondary);
   margin: 4px 0 0;
   letter-spacing: 0.05em;
+}
+.concert-item__description {
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 8px 0 0;
+}
+/* Long-form body — uses PostBody internals (h2/h3/p/etc).
+   Tighter top spacing so it sits right under the description. */
+.concert-item__body {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.concert-item__body p {
+  margin: 0 0 8px;
+  line-height: 1.55;
 }
 .concert-item__link {
   display: inline-block;
@@ -384,7 +409,10 @@ html[data-cta="orange"][data-theme="light"] {
   }
   .concert-item__image {
     width: 112px;
-    height: 112px;
+    /* Same natural-aspect rule as desktop — proportional max-height. */
+    height: auto;
+    max-height: 168px;
+    object-fit: contain;
     align-self: start;
   }
   .concert-item__date {

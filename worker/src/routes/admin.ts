@@ -324,7 +324,7 @@ registerCrud(admin, 'proyectos', [
 
 registerCrud(admin, 'eventos', [
   'title', 'event_date', 'venue', 'city', 'country',
-  'description', 'external_link', 'image_url',
+  'description', 'body', 'external_link', 'image_url',
 ]);
 
 registerCrud(admin, 'publicaciones', [

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { Evento } from '@/types'
+import { PostBody } from '@/components/blog/PostBody'
 
 const isHttpUrl = (s: string | undefined): s is string =>
   !!s && /^https?:\/\//i.test(s)
@@ -29,14 +30,19 @@ export function ConcertItem({ evento }: ConcertItemProps) {
   // mobile is 2 cols (image / [date stacked over content]).
   const variant = showImage ? 'concert-item--with-image' : 'concert-item--no-image'
 
+  // Image width/height feed Next's layout calc but the actual rendered
+  // size comes from CSS — `width: 160px; height: auto` keeps the
+  // natural aspect ratio (no crop). The 1600×900 hint here is just a
+  // sane default for layout-shift prevention; `unoptimized: true` in
+  // next.config.ts means Next does not resize.
   return (
     <article className={`concert-item ${variant}`}>
       {showImage && (
         <Image
           src={evento.imageUrl as string}
           alt={title}
-          width={160}
-          height={160}
+          width={1600}
+          height={900}
           className="concert-item__image"
         />
       )}
@@ -46,6 +52,14 @@ export function ConcertItem({ evento }: ConcertItemProps) {
       <div className="concert-item__content">
         <p className="concert-item-title concert-item__title">{title}</p>
         {venueLine && <p className="concert-item__venue">{venueLine}</p>}
+        {evento.description && (
+          <p className="concert-item__description">{evento.description}</p>
+        )}
+        {evento.body && (
+          <div className="concert-item__body">
+            <PostBody value={evento.body} />
+          </div>
+        )}
         {evento.externalLink && (
           <a
             href={evento.externalLink}
