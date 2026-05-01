@@ -1,0 +1,100 @@
+# Security CI workflow — Cyber Neo CN-029.
+#
+# Runs three independent scans on every PR and on a weekly cron so a
+# CVE / leaked secret / vulnerable transitive doesn't sit undetected:
+#
+#   1. osv-scanner   — full dep-tree CVE scan against the OSV database
+#   2. pnpm audit    — npm advisory database
+#   3. gitleaks      — secret detection across the working tree
+#
+# Each scan runs in its own job so a noisy advisory in one tool doesn't
+# block the others' signal. osv-scanner and gitleaks are gating;
+# pnpm audit is informational (`continue-on-error: true`) because its
+# severity bar churns more (cf. dev-only transitive advisories like
+# CN-009 / undici via @cloudflare/next-on-pages).
+#
+# All actions SHA-pinned per the CN-021 policy. Permissions are least-
+# privilege per job — the OSV and gitleaks reusable workflows need
+# `security-events: write` to upload SARIF to the Security tab.
+
+name: Security scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Mondays 09:00 UTC (~03:00 Mexico City). Weekly cadence is enough;
+    # high-severity items typically also fire a Dependabot PR via the
+    # security-advisories side channel within hours.
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+# Default workflow-level permissions: read-only. Each job can opt up
+# explicitly when it needs to write SARIF.
+permissions:
+  contents: read
+
+jobs:
+  # OSV-Scanner is published as a reusable workflow, so it must be
+  # called at job level (`uses:` on the job, not on a step). The
+  # reusable workflow handles checkout, scanning, and SARIF upload
+  # internally and needs security-events:write to populate the
+  # Security tab.
+  osv-scanner:
+    name: OSV-Scanner (CVE scan)
+    permissions:
+      contents: read
+      security-events: write
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@c51854704019a247608d928f370c98740469d4b5 # v2.3.5
+    with:
+      # Recursive covers root pnpm-lock.yaml (which since CN-020 also
+      # contains the worker workspace section). Fail on any
+      # vulnerability that has a known fix.
+      scan-args: |-
+        --recursive
+        ./
+
+  pnpm-audit:
+    name: pnpm audit (advisory check)
+    runs-on: ubuntu-latest
+    # Informational — surfaces issues in PR logs without blocking the
+    # gating osv-scanner job. Tightened to high+ severity to keep noise
+    # down on dev-only transitives.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "20"
+      - name: Install pnpm
+        run: npm install -g pnpm@10
+      - name: Audit
+        run: pnpm audit --audit-level=high
+        # No `pnpm install` first — pnpm audit reads the lockfile
+        # directly and a fresh install every run wastes CI minutes.
+
+  gitleaks:
+    name: Gitleaks (secret scan)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          # Full history so gitleaks can scan past commits. The Cyber
+          # Neo audit found zero committed secrets — this catches any
+          # future regression, including force-pushed branches.
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+        env:
+          # Free for public repos. For private repos add
+          # GITLEAKS_LICENSE to repo secrets — the action picks it up
+          # automatically.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
