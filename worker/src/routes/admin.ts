@@ -169,11 +169,32 @@ admin.post('/logout', async (c) => {
 
 // ── Generic CRUD factory ──────────────────────────────────────────────────
 
+// CN-011 defense-in-depth: every table and column name passed to
+// registerCrud is interpolated directly into SQL strings (D1 doesn't
+// parametrise identifiers — only values). All current call sites pass
+// hardcoded literals, so the call is safe today, but the factory used
+// to expose a footgun: a future caller passing a request-derived
+// string would yield trivial SQL injection. The allowlist below
+// rejects anything that isn't a plain SQL identifier (lowercase ASCII
+// letters, digits, underscores, leading non-digit) and throws at
+// module load — so the deploy fails fast rather than shipping an
+// exploitable factory.
+const SQL_IDENT_RE = /^[a-z_][a-z0-9_]*$/;
+
 function registerCrud(
   router: Hono<{ Bindings: Env }>,
   table: string,
   columns: string[]
 ): void {
+  if (!SQL_IDENT_RE.test(table)) {
+    throw new Error(`registerCrud: invalid table identifier ${JSON.stringify(table)}`);
+  }
+  for (const col of columns) {
+    if (!SQL_IDENT_RE.test(col)) {
+      throw new Error(`registerCrud: invalid column identifier ${JSON.stringify(col)}`);
+    }
+  }
+
   const colList = columns.join(', ');
   const placeholders = columns.map((_, i) => `?${i + 1}`).join(', ');
   const updateSet = columns.map((col, i) => `${col} = ?${i + 1}`).join(', ');

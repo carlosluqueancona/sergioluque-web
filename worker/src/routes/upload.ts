@@ -95,6 +95,23 @@ function fileTypeFolder(mime: string): string {
   return 'files';
 }
 
+// CN-016: per-MIME upload size caps. Hits BEFORE the body is read into
+// memory via Content-Length, then again after buffering as a belt-and-
+// braces measure. The Workers paid plan body limit is ~100 MB; this
+// keeps images and PDFs well below that ceiling and reserves the
+// large headroom for audio (composer site → uncompressed FLAC files
+// are legitimate and large). Anything beyond ABSOLUTE_MAX is rejected
+// outright before formData() materialises the bytes.
+const MIB = 1024 * 1024;
+const ABSOLUTE_MAX_BYTES = 100 * MIB;
+const MAX_BYTES_BY_MIME: Record<string, number> = {
+  'image/jpeg': 25 * MIB,
+  'image/png': 25 * MIB,
+  'image/webp': 25 * MIB,
+  'application/pdf': 25 * MIB,
+  // audio/* defaults to ABSOLUTE_MAX_BYTES (no entry below).
+};
+
 upload.post('/', async (c) => {
   const origin = c.req.raw.headers.get('origin') ?? '';
   const cors = corsHeaders(origin, getAllowedOrigins(c.env), 'POST, OPTIONS');
@@ -102,6 +119,21 @@ upload.post('/', async (c) => {
   // Auth guard
   const payload = await requireAuth(c.req.raw, c.env);
   if (!payload) return jsonError('Unauthorized', 401, cors);
+
+  // Reject oversize uploads BEFORE buffering the body. Content-Length
+  // can be spoofed but a missing/lying header just falls through to
+  // the post-buffer check below — we still reject, just later.
+  const contentLengthHeader = c.req.raw.headers.get('content-length');
+  if (contentLengthHeader) {
+    const declared = Number.parseInt(contentLengthHeader, 10);
+    if (Number.isFinite(declared) && declared > ABSOLUTE_MAX_BYTES) {
+      return jsonError(
+        `Payload too large: ${declared} bytes exceeds ${ABSOLUTE_MAX_BYTES} byte limit`,
+        413,
+        cors
+      );
+    }
+  }
 
   let formData: FormData;
   try {
@@ -127,6 +159,17 @@ upload.post('/', async (c) => {
   const detectedMime = detectMime(bytes);
   if (!detectedMime || !ALLOWED_MIME.has(detectedMime)) {
     return jsonError('File content does not match allowed types', 400, cors);
+  }
+
+  // Per-MIME size cap (post-buffer — catches anything that lied about
+  // Content-Length or didn't send the header).
+  const sizeCap = MAX_BYTES_BY_MIME[detectedMime] ?? ABSOLUTE_MAX_BYTES;
+  if (buffer.byteLength > sizeCap) {
+    return jsonError(
+      `File too large for ${detectedMime}: ${buffer.byteLength} bytes exceeds ${sizeCap} byte cap`,
+      413,
+      cors
+    );
   }
 
   // Build key

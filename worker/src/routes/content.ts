@@ -2,6 +2,22 @@ import { Hono } from 'hono';
 import type { Env, Obra, Post, Proyecto, Evento, Publicacion, Settings } from '../types';
 import { json, jsonError, corsHeaders, getAllowedOrigins } from '../lib/shared';
 
+/**
+ * Public read API.
+ *
+ * **Visibility contract** (CN-018): every row in `obras`, `proyectos`,
+ * `eventos`, `publicaciones`, and `catalogue` is publicly visible the
+ * moment the admin saves it. There is no `status` / `is_published`
+ * column on those tables and the SELECT statements below intentionally
+ * have no publication filter. `posts` is the exception: it has a
+ * `status` column and the queries below filter `WHERE status = 'published'`.
+ *
+ * If a draft workflow is ever added to any of the other tables, the
+ * filter MUST be enforced HERE (server-side, in the SQL) — not in the
+ * admin UI — and the schema needs the corresponding `status` column.
+ * Doing it in the admin UI alone leaves drafts visible to anyone who
+ * can hit `/content/<table>` directly.
+ */
 const content = new Hono<{ Bindings: Env }>();
 
 // ── Row mappers ───────────────────────────────────────────────────────────
