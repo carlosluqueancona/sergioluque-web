@@ -5,7 +5,11 @@ import type { MetadataRoute } from 'next'
 // Same env-driven base URL as sitemap.ts — keeps the two sources in sync
 // when the canonical host changes. Trailing slash trimmed so we don't
 // end up with `https://example.com//sitemap.xml`.
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sergioluque.com').replace(/\/$/, '')
+//
+// `||` (not `??`) because GitHub Actions injects unset variables as
+// empty strings, which `??` treats as a real value and skips the
+// fallback. `||` correctly falls through on empty.
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://sergioluque.com').replace(/\/$/, '')
 
 export default function robots(): MetadataRoute.Robots {
   return {
