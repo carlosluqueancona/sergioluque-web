@@ -3,9 +3,17 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
+    // CN-017: previously listed `pub-*.r2.dev` as a wildcard, which
+    // matches every public R2 bucket on the platform — a hostile
+    // bucket (e.g. `pub-attacker.r2.dev`) could be used as the source
+    // of a stored Image element, surfacing as a phishing/OG-image
+    // pivot if any input ever reached `<Image src={...}>`. Media is
+    // served through the Worker's `/media/*` proxy
+    // (sergioluque-cms.carlosluque-095.workers.dev) and the future
+    // canonical custom domain (media.sergioluque.com), so the
+    // wildcard is unnecessary. Removed entirely.
     remotePatterns: [
       { protocol: 'https', hostname: 'media.sergioluque.com' },
-      { protocol: 'https', hostname: 'pub-*.r2.dev' },
       { protocol: 'https', hostname: 'sergioluque-cms.carlosluque-095.workers.dev' },
       { protocol: 'https', hostname: 'api.sergioluque.com' },
       { protocol: 'https', hostname: 'upload.wikimedia.org' },
@@ -50,9 +58,9 @@ const nextConfig: NextConfig = {
       "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "img-src 'self' data: https://media.sergioluque.com https://*.r2.dev https://sergioluque-cms.carlosluque-095.workers.dev https://api.sergioluque.com https://upload.wikimedia.org https://www.googletagmanager.com https://www.google-analytics.com",
-      "media-src 'self' https://*.r2.dev https://sergioluque-cms.carlosluque-095.workers.dev https://media.sergioluque.com https://w.soundcloud.com",
-      "connect-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://www.google-analytics.com https://www.googletagmanager.com https://api.sergioluque.com https://*.r2.dev",
+      "img-src 'self' data: https://media.sergioluque.com https://sergioluque-cms.carlosluque-095.workers.dev https://api.sergioluque.com https://upload.wikimedia.org https://www.googletagmanager.com https://www.google-analytics.com",
+      "media-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://media.sergioluque.com https://w.soundcloud.com",
+      "connect-src 'self' https://sergioluque-cms.carlosluque-095.workers.dev https://www.google-analytics.com https://www.googletagmanager.com https://api.sergioluque.com",
       "frame-src https://w.soundcloud.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",

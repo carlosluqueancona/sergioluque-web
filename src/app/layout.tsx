@@ -92,11 +92,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     headingDark = settings?.headingColorDark
     headingLight = settings?.headingColorLight
     if (settings?.lissajous) {
-      // Escape `<` so the inline JSON can't close the <script> tag.
+      // CN-014: escape every character that, inside a JSON literal
+      // embedded in an HTML <script> block, can prematurely terminate
+      // the script or be interpreted by the JS parser as a line
+      // terminator:
+      //   `<` (closes <script>; also handles `</script>`)
+      //   U+2028, U+2029 (LINE/PARAGRAPH SEPARATOR — JSON allows
+      //   them unescaped but JavaScript treats them as line breaks,
+      //   ending a string literal)
       // All lis_* values are constrained (numbers, hex colours, enum
-      // strings, CSV ratios) so this is the only character that can
-      // realistically appear and break the inline script.
-      lissajousJson = JSON.stringify(settings.lissajous).replace(/</g, '\\u003c')
+      // strings, CSV ratios) so none of these realistically appear
+      // today, but defence in depth: if any user-influenced field
+      // ever flows into lissajousJson, the escape keeps the inline
+      // <script> well-formed.
+      lissajousJson = JSON.stringify(settings.lissajous).replace(
+        /[<\u2028\u2029]/g,
+        (ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, '0')}`
+      )
     }
   } catch {
     /* ignore — keep default accent + default Lissajous look */
