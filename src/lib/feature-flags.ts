@@ -11,11 +11,16 @@
  *
  * Flip a value to `true` and redeploy to switch the section back on.
  */
-export type PublicSectionKey = 'blog' | 'projects'
+export type PublicSectionKey = 'blog' | 'projects' | 'obraDetail'
 
 export const PUBLIC_SECTIONS: Record<PublicSectionKey, boolean> = {
   blog: false,
   projects: false,
+  // /listen/[slug] detail pages — disabled per operator request
+  // ("desactivada hasta nuevo aviso"). The /listen list still
+  // renders; only the per-work detail returns 404 and is omitted
+  // from the sitemap. Flip to `true` and redeploy to re-enable.
+  obraDetail: false,
 }
 
 export function isPublicSectionEnabled(key: PublicSectionKey): boolean {
