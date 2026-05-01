@@ -18,27 +18,31 @@ const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sergioluque.com')
 // enough until we surface `updated_at` on the Obra/Post types.
 const BUILD_TIME = new Date()
 
+type ChangeFreq = NonNullable<MetadataRoute.Sitemap[number]['changeFrequency']>
+type StaticEntry = { path: string; changeFrequency: ChangeFreq; priority: number }
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static paths, sorted from most-changing to least.
   // Hidden sections drop out of the sitemap entirely so search engines
   // don't try to index pages that 404 behind the feature flag.
-  const staticEntries: MetadataRoute.Sitemap = [
-    { path: '', changeFrequency: 'daily' as const, priority: 1.0 },
-    { path: '/news', changeFrequency: 'weekly' as const, priority: 0.9 },
-    { path: '/listen', changeFrequency: 'weekly' as const, priority: 0.9 },
-    { path: '/catalogue', changeFrequency: 'weekly' as const, priority: 0.9 },
-    { path: '/bio', changeFrequency: 'monthly' as const, priority: 0.7 },
-    { path: '/stochastics', changeFrequency: 'monthly' as const, priority: 0.6 },
-    { path: '/contact', changeFrequency: 'yearly' as const, priority: 0.5 },
-    { path: '/privacy', changeFrequency: 'yearly' as const, priority: 0.3 },
+  const rawStatic: (StaticEntry | null)[] = [
+    { path: '', changeFrequency: 'daily', priority: 1.0 },
+    { path: '/news', changeFrequency: 'weekly', priority: 0.9 },
+    { path: '/listen', changeFrequency: 'weekly', priority: 0.9 },
+    { path: '/catalogue', changeFrequency: 'weekly', priority: 0.9 },
+    { path: '/bio', changeFrequency: 'monthly', priority: 0.7 },
+    { path: '/stochastics', changeFrequency: 'monthly', priority: 0.6 },
+    { path: '/contact', changeFrequency: 'yearly', priority: 0.5 },
+    { path: '/privacy', changeFrequency: 'yearly', priority: 0.3 },
     PUBLIC_SECTIONS.projects
-      ? { path: '/projects', changeFrequency: 'monthly' as const, priority: 0.6 }
+      ? { path: '/projects', changeFrequency: 'monthly', priority: 0.6 }
       : null,
     PUBLIC_SECTIONS.blog
-      ? { path: '/blog', changeFrequency: 'weekly' as const, priority: 0.6 }
+      ? { path: '/blog', changeFrequency: 'weekly', priority: 0.6 }
       : null,
   ]
-    .filter((e): e is { path: string; changeFrequency: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'always' | 'hourly' | 'never'; priority: number } => e !== null)
+  const staticEntries: MetadataRoute.Sitemap = rawStatic
+    .filter((e): e is StaticEntry => e !== null)
     .map(({ path, changeFrequency, priority }) => ({
       url: `${BASE_URL}${path}`,
       lastModified: BUILD_TIME,
