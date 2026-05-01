@@ -188,6 +188,21 @@ export async function verifyPassword(
 }
 
 // ── CORS ──────────────────────────────────────────────────────────────────
+//
+// CN-005 hardening: dev origins (http://localhost:3000/3001) are NOT
+// included in production. They must be explicitly opted in via
+// `ALLOW_DEV_ORIGINS=1` in the worker env (typically set in
+// `worker/.dev.vars` for local `wrangler dev`, never in committed
+// wrangler.toml). The previous behaviour unconditionally appended them
+// to every response, which combined with `Access-Control-Allow-Credentials: true`
+// let a localhost-bound malicious page send authenticated cross-origin
+// XHR if it could lure an authenticated admin to load it.
+//
+// `corsHeaders` now omits all CORS headers entirely when the request
+// origin is not in the allowlist — the browser will block the response
+// rather than reflecting the canonical origin (info leak) or stripping
+// just the credentials flag. Always emits `Vary: Origin` so caches do
+// not serve a per-origin response to the wrong origin.
 
 const DEV_ORIGINS = ['http://localhost:3000', 'http://localhost:3001'];
 
@@ -196,7 +211,11 @@ export function getAllowedOrigins(env: Env): string[] {
     .split(',')
     .map((o) => o.trim())
     .filter(Boolean);
-  return [...prod, ...DEV_ORIGINS];
+  // Explicit opt-in for local development. Set ALLOW_DEV_ORIGINS=1 in
+  // worker/.dev.vars (gitignored). Production wrangler.toml does NOT
+  // set this, so production never advertises localhost.
+  const allowDev = env.ALLOW_DEV_ORIGINS === '1' || env.ALLOW_DEV_ORIGINS === 'true';
+  return allowDev ? [...prod, ...DEV_ORIGINS] : prod;
 }
 
 export function corsHeaders(
@@ -204,9 +223,20 @@ export function corsHeaders(
   allowedOrigins: string[],
   methods = 'GET, OPTIONS'
 ): Record<string, string> {
-  const allowed = allowedOrigins.includes(origin) ? origin : allowedOrigins[0] ?? '';
+  // Always set Vary so caches/CDNs key on Origin regardless of match.
+  // Otherwise a cached preflight from origin A could be served back to
+  // origin B with the wrong Access-Control-Allow-Origin.
+  const base: Record<string, string> = { Vary: 'Origin' };
+
+  // Origin not in allowlist → return no Allow-* headers. The browser
+  // will block the response; we don't tell the attacker what the
+  // canonical origin is, and we don't ever send Allow-Credentials to
+  // an unrecognised caller.
+  if (!origin || !allowedOrigins.includes(origin)) return base;
+
   return {
-    'Access-Control-Allow-Origin': allowed ?? '',
+    ...base,
+    'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': methods,
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Credentials': 'true',
