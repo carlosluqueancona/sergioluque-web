@@ -10,6 +10,9 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: S.bio.title,
+  description:
+    'Biography of composer and researcher Sergio Luque — education, residencies, premieres, and selected works.',
+  alternates: { canonical: '/bio' },
 }
 
 const FALLBACK_PORTRAIT = '/bio/portrait.jpg'

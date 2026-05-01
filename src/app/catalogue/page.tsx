@@ -9,6 +9,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: S.catalogue.title,
   description: S.catalogue.subtitle,
+  alternates: { canonical: '/catalogue' },
 }
 
 export default async function CataloguePage() {

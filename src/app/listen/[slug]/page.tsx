@@ -36,7 +36,14 @@ export async function generateMetadata({
     undefined
   return {
     title: obra.title,
-    description: obra.instrumentation,
+    // Description = title + instrumentation when present; falls back
+    // to instrumentation alone, then to a generic phrasing. Better
+    // than the bare "violin solo" description which Google
+    // characterised as low-information.
+    description: obra.instrumentation
+      ? `${obra.title} — ${obra.instrumentation}. A composition by Sergio Luque.`
+      : `${obra.title}. A composition by Sergio Luque.`,
+    alternates: { canonical: `/listen/${slug}` },
     openGraph: ogImage
       ? { images: [{ url: ogImage, width: 1200, height: 630 }] }
       : undefined,
@@ -69,8 +76,46 @@ export default async function ObraPage({
     .filter(Boolean)
     .join(', ')
 
+  // JSON-LD MusicComposition schema for this work. References the
+  // site-wide Person entity declared in app/layout.tsx via @id, so the
+  // composer-to-composition link is a single Knowledge Graph node
+  // rather than two disconnected blobs. Audio URL surfaces as a
+  // recordedAs MusicRecording when present — that's the structure
+  // Google + AI search engines look for to surface listenable
+  // results. Only render when we have a slug + title (always true
+  // for an existing obra row).
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'MusicComposition',
+    '@id': `https://sergioluque.com/listen/${slug}#composition`,
+    name: title,
+    composer: { '@id': 'https://sergioluque.com/#person' },
+    url: `https://sergioluque.com/listen/${slug}`,
+    ...(obra.year ? { datePublished: String(obra.year) } : {}),
+    ...(instrumentation ? { musicArrangement: instrumentation } : {}),
+    ...(description ? { description } : {}),
+    ...(isHttpUrl(obra.audioUrl)
+      ? {
+          recordedAs: {
+            '@type': 'MusicRecording',
+            byArtist: { '@id': 'https://sergioluque.com/#person' },
+            audio: obra.audioUrl,
+          },
+        }
+      : {}),
+  }
+
   return (
     <div className="page-shell">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(
+            /[<\u2028\u2029]/g,
+            (ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, '0')}`
+          ),
+        }}
+      />
       <div className="aside-grid">
         <div>
           <h1 className="t-h2">{title}</h1>

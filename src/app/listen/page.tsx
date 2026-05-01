@@ -5,7 +5,12 @@ import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = { title: S.works.title }
+export const metadata: Metadata = {
+  title: S.works.title,
+  description:
+    'Listen to selected instrumental and electroacoustic works by composer Sergio Luque — recordings, scores, and program notes for each piece.',
+  alternates: { canonical: '/listen' },
+}
 
 export default async function ObrasPage() {
   // Fetch obras + settings in parallel — both come from the same Worker

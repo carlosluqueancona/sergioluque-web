@@ -5,7 +5,12 @@ import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = { title: S.concerts.title }
+export const metadata: Metadata = {
+  title: S.concerts.title,
+  description:
+    'Upcoming concerts, premieres, and recent news for composer Sergio Luque.',
+  alternates: { canonical: '/news' },
+}
 
 export default async function ConciertosPage() {
   const [proximos, pasados] = await Promise.all([
