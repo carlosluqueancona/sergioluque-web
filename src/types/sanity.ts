@@ -18,6 +18,8 @@ export interface Obra {
   premiereCity?: string
   commissions?: string
   ensembles?: string
+  /** Studio/venue where the recording was made — surfaces as "Recorded at" on /listen/[slug]. */
+  recordedAt?: string
   isFeatured: boolean
 }
 
