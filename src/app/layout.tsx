@@ -219,10 +219,61 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   description:
                     'Composer of instrumental, electroacoustic, and stochastic synthesis works.',
                   url: 'https://sergioluque.com',
+                  birthDate: '1976',
+                  nationality: { '@type': 'Country', name: 'Mexico' },
                   // image lets Google attach the right portrait when
                   // building a Knowledge Panel. Pulls from Settings →
                   // Profile image, same source as /bio's hero portrait.
                   ...(profileImageUrl ? { image: profileImageUrl } : {}),
+                  // Current address — Google maps "based in Madrid"
+                  // for local-search and event surfacing.
+                  address: {
+                    '@type': 'PostalAddress',
+                    addressLocality: 'Madrid',
+                    addressCountry: 'ES',
+                  },
+                  // Current employer / affiliation. Drives the
+                  // "works for" surface in Knowledge Panels.
+                  worksFor: {
+                    '@type': 'EducationalOrganization',
+                    name: 'Centro Superior Katarina Gurska',
+                    url: 'https://csmkg.com/',
+                  },
+                  affiliation: {
+                    '@type': 'CollegeOrUniversity',
+                    name: 'Royal Conservatoire The Hague',
+                  },
+                  // Educational pedigree — schema.org/CollegeOrUniversity
+                  // entries let Google validate "studied at X" claims.
+                  // Ordered by degree level (PhD → Masters → workshop).
+                  alumniOf: [
+                    {
+                      '@type': 'CollegeOrUniversity',
+                      name: 'University of Birmingham',
+                      sameAs: 'https://www.birmingham.ac.uk/',
+                    },
+                    {
+                      '@type': 'CollegeOrUniversity',
+                      name: 'Institute of Sonology, Royal Conservatoire The Hague',
+                      sameAs: 'https://sonology.org/',
+                    },
+                    {
+                      '@type': 'CollegeOrUniversity',
+                      name: 'Conservatory of Rotterdam',
+                      sameAs: 'https://www.codarts.nl/',
+                    },
+                  ],
+                  // Subject-matter expertise — surfaces "Sergio Luque
+                  // knows about X" to AI search engines (Perplexity,
+                  // ChatGPT search) when grounding answers.
+                  knowsAbout: [
+                    'Electroacoustic composition',
+                    'Stochastic synthesis',
+                    'Computer music',
+                    'Algorithmic composition',
+                    'Sound synthesis',
+                    'SuperCollider',
+                  ],
                   // sameAs corroborates "this is the same person" to
                   // the Google Knowledge Graph. Populated dynamically
                   // from admin → Settings → Social, so the operator
