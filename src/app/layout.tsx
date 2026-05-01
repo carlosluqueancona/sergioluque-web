@@ -87,10 +87,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let headingsCustom = false
   let headingDark: string | undefined
   let headingLight: string | undefined
+  // Academic / persistent identifiers. Hardcoded because they change
+  // essentially never (ORCID iDs are issued once per researcher and
+  // never reassigned). If the operator gets new identifiers
+  // (ResearchGate, ISNI, MusicBrainz, Wikidata Q-number, etc.) just
+  // append URLs to this array and redeploy. Defined OUTSIDE the try
+  // block so a worker outage that fails getSettings() still emits
+  // the academic IDs in the JSON-LD.
+  const ACADEMIC_SAME_AS: readonly string[] = [
+    'https://orcid.org/0009-0005-9562-5744',
+  ] as const
+
   // Social-profile URLs from Settings → injected into Person.sameAs
   // in the JSON-LD below. Operator manages these in admin → Settings;
   // unset entries are dropped (the JSON-LD only emits validated URLs).
-  let sameAs: string[] = []
+  // Default to the academic IDs so a Settings fetch failure still
+  // leaves the most-stable identifiers in place.
+  let sameAs: string[] = [...ACADEMIC_SAME_AS]
   let profileImageUrl: string | undefined
   try {
     const settings = await getSettings()
@@ -102,6 +115,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     headingLight = settings?.headingColorLight
     profileImageUrl = settings?.profileImageUrl
     sameAs = [
+      ...ACADEMIC_SAME_AS,
       settings?.socialTwitter,
       settings?.socialInstagram,
       settings?.socialYoutube,
