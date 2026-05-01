@@ -1,3 +1,13 @@
+# CN-020: consolidate the Cloudflare Worker as a pnpm workspace member
+# so a single `pnpm install --frozen-lockfile` at the repo root installs
+# both Next.js and worker deps. Previously the worker carried its own
+# `package-lock.json` and CI ran `npm ci` against it, which doubled the
+# supply-chain surface (two registries / two resolvers / two lockfile
+# formats) and fragmented dependency-update tooling.
+packages:
+  - '.'
+  - 'worker'
+
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
@@ -6,3 +16,4 @@ onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
   - msw
+  - workerd
