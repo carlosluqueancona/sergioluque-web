@@ -15,6 +15,12 @@ export interface Env {
   R2_ACCESS_KEY_ID?: string;
   R2_SECRET_ACCESS_KEY?: string;
   R2_BUCKET_NAME?: string;
+  // Local-dev opt-in for CORS. Set to "1" or "true" in
+  // worker/.dev.vars (gitignored) when running `wrangler dev` so the
+  // worker accepts requests from http://localhost:3000/3001 — the Next
+  // dev server. Production never sets this, so dev origins are never
+  // advertised at runtime.
+  ALLOW_DEV_ORIGINS?: string;
   // Cloudflare Workers Rate Limiting binding. Optional — when absent,
   // the login handler falls through to its in-handler delay only. The
   // binding ships in wrangler.toml under [[unsafe.bindings]] and may
