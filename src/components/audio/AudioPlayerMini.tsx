@@ -155,7 +155,10 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
   )
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    // `minWidth: 0` so the player honours its grid/flex parent's width
+    // when the viewport shrinks instead of forcing the parent wider via
+    // the waveform's intrinsic content size.
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: 0 }}>
       <audio
         ref={audioRef}
         src={audioUrl}
@@ -243,6 +246,10 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
           style={{
             position: 'relative',
             flex: 1,
+            // `minWidth: 0` so a flex item with `flex: 1` can actually
+            // shrink below its content's min-content size (the inner
+            // bar would otherwise force overflow when the row narrows).
+            minWidth: 0,
             height: '14px',
             display: 'flex',
             alignItems: 'center',
