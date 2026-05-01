@@ -6,7 +6,12 @@ import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = { title: S.publications.title }
+export const metadata: Metadata = {
+  title: S.publications.title,
+  description:
+    'Examples and writings on stochastic synthesis — Xenakis-derived sound generation, research notes, and publications by Sergio Luque.',
+  alternates: { canonical: '/stochastics' },
+}
 
 const isHttpUrl = (s: string | undefined): s is string =>
   !!s && /^https?:\/\//i.test(s)

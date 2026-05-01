@@ -4,7 +4,12 @@ import { getSettings } from '@/lib/db/queries'
 import { S } from '@/lib/strings'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: S.contact.title }
+export const metadata: Metadata = {
+  title: S.contact.title,
+  description:
+    'Get in touch with composer Sergio Luque for commissions, performances, or research collaborations.',
+  alternates: { canonical: '/contact' },
+}
 
 export default async function ContactoPage() {
   let settings = null

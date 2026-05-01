@@ -43,11 +43,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogUrl = socialImage || '/og-default.jpg'
   return {
     title: {
-      default: 'Sergio Luque',
+      default: 'Sergio Luque — Composer',
       template: '%s — Sergio Luque',
     },
     description:
-      'Composer. Instrumental, electroacoustic, and stochastic synthesis works.',
+      'Composer Sergio Luque — instrumental, electroacoustic, and stochastic synthesis works. Listen, browse the catalogue, and read about the work.',
+    // Default canonical for the home. Sub-pages override via their own
+    // `alternates.canonical` (relative paths resolve against
+    // metadataBase below).
+    alternates: { canonical: '/' },
     openGraph: {
       type: 'website',
       locale: 'en_GB',
@@ -171,6 +175,56 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {accentStyle && (
           <style dangerouslySetInnerHTML={{ __html: accentStyle }} />
         )}
+        {/*
+          Site-wide JSON-LD. Two graphs:
+            * Person — anchors the brand entity ("Sergio Luque is a
+              composer") so Google can build a Knowledge Panel and
+              link the right name to the right work, AI search engines
+              can ground answers, and image searches return the right
+              attribution.
+            * WebSite — declares the canonical URL and lets Google
+              show a sitelinks search box on SERPs.
+          Both reference each other via @id so the graph is connected.
+          JSON-encoded with the same `<` / U+2028 / U+2029 escape used
+          for the Lissajous config above (see CN-014).
+        */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Person',
+                  '@id': 'https://sergioluque.com/#person',
+                  name: 'Sergio Luque',
+                  jobTitle: 'Composer',
+                  description:
+                    'Composer of instrumental, electroacoustic, and stochastic synthesis works.',
+                  url: 'https://sergioluque.com',
+                  // sameAs intentionally minimal — add SoundCloud /
+                  // Bandcamp / Wikipedia / ResearchGate / ORCID URLs
+                  // here as the operator surfaces them. Google's
+                  // Knowledge Graph relies on these to disambiguate.
+                  sameAs: [],
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://sergioluque.com/#website',
+                  url: 'https://sergioluque.com',
+                  name: 'Sergio Luque',
+                  description:
+                    'Composer Sergio Luque — instrumental, electroacoustic, and stochastic synthesis works.',
+                  inLanguage: 'en-GB',
+                  publisher: { '@id': 'https://sergioluque.com/#person' },
+                },
+              ],
+            }).replace(
+              /[<\u2028\u2029]/g,
+              (ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, '0')}`
+            ),
+          }}
+        />
       </head>
       <body className={`${spaceMono.variable} ${ibmPlexSans.variable} antialiased`}>
         <ExclusivePlayback />

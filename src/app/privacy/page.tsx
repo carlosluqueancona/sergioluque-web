@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Privacy policy',
   description:
     'How sergioluque.com handles personal data, cookies, analytics, and your rights under the GDPR.',
+  alternates: { canonical: '/privacy' },
 }
 
 const LAST_UPDATED = '28 April 2026'
