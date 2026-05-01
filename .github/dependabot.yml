@@ -1,0 +1,62 @@
+# Dependabot configuration — Cyber Neo CN-029.
+#
+# Opens automatic PRs for dependency and GitHub Actions updates so a
+# critical CVE doesn't sit unpatched for months (cf. how `next@15.3.3`
+# stayed in main long after the CVE-2025-55182 RCE fix existed).
+#
+# Schedule is weekly on Mondays at 09:00 Mexico City local time —
+# enough to catch issues without flooding the inbox. Security
+# advisories override that schedule and open PRs immediately.
+#
+# Dependency tree to watch:
+#   - npm at /          → root + worker (worker is a pnpm workspace
+#                          member as of CN-020, so a single ecosystem
+#                          entry covers both lockfile sections)
+#   - github-actions    → .github/workflows/* SHA-pinned bumps
+#
+# Reference: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Mexico_City"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "security"
+    # Group non-major patches together so weekly hygiene is one PR
+    # instead of fifteen. Major-version bumps stay individual because
+    # they tend to need code changes.
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    # Ignore the @cloudflare/next-on-pages major-version bump path
+    # entirely — that package is deprecated in favor of
+    # @opennextjs/cloudflare, and a Dependabot PR for a 1.x → 2.x bump
+    # would point at an abandoned upgrade route. Audit that migration
+    # manually when the team is ready.
+    ignore:
+      - dependency-name: "@cloudflare/next-on-pages"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Mexico_City"
+    open-pull-requests-limit: 3
+    labels:
+      - "ci"
+      - "security"
+    # Dependabot will keep the `# vX.Y.Z` trailing comment in sync
+    # with the SHA so the human-readable version stays accurate after
+    # every bump (per CN-021's pinning convention).
