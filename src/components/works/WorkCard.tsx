@@ -177,7 +177,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
         {showAudio ? (
           <div style={{ position: 'relative', zIndex: 2, marginBottom: hasMeta ? '24px' : 0 }}>
             {audioFormat && (
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
                 <AudioFormatTag format={audioFormat} />
               </div>
             )}
