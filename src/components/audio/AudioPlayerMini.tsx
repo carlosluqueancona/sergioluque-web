@@ -150,8 +150,12 @@ export function AudioPlayerMini({ audioUrl, title: _title, duration }: AudioPlay
 
       {/* Decorative waveform — animates from AnalyserNode while playing,
           fills with the accent color up to `progress`. No pointer events
-          here; scrubbing happens on the thin line below. */}
-      <div style={{ height: '32px', position: 'relative' }}>
+          here; scrubbing happens on the thin line below. The 44px left
+          padding aligns the waveform start with the slider start (play
+          button 32 + row gap 12), so the played portion of the wave and
+          the filled portion of the bar share an X axis — visually
+          reinforces that they represent the same value. */}
+      <div style={{ height: '32px', position: 'relative', paddingLeft: '44px' }}>
         <WaveformBars
           getAnalyser={getAnalyser}
           isPlaying={isPlaying}
