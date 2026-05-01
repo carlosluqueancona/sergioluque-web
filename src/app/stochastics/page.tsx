@@ -116,7 +116,7 @@ export default async function PublicacionesPage() {
             maxWidth: '52ch',
           }}
         >
-          Selected stochastic-synthesis recordings, hosted on SoundCloud.
+          Stochastic Synthesis Examples.
         </p>
         <div
           style={{
