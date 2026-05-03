@@ -307,7 +307,7 @@ function FieldRenderer({ field, value, onChange, uploadFile, deleteFile }: Field
           onChange={(e) => onChange(e.target.value)}
           rows={field.rows ?? 4}
           required={field.required}
-          style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
+          style={{ ...inputStyle, resize: 'vertical' }}
         />
       </div>
     )

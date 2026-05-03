@@ -104,6 +104,7 @@ function mapEvento(row: Record<string, unknown>, _locale: string): Evento {
     id: row['id'] as number,
     title: pick(row, 'title') ?? '',
     eventDate: row['event_date'] as string,
+    eventEndDate: (row['event_end_date'] as string) || undefined,
     venue: (row['venue'] as string) || undefined,
     city: (row['city'] as string) || undefined,
     country: (row['country'] as string) || undefined,
@@ -313,9 +314,13 @@ content.get('/eventos', async (c) => {
     const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
     let stmt: D1PreparedStatement;
 
+    // Multi-day events stay "upcoming" until their end date passes — use
+    // COALESCE(end, start) so single-day events keep behaving as before
+    // and a festival/residency that started yesterday but ends tomorrow
+    // is still surfaced under upcoming.
     if (filter === 'past') {
       stmt = c.env.DB.prepare(
-        "SELECT * FROM eventos WHERE event_date < ?1 ORDER BY event_date DESC"
+        "SELECT * FROM eventos WHERE COALESCE(NULLIF(event_end_date, ''), event_date) < ?1 ORDER BY event_date DESC"
       ).bind(today);
     } else if (filter === 'latest') {
       // No date filter — most recent news first regardless of whether the
@@ -326,7 +331,7 @@ content.get('/eventos', async (c) => {
     } else {
       // upcoming (default)
       stmt = c.env.DB.prepare(
-        "SELECT * FROM eventos WHERE event_date >= ?1 ORDER BY event_date ASC"
+        "SELECT * FROM eventos WHERE COALESCE(NULLIF(event_end_date, ''), event_date) >= ?1 ORDER BY event_date ASC"
       ).bind(today);
     }
 

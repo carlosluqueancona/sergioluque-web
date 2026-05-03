@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS eventos (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   title          TEXT NOT NULL DEFAULT '',
   event_date     TEXT NOT NULL,
+  event_end_date TEXT DEFAULT '',
   venue          TEXT DEFAULT '',
   city           TEXT DEFAULT '',
   country        TEXT DEFAULT '',

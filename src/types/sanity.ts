@@ -50,6 +50,8 @@ export interface Evento {
   id: number
   title: string
   eventDate: string
+  /** Optional end date for multi-day events (festivals, residencies). */
+  eventEndDate?: string
   venue?: string
   city?: string
   country?: string

@@ -33,6 +33,7 @@ function eventoToMusicEvent(evento: Evento) {
     '@id': `https://sergioluque.com/news#event-${evento.id}`,
     name: evento.title,
     startDate: evento.eventDate,
+    ...(evento.eventEndDate ? { endDate: evento.eventEndDate } : {}),
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     composer: composerRef,
