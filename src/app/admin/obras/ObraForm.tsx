@@ -179,11 +179,27 @@ export function ObraForm({ initialData }: ObraFormProps) {
       </div>
 
       <div style={fieldStyle}>
-        <label style={labelStyle}>Description</label>
+        <label style={labelStyle}>Description (Markdown)</label>
         <textarea
-          style={{ ...inputStyle, height: '120px', resize: 'vertical' }}
+          style={{
+            ...inputStyle,
+            height: '240px',
+            resize: 'vertical',
+            fontFamily: 'monospace',
+          }}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
+          placeholder={
+            'Markdown supported:\n' +
+            '## Heading\n' +
+            '### Subheading\n' +
+            '**bold**, *italic*, `code`\n' +
+            '- bullet list\n' +
+            '1. numbered list\n' +
+            '> blockquote\n' +
+            '[link label](https://example.com)\n' +
+            'Bare URLs https://example.com are auto-linked.'
+          }
         />
       </div>
 
