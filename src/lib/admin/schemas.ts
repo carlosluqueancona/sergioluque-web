@@ -94,7 +94,8 @@ export const SCHEMAS: Record<string, EntitySchema> = {
     ],
     fields: [
       { key: 'title', label: 'Title', type: 'text', required: true },
-      { key: 'event_date', label: 'Date and time', type: 'datetime', required: true },
+      { key: 'event_date', label: 'Date', type: 'date', required: true },
+      { key: 'event_end_date', label: 'End date (optional, for multi-day events)', type: 'date' },
       { key: 'venue', label: 'Venue', type: 'text' },
       { key: 'city', label: 'City', type: 'text' },
       { key: 'country', label: 'Country', type: 'text' },

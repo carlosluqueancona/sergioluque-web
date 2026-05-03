@@ -18,6 +18,32 @@ function formatEventDate(dateStr: string): string {
   })
 }
 
+/**
+ * Format an event date range. Picks the shortest representation that
+ * stays unambiguous: same month → "3–5 May 2026", different months in
+ * the same year → "30 April – 2 May 2026", different years → full date
+ * on both sides. Falls back to the single start date when end is empty
+ * or equal to start.
+ */
+function formatEventDateRange(startStr: string, endStr?: string): string {
+  if (!endStr || endStr === startStr) return formatEventDate(startStr)
+  const start = new Date(startStr)
+  const end = new Date(endStr)
+  if (Number.isNaN(end.getTime())) return formatEventDate(startStr)
+  if (end.getTime() < start.getTime()) return formatEventDate(startStr)
+  const sameYear = start.getUTCFullYear() === end.getUTCFullYear()
+  const sameMonth = sameYear && start.getUTCMonth() === end.getUTCMonth()
+  if (sameMonth) {
+    const day = start.toLocaleDateString('en-GB', { day: 'numeric' })
+    return `${day}–${formatEventDate(endStr)}`
+  }
+  if (sameYear) {
+    const startPart = start.toLocaleDateString('en-GB', { month: 'long', day: 'numeric' })
+    return `${startPart} – ${formatEventDate(endStr)}`
+  }
+  return `${formatEventDate(startStr)} – ${formatEventDate(endStr)}`
+}
+
 export function ConcertItem({ evento }: ConcertItemProps) {
   const title = evento.title
   const showImage = isHttpUrl(evento.imageUrl)
@@ -48,7 +74,9 @@ export function ConcertItem({ evento }: ConcertItemProps) {
         />
       )}
 
-      <span className="concert-item__date">{formatEventDate(evento.eventDate)}</span>
+      <span className="concert-item__date">
+        {formatEventDateRange(evento.eventDate, evento.eventEndDate)}
+      </span>
 
       <div className="concert-item__content">
         <p className="concert-item-title concert-item__title">{title}</p>
