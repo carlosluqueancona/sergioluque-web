@@ -70,11 +70,13 @@ export function ConcertImage({ src, alt }: ConcertImageProps) {
           >
             ×
           </button>
-          <Image
+          {/* Plain <img> here on purpose — next/image with
+              unoptimized: true and a flex parent occasionally renders
+              with zero box. The src is already a full R2 URL. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={src}
             alt={alt}
-            width={2400}
-            height={1600}
             className="concert-lightbox__image"
             onClick={(e) => e.stopPropagation()}
           />
