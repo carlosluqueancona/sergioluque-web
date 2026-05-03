@@ -358,6 +358,11 @@ html[data-cta="orange"][data-theme="light"] {
   font-size: 15px;
   color: var(--text-primary);
   margin: 0;
+  /* Long monospaced titles can include unbroken sequences (URLs,
+     proper nouns) that bust out of a narrow text column. anywhere
+     lets the browser break mid-word as a last resort while still
+     preferring word boundaries first. */
+  overflow-wrap: anywhere;
   transition: color 220ms ease;
 }
 .concert-item:hover .concert-item__title,
@@ -407,17 +412,17 @@ html[data-cta="orange"][data-theme="light"] {
   text-decoration: none;
 }
 
-/* Mobile: image on the left, [date + title + venue] stacked on the
-   right. Date becomes a small meta line above the title. */
-@media (max-width: 720px) {
+/* Tablet: image still on the left, but smaller so the right column
+   has room for the title without overflowing. */
+@media (max-width: 900px) {
   .concert-item--with-image {
-    grid-template-columns: 236px 1fr;
+    grid-template-columns: 200px 1fr;
     grid-template-areas:
       'image date'
       'image content';
     grid-template-rows: auto 1fr;
-    column-gap: 12px;
-    row-gap: 4px;
+    column-gap: 16px;
+    row-gap: 6px;
   }
   .concert-item--no-image {
     grid-template-columns: 1fr;
@@ -427,15 +432,41 @@ html[data-cta="orange"][data-theme="light"] {
     row-gap: 4px;
   }
   .concert-item__image {
-    width: 236px;
+    width: 200px;
     /* Same natural-aspect rule as desktop — proportional max-height. */
     height: auto;
-    max-height: 353px;
+    max-height: 300px;
     object-fit: contain;
     align-self: start;
   }
   .concert-item__date {
     align-self: end;
+  }
+}
+
+/* Phone: stack — image full-width on top, then date + content below
+   as a single column. At <=540px the side-by-side layout starves the
+   text column (long monospaced titles overflow), so go vertical. */
+@media (max-width: 540px) {
+  .concert-item--with-image {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'image'
+      'date'
+      'content';
+    grid-template-rows: auto auto auto;
+    column-gap: 0;
+    row-gap: 8px;
+  }
+  .concert-item__image {
+    width: 100%;
+    /* Cap the height so a tall poster doesn't push the entire row
+       off the first viewport. The image still keeps its natural
+       aspect ratio thanks to object-fit: contain. */
+    max-height: 320px;
+  }
+  .concert-item__date {
+    align-self: start;
   }
 }
 
