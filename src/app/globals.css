@@ -287,7 +287,9 @@ html[data-cta="orange"][data-theme="light"] {
 .work-card__description .post-body p,
 .work-card__description .post-body ul,
 .work-card__description .post-body ol,
-.work-card__description .post-body blockquote {
+.work-card__description .post-body blockquote,
+.work-card__description .post-body li {
+  font-family: var(--font-space-mono), monospace;
   font-size: 15px;
   line-height: 1.6;
   color: var(--text-secondary);
