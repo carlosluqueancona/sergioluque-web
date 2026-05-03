@@ -59,12 +59,12 @@ export async function generateMetadata(): Promise<Metadata> {
       // Short, punchy copy for the social-share card preview
       // (WhatsApp / iMessage / Twitter / Facebook / LinkedIn).
       // The longer prose description above stays for SEO/meta.
-      description: 'Sergio Luque — composer of instrumental and electroacoustic music.',
+      description: 'Instrumental and electroacoustic music.',
       images: [{ url: ogUrl, width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
-      description: 'Sergio Luque — composer of instrumental and electroacoustic music.',
+      description: 'Instrumental and electroacoustic music.',
       images: [ogUrl],
     },
     // src/app/favicon.ico is auto-detected by Next; the rest of the
