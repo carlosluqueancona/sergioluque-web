@@ -4,6 +4,21 @@ import { cookies } from 'next/headers'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getSchema } from '@/lib/admin/schemas'
+import { EntityListTable } from '@/components/admin/EntityListTable'
+
+/**
+ * Per-entity hidden search keys. listColumns drives what's visible
+ * in the table, but the operator usually wants to find by venue or
+ * body text too — those columns aren't shown in the row but should
+ * match the filter.
+ */
+const SEARCH_EXTRA: Record<string, string[]> = {
+  eventos: ['venue', 'country', 'description', 'body', 'external_link'],
+  publicaciones: ['journal', 'doi', 'abstract'],
+  catalogue: ['instrumentation', 'notes', 'description', 'year_text'],
+  proyectos: ['description', 'slug'],
+  posts: ['excerpt', 'tags', 'slug', 'body'],
+}
 
 const WORKER_BASE =
   process.env.NODE_ENV === 'production'
@@ -80,87 +95,12 @@ export default async function EntityListPage({
         </Link>
       </div>
 
-      {rows.length === 0 ? (
-        <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
-          No records yet. Create the first one.
-        </p>
-      ) : (
-        <table
-          style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            fontFamily: 'monospace',
-            fontSize: '12px',
-          }}
-        >
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <th
-                style={{
-                  textAlign: 'left',
-                  padding: '8px 12px',
-                  color: 'var(--text-muted)',
-                  fontWeight: 400,
-                  fontSize: '10px',
-                  letterSpacing: '0.1em',
-                  width: '60px',
-                }}
-              >
-                ID
-              </th>
-              {schema.listColumns.map((col) => (
-                <th
-                  key={col.key}
-                  style={{
-                    textAlign: 'left',
-                    padding: '8px 12px',
-                    color: 'var(--text-muted)',
-                    fontWeight: 400,
-                    fontSize: '10px',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {col.label}
-                </th>
-              ))}
-              <th style={{ width: '80px' }} />
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={String(row.id)} style={{ borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '12px', color: 'var(--text-muted)' }}>
-                  {String(row.id)}
-                </td>
-                {schema.listColumns.map((col) => {
-                  const v = row[col.key]
-                  let display: string = ''
-                  if (v == null) display = '—'
-                  else if (typeof v === 'number' && (col.key === 'is_featured')) {
-                    display = v === 1 ? '✓' : '—'
-                  } else {
-                    display = String(v).slice(0, 80)
-                  }
-                  return (
-                    <td key={col.key} style={{ padding: '12px' }}>
-                      {display}
-                    </td>
-                  )
-                })}
-                <td style={{ padding: '12px', textAlign: 'right' }}>
-                  <Link
-                    href={`/admin/${schema.route}/${row.id}`}
-                    style={{ color: 'var(--accent)', fontSize: '11px' }}
-                  >
-                    Edit →
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <EntityListTable
+        rows={rows}
+        route={schema.route}
+        listColumns={schema.listColumns}
+        searchableExtraKeys={SEARCH_EXTRA[schema.name] ?? []}
+      />
     </main>
   )
 }
