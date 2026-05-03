@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import type { Evento } from '@/types'
 import { PostBody } from '@/components/blog/PostBody'
 import { TrackedExternalLink } from '@/components/analytics/TrackedExternalLink'
+import { ConcertImage } from './ConcertImage'
 
 const isHttpUrl = (s: string | undefined): s is string =>
   !!s && /^https?:\/\//i.test(s)
@@ -65,13 +65,7 @@ export function ConcertItem({ evento }: ConcertItemProps) {
   return (
     <article className={`concert-item ${variant}`}>
       {showImage && (
-        <Image
-          src={evento.imageUrl as string}
-          alt={title}
-          width={1600}
-          height={900}
-          className="concert-item__image"
-        />
+        <ConcertImage src={evento.imageUrl as string} alt={title} />
       )}
 
       <span className="concert-item__date">
