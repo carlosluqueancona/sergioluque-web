@@ -51,10 +51,10 @@ export function ConcertItem({ evento }: ConcertItemProps) {
     .filter(Boolean)
     .join(', ')
 
-  // Layout class drives the responsive grid in globals.css. Inline
-  // grid styles can't be overridden by media queries, so the layout
-  // moved fully into CSS — desktop is 3 cols (image / date / content),
-  // mobile is 2 cols (image / [date stacked over content]).
+  // Layout class drives the responsive grid in globals.css. The date
+  // used to live in its own middle column — it's now stacked inside
+  // .concert-item__content directly under the venue line, so the row
+  // is just a 2-col grid: image | content.
   const variant = showImage ? 'concert-item--with-image' : 'concert-item--no-image'
 
   // Image width/height feed Next's layout calc but the actual rendered
@@ -68,13 +68,12 @@ export function ConcertItem({ evento }: ConcertItemProps) {
         <ConcertImage src={evento.imageUrl as string} alt={title} />
       )}
 
-      <span className="concert-item__date">
-        {formatEventDateRange(evento.eventDate, evento.eventEndDate)}
-      </span>
-
       <div className="concert-item__content">
         <p className="concert-item-title concert-item__title">{title}</p>
         {venueLine && <p className="concert-item__venue">{venueLine}</p>}
+        <span className="concert-item__date">
+          {formatEventDateRange(evento.eventDate, evento.eventEndDate)}
+        </span>
         {evento.description && (
           <p className="concert-item__description">{evento.description}</p>
         )}
