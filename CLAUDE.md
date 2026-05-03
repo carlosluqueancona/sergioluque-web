@@ -92,9 +92,10 @@ Dual light/dark con custom toggle. Variables base (dark):
 
 ## Deploy
 
-- **Pages**: `pnpm pages:deploy` (proyecto `sergioluque-web` en Cloudflare). Live en `https://sergioluque-web.pages.dev`.
-- **Worker**: `pnpm worker:deploy` (proyecto `sergioluque-cms`).
-- **DNS de `sergioluque.com`**: pendiente de migrar desde Hostinger a Cloudflare Pages (acción manual del usuario).
+- **Pages**: `pnpm pages:deploy` (proyecto `sergioluque-web` en Cloudflare). Live en `https://sergioluque.com`, `https://www.sergioluque.com` y `https://sergioluque-web.pages.dev`. Zone `sergioluque.com` está gestionada en Cloudflare.
+- **Worker**: `pnpm worker:deploy` (proyecto `sergioluque-cms`). Responde en dos hostnames:
+  - `https://media.sergioluque.com` — custom domain canónico para media (definido como `[[routes]] custom_domain = true` en `worker/wrangler.toml`). `MEDIA_PUBLIC_URL` apunta aquí, así que `upload.ts` y `admin.ts` escriben este hostname en URLs públicas nuevas.
+  - `https://sergioluque-cms.carlosluque-095.workers.dev` — `workers_dev = true` en `wrangler.toml`. **Se mantiene vivo** porque `CMS_API_URL` del front por defecto lo usa. URLs históricas siguen sirviendo desde aquí; la migración 0005 las reescribe a `media.sergioluque.com` en D1.
 
 ## Reglas No Negociables
 
