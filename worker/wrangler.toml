@@ -2,6 +2,11 @@ name = "sergioluque-cms"
 main = "src/index.ts"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
+# Keep the workers.dev URL alive alongside the custom domain — every
+# existing media URL in D1, plus the front-end CMS_API_URL, points at
+# the workers.dev hostname. Disabling it would 404 the whole site
+# until every URL is migrated.
+workers_dev = true
 
 [[d1_databases]]
 binding = "DB"
@@ -28,3 +33,16 @@ simple = { limit = 10, period = 60 }
 
 [vars]
 ALLOWED_ORIGINS = "https://sergioluque.com,https://www.sergioluque.com,https://sergioluque-web.pages.dev"
+# Public base URL for media — what the worker writes into the DB when
+# uploads succeed and what the public site fetches images/audio/PDFs
+# from. Bound to the custom domain below so the URLs no longer expose
+# the workers.dev subdomain.
+MEDIA_PUBLIC_URL = "https://media.sergioluque.com"
+
+# Custom domain binding. Cloudflare auto-creates the DNS record (CNAME
+# under the sergioluque.com zone) and provisions the SSL cert on
+# deploy. Requires the zone to already be in this Cloudflare account
+# — which it is (Pages "sergioluque-web" is already on it).
+[[routes]]
+pattern = "media.sergioluque.com"
+custom_domain = true
