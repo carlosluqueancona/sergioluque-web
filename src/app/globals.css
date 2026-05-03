@@ -278,6 +278,45 @@ html[data-cta="orange"][data-theme="light"] {
   color: var(--text-primary);
 }
 
+/* WorkCard description — Markdown still renders, but scaled to the
+   card's metadata register (sans 13px secondary) so it sits next to
+   PERFORMED BY / PREMIERE / COMMISSIONED BY without dominating. */
+.work-card__description {
+  margin-top: 12px;
+}
+.work-card__description .post-body p,
+.work-card__description .post-body ul,
+.work-card__description .post-body ol,
+.work-card__description .post-body blockquote {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 10px;
+}
+.work-card__description .post-body ul,
+.work-card__description .post-body ol {
+  padding-left: 20px;
+}
+.work-card__description .post-body li {
+  margin: 0 0 4px;
+}
+.work-card__description .post-body h2 {
+  font-size: 14px;
+  margin: 14px 0 6px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.work-card__description .post-body h3 {
+  font-size: 12px;
+  margin: 12px 0 4px;
+}
+.work-card__description .post-body hr {
+  margin: 14px 0;
+}
+.work-card__description .post-body :last-child {
+  margin-bottom: 0;
+}
+
 /* Detail heading (single-obra title). Used inside <h1> on detail pages
    but the same visual weight as a section h2 — drives off --heading so
    it follows the orange toggle. */

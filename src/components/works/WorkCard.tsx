@@ -1,6 +1,7 @@
 import Image from 'next/image'
 // import Link from 'next/link'  // re-enable together with the <Link> below
 import { AudioPlayerMini, AudioFormatTag } from '@/components/audio'
+import { PostBody } from '@/components/blog/PostBody'
 import { S } from '@/lib/strings'
 import { detectAudioFormat } from '@/lib/audio-format'
 import type { Obra } from '@/types'
@@ -14,42 +15,15 @@ interface WorkCardProps {
   fallbackCoverUrl?: string
 }
 
-// Strip HTML and Markdown syntax tokens, collapse whitespace, then
-// trim to a card-sized excerpt. `description` is authored as Markdown
-// (PostBody renders it richly elsewhere) — in this card listing we
-// want a clean prose teaser without raw `**`, `##`, `* `, `---`,
-// etc. leaking through.
-function descriptionExcerpt(raw: string | undefined, max = 220): string | null {
-  if (!raw) return null
-  const plain = raw
-    // Strip HTML tags (legacy entries authored as HTML).
-    .replace(/<[^>]+>/g, ' ')
-    // Horizontal rules: `---` or `***` on their own line.
-    .replace(/^\s*(?:-{3,}|\*{3,})\s*$/gm, ' ')
-    // Heading markers (## , ### ) at line start.
-    .replace(/^\s*#{1,6}\s+/gm, '')
-    // Blockquote markers (> ) at line start.
-    .replace(/^\s*>\s+/gm, '')
-    // List markers (- , * , 1. ) at line start.
-    .replace(/^\s*(?:[-*]|\d+\.)\s+/gm, '')
-    // Inline code: keep contents, drop backticks.
-    .replace(/`([^`]+)`/g, '$1')
-    // Bold **text** → text (run before italic so the inner * survives).
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    // Italic *text* and _text_ → text.
-    .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1$2')
-    .replace(/(^|[^_])_([^_\n]+)_(?!_)/g, '$1$2')
-    // Markdown links [label](url) → label.
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    // Collapse remaining whitespace into single spaces.
-    .replace(/\s+/g, ' ')
-    .trim()
-  if (!plain) return null
-  if (plain.length <= max) return plain
-  // Cut on a word boundary close to the limit so we don't slice mid-word.
-  const slice = plain.slice(0, max)
-  const lastSpace = slice.lastIndexOf(' ')
-  return (lastSpace > max * 0.6 ? slice.slice(0, lastSpace) : slice).trimEnd() + '…'
+/**
+ * `description` is authored as Markdown — full rendering happens in
+ * <PostBody>. This card used to flatten it to a 220-char excerpt,
+ * which stripped the formatting the operator wanted. Now the card
+ * renders the description as rich Markdown via PostBody and we only
+ * still need to know whether there's *something* to render.
+ */
+function hasDescription(raw: string | undefined): raw is string {
+  return Boolean(raw && raw.trim().length > 0)
 }
 
 const metaRowStyle: React.CSSProperties = {
@@ -108,7 +82,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
   const premiereInfo = [obra.premiereDate, obra.premiereVenue, obra.premiereCity]
     .filter(Boolean)
     .join(', ')
-  const excerpt = descriptionExcerpt(obra.description)
+  const showDescription = hasDescription(obra.description)
 
   // Decide if there's any auxiliary metadata worth rendering — used to keep
   // the meta block from collapsing to an empty <div> when none of these
@@ -118,7 +92,7 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
     Boolean(obra.commissions) ||
     Boolean(obra.ensembles) ||
     Boolean(obra.recordedAt) ||
-    Boolean(excerpt)
+    showDescription
 
   return (
     <article
@@ -228,13 +202,10 @@ export function WorkCard({ obra, fallbackCoverUrl }: WorkCardProps) {
             {obra.recordedAt && <MetaRow label={S.works.recordedAt} value={obra.recordedAt} />}
             {premiereInfo && <MetaRow label={S.works.premiere} value={premiereInfo} />}
             {obra.commissions && <MetaRow label={S.works.commissions} value={obra.commissions} />}
-            {excerpt && (
-              <p
-                className="t-meta"
-                style={{ margin: '12px 0 0', lineHeight: 1.6 }}
-              >
-                {excerpt}
-              </p>
+            {showDescription && (
+              <div className="work-card__description">
+                <PostBody value={obra.description as string} />
+              </div>
             )}
           </div>
         )}
