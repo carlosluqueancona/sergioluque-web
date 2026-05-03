@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS catalogue (
   title           TEXT NOT NULL DEFAULT '',
   year_text       TEXT DEFAULT '',
   year_sort       INTEGER DEFAULT 0,
+  month           INTEGER DEFAULT 0,
   instrumentation TEXT DEFAULT '',
   notes           TEXT DEFAULT '',
   description     TEXT DEFAULT '',
