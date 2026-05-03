@@ -30,7 +30,7 @@ const ibmPlexSans = IBM_Plex_Sans({
 // Site-wide metadata, including the OG image used by WhatsApp / Twitter
 // / Facebook / iMessage previews. The image URL comes from admin →
 // Settings → "Social share image" so the operator can swap it without
-// a redeploy. Falls back to the static /og-default.jpg if no setting
+// a redeploy. Falls back to the static /SL-SocialShare.png if no setting
 // is configured.
 export async function generateMetadata(): Promise<Metadata> {
   let socialImage: string | undefined
@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch {
     /* tolerate worker outages — fall through to the static default */
   }
-  const ogUrl = socialImage || '/og-default.jpg'
+  const ogUrl = socialImage || '/SL-SocialShare.png'
   return {
     title: {
       default: 'Sergio Luque — Composer',
