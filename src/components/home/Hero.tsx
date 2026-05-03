@@ -2,8 +2,8 @@ import { HeroLissajous } from './HeroLissajous'
 
 const COPY = {
   practice: 'Composer',
-  catalog: 'Works catalogue',
-  scrollHint: 'Scroll for catalogue',
+  catalog: 'Selected works',
+  scrollHint: 'Scroll for selected works',
   // Two-word manifesto: each word stands alone as a complete statement
   // about the practice. Rendered one-per-line for giant-scale impact.
   headingWords: ['Instrumental.', 'Electroacoustic.'] as const,
