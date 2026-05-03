@@ -56,9 +56,17 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       locale: 'en_GB',
       siteName: 'Sergio Luque',
+      // Short, punchy copy for the social-share card preview
+      // (WhatsApp / iMessage / Twitter / Facebook / LinkedIn).
+      // The longer prose description above stays for SEO/meta.
+      description: 'Sergio Luque — composer of instrumental and electroacoustic music.',
       images: [{ url: ogUrl, width: 1200, height: 630 }],
     },
-    twitter: { card: 'summary_large_image', images: [ogUrl] },
+    twitter: {
+      card: 'summary_large_image',
+      description: 'Sergio Luque — composer of instrumental and electroacoustic music.',
+      images: [ogUrl],
+    },
     // src/app/favicon.ico is auto-detected by Next; the rest of the
     // icon set lives in /public and is wired up explicitly here so
     // browsers / iOS / Android pick the right asset for each surface.
