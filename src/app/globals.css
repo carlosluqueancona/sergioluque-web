@@ -308,7 +308,7 @@ html[data-cta="orange"][data-theme="light"] {
   background: var(--surface);
 }
 .concert-item--with-image {
-  grid-template-columns: 160px 140px 1fr;
+  grid-template-columns: 240px 140px 1fr;
   grid-template-areas: 'image date content';
 }
 .concert-item--no-image {
@@ -318,14 +318,14 @@ html[data-cta="orange"][data-theme="light"] {
 .concert-item__image {
   grid-area: image;
   display: block;
-  width: 160px;
+  width: 240px;
   /* `height: auto` preserves the natural aspect ratio so posters and
      square photos both render uncropped (operator wants "imágenes
      completas"). max-height keeps very tall portraits from blowing
-     out the row; if a poster is taller than 240px it'll be letterboxed
+     out the row; if a poster is taller than 360px it'll be letterboxed
      within the box via object-fit: contain. */
   height: auto;
-  max-height: 240px;
+  max-height: 360px;
   object-fit: contain;
   align-self: start;
 }
@@ -392,7 +392,7 @@ html[data-cta="orange"][data-theme="light"] {
    right. Date becomes a small meta line above the title. */
 @media (max-width: 720px) {
   .concert-item--with-image {
-    grid-template-columns: 112px 1fr;
+    grid-template-columns: 168px 1fr;
     grid-template-areas:
       'image date'
       'image content';
@@ -408,10 +408,10 @@ html[data-cta="orange"][data-theme="light"] {
     row-gap: 4px;
   }
   .concert-item__image {
-    width: 112px;
+    width: 168px;
     /* Same natural-aspect rule as desktop — proportional max-height. */
     height: auto;
-    max-height: 168px;
+    max-height: 252px;
     object-fit: contain;
     align-self: start;
   }
