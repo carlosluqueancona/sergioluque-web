@@ -53,32 +53,64 @@ export function ConcertImage({ src, alt }: ConcertImageProps) {
 
       {open && (
         <div
-          className="concert-lightbox"
           role="dialog"
           aria-modal="true"
           aria-label={alt}
           onClick={() => setOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 1000,
+            background: 'rgba(0, 0, 0, 0.92)',
+            cursor: 'zoom-out',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 24,
+          }}
         >
           <button
             type="button"
-            className="concert-lightbox__close"
             onClick={(e) => {
               e.stopPropagation()
               setOpen(false)
             }}
             aria-label="Close"
+            style={{
+              position: 'fixed',
+              top: 16,
+              right: 16,
+              width: 44,
+              height: 44,
+              background: 'var(--bg)',
+              border: '1px solid var(--border)',
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-space-mono), monospace',
+              fontSize: 22,
+              lineHeight: 1,
+              cursor: 'pointer',
+              zIndex: 1001,
+            }}
           >
             ×
           </button>
-          {/* Plain <img> here on purpose — next/image with
-              unoptimized: true and a flex parent occasionally renders
-              with zero box. The src is already a full R2 URL. */}
+          {/* Plain <img> with inline styles to bypass any cached or
+              conflicting CSS rules. The src is already a full R2/
+              Worker URL — no Next image optimization needed. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt={alt}
-            className="concert-lightbox__image"
             onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: 'calc(100vw - 48px)',
+              maxHeight: 'calc(100vh - 48px)',
+              width: 'auto',
+              height: 'auto',
+              display: 'block',
+              objectFit: 'contain',
+              cursor: 'default',
+            }}
           />
         </div>
       )}
