@@ -2,7 +2,6 @@ import { HeroLissajous } from './HeroLissajous'
 
 const COPY = {
   practice: 'Composer',
-  catalog: 'Selected works',
   scrollHint: 'Scroll for selected works',
   // Two-word manifesto: each word stands alone as a complete statement
   // about the practice. Rendered one-per-line for giant-scale impact.
@@ -147,7 +146,6 @@ export function Hero() {
         <span>
           <span className="hero-scroll-hint" aria-hidden>↓</span> {t.scrollHint}
         </span>
-        <span>{t.catalog}</span>
       </div>
       </div>
     </section>
