@@ -201,6 +201,18 @@ html[data-cta="orange"][data-theme="light"] {
   margin: 0 0 8px;
 }
 
+/* PostBody (Markdown-like long-form prose) — default style used on
+   /bio, /blog/[slug], /listen/[slug], /projects/[slug]. Override in
+   .concert-item__body for the news card. */
+.post-body p {
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin: 0 0 24px;
+  white-space: pre-wrap;
+}
+
 /* Detail heading (single-obra title). Used inside <h1> on detail pages
    but the same visual weight as a section h2 — drives off --heading so
    it follows the orange toggle. */
@@ -308,7 +320,7 @@ html[data-cta="orange"][data-theme="light"] {
   background: var(--surface);
 }
 .concert-item--with-image {
-  grid-template-columns: 240px 140px 1fr;
+  grid-template-columns: 336px 140px 1fr;
   grid-template-areas: 'image date content';
 }
 .concert-item--no-image {
@@ -318,14 +330,14 @@ html[data-cta="orange"][data-theme="light"] {
 .concert-item__image {
   grid-area: image;
   display: block;
-  width: 240px;
+  width: 336px;
   /* `height: auto` preserves the natural aspect ratio so posters and
      square photos both render uncropped (operator wants "imágenes
      completas"). max-height keeps very tall portraits from blowing
-     out the row; if a poster is taller than 360px it'll be letterboxed
+     out the row; if a poster is taller than 504px it'll be letterboxed
      within the box via object-fit: contain. */
   height: auto;
-  max-height: 360px;
+  max-height: 504px;
   object-fit: contain;
   align-self: start;
 }
@@ -343,7 +355,7 @@ html[data-cta="orange"][data-theme="light"] {
 .concert-item__title,
 .concert-item .concert-item-title {
   font-family: var(--font-space-mono), monospace;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-primary);
   margin: 0;
   transition: color 220ms ease;
@@ -354,28 +366,35 @@ html[data-cta="orange"][data-theme="light"] {
 }
 .concert-item__venue {
   font-family: var(--font-space-mono), monospace;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
-  margin: 4px 0 0;
+  margin: 6px 0 0;
   letter-spacing: 0.05em;
 }
 .concert-item__description {
   font-family: var(--font-ibm-plex-sans), sans-serif;
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.6;
   color: var(--text-secondary);
-  margin: 8px 0 0;
+  margin: 10px 0 0;
 }
-/* Long-form body — uses PostBody internals (h2/h3/p/etc).
-   Tighter top spacing so it sits right under the description. */
+/* Long-form body — uses PostBody (.post-body p). In the news card we
+   force it to match the description style (sans 15px, secondary)
+   instead of the heavier blog-post body, so the whole right-hand
+   column reads as one consistent block of metadata + prose. */
 .concert-item__body {
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--text-secondary);
+  margin-top: 10px;
 }
-.concert-item__body p {
+.concert-item__body .post-body p {
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
   margin: 0 0 8px;
-  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.concert-item__body .post-body p:last-child {
+  margin-bottom: 0;
 }
 .concert-item__link {
   display: inline-block;
@@ -392,7 +411,7 @@ html[data-cta="orange"][data-theme="light"] {
    right. Date becomes a small meta line above the title. */
 @media (max-width: 720px) {
   .concert-item--with-image {
-    grid-template-columns: 168px 1fr;
+    grid-template-columns: 236px 1fr;
     grid-template-areas:
       'image date'
       'image content';
@@ -408,10 +427,10 @@ html[data-cta="orange"][data-theme="light"] {
     row-gap: 4px;
   }
   .concert-item__image {
-    width: 168px;
+    width: 236px;
     /* Same natural-aspect rule as desktop — proportional max-height. */
     height: auto;
-    max-height: 252px;
+    max-height: 353px;
     object-fit: contain;
     align-self: start;
   }
