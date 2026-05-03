@@ -288,7 +288,7 @@ html[data-cta="orange"][data-theme="light"] {
 .work-card__description .post-body ul,
 .work-card__description .post-body ol,
 .work-card__description .post-body blockquote {
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.6;
   color: var(--text-secondary);
   margin: 0 0 10px;
