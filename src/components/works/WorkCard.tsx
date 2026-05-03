@@ -14,12 +14,36 @@ interface WorkCardProps {
   fallbackCoverUrl?: string
 }
 
-// Strip HTML tags + collapse whitespace, then trim to a card-sized excerpt.
-// `description` can be authored as rich text (PostBody renders it on the
-// detail page); on the listing we just want a teaser.
+// Strip HTML and Markdown syntax tokens, collapse whitespace, then
+// trim to a card-sized excerpt. `description` is authored as Markdown
+// (PostBody renders it richly elsewhere) — in this card listing we
+// want a clean prose teaser without raw `**`, `##`, `* `, `---`,
+// etc. leaking through.
 function descriptionExcerpt(raw: string | undefined, max = 220): string | null {
   if (!raw) return null
-  const plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  const plain = raw
+    // Strip HTML tags (legacy entries authored as HTML).
+    .replace(/<[^>]+>/g, ' ')
+    // Horizontal rules: `---` or `***` on their own line.
+    .replace(/^\s*(?:-{3,}|\*{3,})\s*$/gm, ' ')
+    // Heading markers (## , ### ) at line start.
+    .replace(/^\s*#{1,6}\s+/gm, '')
+    // Blockquote markers (> ) at line start.
+    .replace(/^\s*>\s+/gm, '')
+    // List markers (- , * , 1. ) at line start.
+    .replace(/^\s*(?:[-*]|\d+\.)\s+/gm, '')
+    // Inline code: keep contents, drop backticks.
+    .replace(/`([^`]+)`/g, '$1')
+    // Bold **text** → text (run before italic so the inner * survives).
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    // Italic *text* and _text_ → text.
+    .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1$2')
+    .replace(/(^|[^_])_([^_\n]+)_(?!_)/g, '$1$2')
+    // Markdown links [label](url) → label.
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // Collapse remaining whitespace into single spaces.
+    .replace(/\s+/g, ' ')
+    .trim()
   if (!plain) return null
   if (plain.length <= max) return plain
   // Cut on a word boundary close to the limit so we don't slice mid-word.
