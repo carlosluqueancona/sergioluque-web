@@ -471,10 +471,6 @@ html[data-cta="orange"][data-theme="light"] {
   inset: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(24px, 4vw, 64px);
   cursor: zoom-out;
   animation: concert-lightbox-in 180ms ease-out;
 }
@@ -483,10 +479,14 @@ html[data-cta="orange"][data-theme="light"] {
   to { opacity: 1; }
 }
 .concert-lightbox__image {
-  /* Use viewport-based caps directly so the image renders even if
-     the parent flex container hasn't computed its content size yet
-     (rare but possible with very tall portraits). */
-  max-width: min(100%, calc(100vw - 48px));
+  /* Absolute centering instead of flex — guarantees the img has
+     a layout box even if its intrinsic width gets crushed by some
+     flex implementations. */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: calc(100vw - 48px);
   max-height: calc(100vh - 48px);
   width: auto;
   height: auto;
