@@ -189,11 +189,11 @@ content.get('/catalogue', async (c) => {
     let stmt: D1PreparedStatement;
     if (category === 'vocal_instrumental_mixed' || category === 'electroacoustic') {
       stmt = c.env.DB.prepare(
-        'SELECT * FROM catalogue WHERE category = ?1 ORDER BY year_sort DESC, sort_order ASC, id ASC'
+        'SELECT * FROM catalogue WHERE category = ?1 ORDER BY year_sort DESC, month DESC, sort_order ASC, id ASC'
       ).bind(category);
     } else {
       stmt = c.env.DB.prepare(
-        'SELECT * FROM catalogue ORDER BY year_sort DESC, sort_order ASC, id ASC'
+        'SELECT * FROM catalogue ORDER BY year_sort DESC, month DESC, sort_order ASC, id ASC'
       );
     }
     const { results } = await stmt.all<Record<string, unknown>>();

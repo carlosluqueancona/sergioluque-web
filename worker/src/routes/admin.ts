@@ -339,7 +339,7 @@ registerCrud(admin, 'posts', [
 ]);
 
 registerCrud(admin, 'catalogue', [
-  'category', 'title', 'year_text', 'year_sort',
+  'category', 'title', 'year_text', 'year_sort', 'month',
   'instrumentation', 'notes',
   'description', 'image_url',
   'score_url', 'listen_url', 'patch_url', 'video_url', 'lossless_url',

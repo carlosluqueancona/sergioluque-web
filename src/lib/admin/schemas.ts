@@ -166,6 +166,12 @@ export const SCHEMAS: Record<string, EntitySchema> = {
         placeholder: 'End year of the composition (used to order the list)',
       },
       {
+        key: 'month',
+        label: 'Month (internal — for ordering pieces from the same year)',
+        type: 'number',
+        placeholder: '1 = January, 12 = December. Not shown publicly. Leave blank if unknown.',
+      },
+      {
         key: 'instrumentation',
         label: 'Instrumentation',
         type: 'textarea',
