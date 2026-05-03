@@ -460,10 +460,12 @@ html[data-cta="orange"][data-theme="light"] {
   }
   .concert-item__image {
     width: 100%;
-    /* Cap the height so a tall poster doesn't push the entire row
-       off the first viewport. The image still keeps its natural
-       aspect ratio thanks to object-fit: contain. */
-    max-height: 320px;
+    height: auto;
+    /* No height cap on phone — a tall poster (festival programmes,
+       portrait flyers) should render at full container width keeping
+       its natural aspect ratio. */
+    max-height: none;
+    object-fit: contain;
   }
   .concert-item__date {
     align-self: start;
